@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>quanta — Welcome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{--navy-900:#1B2845;--navy-700:#2D3E66;--gold:#F59E0B;--gold-tint:#FEF3C7;--emerald:#059669;--emerald-tint:#ECFDF5;--purple:#7C3AED;--purple-tint:#F3EEFF;--rose:#F43F5E;--sky:#0EA5E9;--sky-tint:#E0F2FE;--surface:#FAFAF9;--surface-card:#FFFFFF;--surface-muted:#F4F4F2;--border:#E7E5E4;--border-strong:#D4D4D2;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--shadow-sm:0 2px 8px rgba(15,23,42,0.06);--shadow-md:0 8px 24px rgba(15,23,42,0.08);--shadow-lg:0 20px 48px rgba(15,23,42,0.10);--ease:cubic-bezier(0.16,1,0.3,1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--surface);color:var(--text-primary);font-family:'Inter',system-ui,sans-serif;font-feature-settings:'cv11','ss01','ss03';font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;}
+  a{color:inherit;text-decoration:none;}button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+  .page{min-height:100vh;display:flex;flex-direction:column;}
+
+  /* Top bar */
+  .ob-topbar{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;border-bottom:1px solid var(--border);background:var(--surface-card);}
+  .ob-brand{display:flex;align-items:center;gap:10px;}
+  .ob-logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--navy-900),var(--purple));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:18px;}
+  .ob-wordmark{font-weight:700;font-size:17px;letter-spacing:-0.02em;color:var(--navy-900);}
+  .skip-btn{font-size:14px;color:var(--text-muted);font-weight:500;padding:6px 12px;border-radius:8px;transition:all 200ms;}
+  .skip-btn:hover{background:var(--surface-muted);color:var(--text-secondary);}
+
+  /* Content */
+  .ob-content{flex:1;display:flex;align-items:center;justify-content:center;padding:48px;}
+  .ob-card{background:var(--surface-card);border:1px solid var(--border);border-radius:24px;padding:48px;max-width:720px;width:100%;box-shadow:var(--shadow-lg);}
+
+  /* Progress dots */
+  .progress-dots{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:36px;}
+  .dot-step{display:flex;align-items:center;}
+  .dot{width:10px;height:10px;border-radius:50%;transition:all 300ms var(--ease);}
+  .dot.done{background:var(--purple);width:8px;height:8px;}
+  .dot.active{background:var(--purple);width:12px;height:12px;box-shadow:0 0 0 4px var(--purple-tint);}
+  .dot.inactive{background:var(--border-strong);}
+  .dot-line{width:48px;height:2px;background:var(--border);}
+  .dot-line.done{background:var(--purple);}
+  .step-label{text-align:center;font-size:12px;color:var(--text-muted);font-weight:500;margin-bottom:36px;margin-top:-20px;}
+
+  /* Step header */
+  .step-eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);margin-bottom:10px;text-align:center;}
+  .step-title{font-size:30px;font-weight:800;letter-spacing:-0.025em;color:var(--text-primary);text-align:center;margin-bottom:10px;}
+  .step-sub{font-size:15px;color:var(--text-secondary);text-align:center;margin-bottom:36px;}
+
+  /* Option cards grid 2x2 */
+  .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:36px;}
+  .option-card{
+    border:2px solid var(--border);border-radius:16px;padding:24px 20px;
+    display:flex;flex-direction:column;align-items:flex-start;gap:12px;
+    cursor:pointer;transition:all 200ms var(--ease);position:relative;
+  }
+  .option-card:hover{border-color:var(--purple);background:var(--purple-tint);}
+  .option-card.selected{border-color:var(--purple);background:var(--purple-tint);}
+  .option-card.selected::after{content:"✓";position:absolute;top:14px;right:16px;width:22px;height:22px;background:var(--purple);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+  .option-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+  .option-title{font-size:16px;font-weight:700;color:var(--text-primary);}
+  .option-desc{font-size:13px;color:var(--text-secondary);line-height:1.5;}
+
+  /* Bottom nav */
+  .ob-footer{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;border-top:1px solid var(--border);background:var(--surface-card);}
+  .back-btn{display:flex;align-items:center;gap:6px;color:var(--text-muted);font-size:14px;font-weight:500;padding:10px 16px;border-radius:10px;transition:all 200ms;}
+  .back-btn:hover{background:var(--surface-muted);color:var(--text-secondary);}
+  .continue-btn{background:var(--purple);color:white;border-radius:12px;padding:12px 28px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;transition:all 200ms var(--ease);}
+  .continue-btn:hover{background:#6D28D9;transform:translateY(-1px);}
+  .continue-btn svg{width:15px;height:15px;}
+  .step-count{font-size:13px;color:var(--text-muted);}
+
+  /* Decorative background */
+  .ob-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .ob-bg::before{content:"∫ Σ ∂ π ∇";position:absolute;font-size:200px;font-weight:800;color:rgba(124,58,237,0.04);right:-80px;top:-40px;line-height:1.2;font-family:'Inter',sans-serif;}
+  .ob-bg::after{content:"∞ ω";position:absolute;font-size:200px;font-weight:800;color:rgba(124,58,237,0.03);left:-40px;bottom:-40px;line-height:1.2;font-family:'Inter',sans-serif;}
+  .ob-content,.ob-topbar,.ob-footer{position:relative;z-index:1;}
+
+  .watermark{position:fixed;bottom:80px;right:16px;background:rgba(15,23,42,0.85);color:white;font-size:12px;font-weight:500;padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-md);z-index:100;backdrop-filter:blur(8px);}
+</style>
+</head>
+<body>
+<div class="ob-bg"></div>
+<div class="page">
+  <header class="ob-topbar">
+    <div class="ob-brand">
+      <div class="ob-logo">Q</div>
+      <span class="ob-wordmark">quanta</span>
+    </div>
+    <button class="skip-btn">Skip setup</button>
+  </header>
+
+  <div class="ob-content">
+    <div class="ob-card">
+      <!-- Progress -->
+      <div class="progress-dots">
+        <div class="dot-step"><div class="dot active"></div></div>
+        <div class="dot-line"></div>
+        <div class="dot-step"><div class="dot inactive"></div></div>
+        <div class="dot-line"></div>
+        <div class="dot-step"><div class="dot inactive"></div></div>
+        <div class="dot-line"></div>
+        <div class="dot-step"><div class="dot inactive"></div></div>
+      </div>
+      <div class="step-label">Step 1 of 4 — Your motivation</div>
+
+      <div class="step-eyebrow">Welcome to quanta 👋</div>
+      <h1 class="step-title">What brings you here?</h1>
+      <p class="step-sub">We'll personalize your learning path based on your goals. Pick everything that applies.</p>
+
+      <div class="options-grid">
+        <div class="option-card selected">
+          <div class="option-icon" style="background:#F3EEFF;">🎓</div>
+          <div class="option-title">Prep for olympiads</div>
+          <div class="option-desc">Math or informatics competitions, AMC, IMO, ICPC — I want to compete seriously.</div>
+        </div>
+        <div class="option-card">
+          <div class="option-icon" style="background:#E0F2FE;">💻</div>
+          <div class="option-title">Coding interviews</div>
+          <div class="option-desc">FAANG-style interviews, LeetCode, competitive programming for job prep.</div>
+        </div>
+        <div class="option-card selected">
+          <div class="option-icon" style="background:#FEF3C7;">🧠</div>
+          <div class="option-title">Learn for curiosity</div>
+          <div class="option-desc">I love math and want to go deeper — no specific exam, just intellectual growth.</div>
+        </div>
+        <div class="option-card">
+          <div class="option-icon" style="background:#ECFDF5;">📚</div>
+          <div class="option-title">Supplement coursework</div>
+          <div class="option-desc">University or school math that I want extra practice and explanation for.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="ob-footer">
+    <button class="back-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <span class="step-count">2 selected · Click to select/deselect</span>
+    <button class="continue-btn">
+      Continue
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </footer>
+</div>
+<div class="watermark">by Shusei — Sample Only</div>
+</body>
+</html>

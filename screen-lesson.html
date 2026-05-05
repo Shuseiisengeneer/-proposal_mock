@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>quanta — Lesson: Graph Coloring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --navy-900:#1B2845;--navy-700:#2D3E66;--navy-100:#E8EDF7;--navy-50:#F4F6FB;
+    --gold:#F59E0B;--gold-tint:#FEF3C7;--emerald:#059669;--emerald-tint:#ECFDF5;
+    --purple:#7C3AED;--purple-tint:#F3EEFF;--rose:#F43F5E;--rose-tint:#FFE4E8;
+    --sky:#0EA5E9;--sky-tint:#E0F2FE;
+    --surface:#FAFAF9;--surface-card:#FFFFFF;--surface-muted:#F4F4F2;
+    --border:#E7E5E4;--border-strong:#D4D4D2;
+    --text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;
+    --shadow-xs:0 1px 2px rgba(15,23,42,0.04);--shadow-sm:0 2px 8px rgba(15,23,42,0.06);
+    --shadow-md:0 8px 24px rgba(15,23,42,0.08);
+    --ease:cubic-bezier(0.16,1,0.3,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--surface);color:var(--text-primary);font-family:'Inter',system-ui,sans-serif;font-feature-settings:'cv11','ss01','ss03';font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;height:100%;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+  .lesson-shell{display:flex;flex-direction:column;height:100vh;}
+
+  /* Top bar */
+  .lesson-topbar{height:56px;background:var(--surface-card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;}
+  .back-btn{display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:14px;font-weight:500;transition:color 200ms;}
+  .back-btn:hover{color:var(--text-primary);}
+  .back-btn svg{width:16px;height:16px;}
+  .lesson-progress-row{display:flex;align-items:center;gap:12px;}
+  .lesson-counter{font-size:13px;color:var(--text-secondary);}
+  .lesson-counter strong{color:var(--text-primary);}
+  .top-progress{width:120px;height:6px;background:var(--surface-muted);border-radius:999px;overflow:hidden;}
+  .top-progress-fill{height:100%;background:var(--purple);width:72.2%;}
+  .topbar-right{display:flex;align-items:center;gap:12px;}
+  .save-btn{display:flex;align-items:center;gap:5px;color:var(--text-secondary);font-size:13px;font-weight:500;padding:6px 12px;border:1px solid var(--border);border-radius:8px;transition:all 200ms;}
+  .save-btn:hover{background:var(--navy-50);color:var(--navy-900);}
+  .save-btn svg{width:14px;height:14px;}
+  .xp-chip{display:inline-flex;align-items:center;gap:4px;background:var(--gold-tint);color:#92400E;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;}
+  .xp-chip svg{width:12px;height:12px;color:var(--gold);}
+
+  /* Main layout */
+  .lesson-main{display:grid;grid-template-columns:280px 1fr;flex:1;overflow:hidden;}
+
+  /* Outline rail */
+  .lesson-outline{border-right:1px solid var(--border);background:var(--surface-card);overflow-y:auto;padding:20px 0;}
+  .outline-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);padding:0 16px 8px;}
+  .outline-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 200ms var(--ease);position:relative;}
+  .outline-item:hover{background:var(--navy-50);color:var(--text-primary);}
+  .outline-item.done{color:var(--text-secondary);}
+  .outline-item.active{background:var(--navy-50);color:var(--navy-900);font-weight:600;}
+  .outline-item.active::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:22px;background:var(--purple);border-radius:0 3px 3px 0;}
+  .outline-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .outline-dot.done{background:var(--emerald-tint);}
+  .outline-dot.done svg{width:10px;height:10px;stroke:var(--emerald);stroke-width:3;}
+  .outline-dot.active{background:var(--purple);width:8px;height:8px;margin:0 5px;}
+  .outline-dot.inactive{background:var(--surface-muted);border:1.5px solid var(--border-strong);width:16px;height:16px;}
+  .outline-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-left:auto;flex-shrink:0;}
+
+  /* Reading area */
+  .lesson-reading{overflow-y:auto;padding:48px 64px 96px;}
+  .reading-inner{max-width:700px;margin:0 auto;}
+
+  .lesson-eyebrow{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);margin-bottom:12px;}
+  .lesson-title{font-size:34px;font-weight:800;letter-spacing:-0.03em;line-height:1.1;color:var(--text-primary);margin-bottom:14px;}
+  .lesson-meta{display:flex;align-items:center;gap:16px;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+  .lesson-meta-item{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-muted);}
+  .lesson-meta-item svg{width:14px;height:14px;}
+
+  .prose p{font-size:16px;line-height:1.8;color:var(--text-primary);margin-bottom:20px;}
+  .prose p:last-child{margin-bottom:0;}
+  .prose strong{font-weight:700;color:var(--text-primary);}
+  .prose .math{font-family:'JetBrains Mono',monospace;font-size:14px;background:var(--purple-tint);color:var(--purple);padding:2px 6px;border-radius:4px;}
+
+  .prose h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;color:var(--text-primary);margin:40px 0 16px;}
+  .prose h3{font-size:17px;font-weight:600;color:var(--text-primary);margin:28px 0 10px;}
+
+  /* Callout boxes */
+  .callout{border-radius:0 12px 12px 0;padding:16px 20px;margin:24px 0;font-size:14px;line-height:1.65;}
+  .callout-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;}
+  .callout.definition{background:var(--purple-tint);border-left:3px solid var(--purple);}
+  .callout.definition .callout-title{color:var(--purple);}
+  .callout.theorem{background:var(--gold-tint);border-left:3px solid var(--gold);}
+  .callout.theorem .callout-title{color:#92400E;}
+  .callout.example{background:var(--sky-tint);border-left:3px solid var(--sky);}
+  .callout.example .callout-title{color:var(--sky);}
+
+  /* Code block */
+  .code-block{background:#0F172A;border-radius:12px;padding:20px 24px;margin:20px 0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;color:#E2E8F0;overflow-x:auto;}
+  .code-block .kw{color:#A78BFA;}
+  .code-block .cm{color:#475569;font-style:italic;}
+  .code-block .nm{color:#FCD34D;}
+
+  /* Visual separator */
+  .section-divider{height:1px;background:var(--border);margin:36px 0;}
+
+  /* Graph visual (CSS art) */
+  .graph-visual{background:var(--surface-muted);border:1px solid var(--border);border-radius:16px;padding:32px;margin:24px 0;display:flex;align-items:center;justify-content:center;position:relative;height:200px;}
+  .graph-visual svg{width:100%;height:100%;max-width:360px;}
+
+  /* Inline question card */
+  .question-card{background:var(--surface-card);border:2px solid var(--purple);border-radius:16px;padding:24px;margin:36px 0;box-shadow:0 0 0 4px var(--purple-tint);}
+  .question-badge{display:inline-flex;align-items:center;gap:5px;background:var(--purple);color:white;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:4px 10px;border-radius:999px;margin-bottom:14px;}
+  .question-badge svg{width:12px;height:12px;}
+  .question-text{font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:18px;line-height:1.5;}
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .option{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all 200ms var(--ease);font-size:14px;font-weight:500;color:var(--text-primary);}
+  .option:hover{border-color:var(--purple);background:var(--purple-tint);}
+  .option.correct{border-color:var(--emerald);background:var(--emerald-tint);color:var(--emerald);}
+  .option.selected{border-color:var(--purple);background:var(--purple-tint);}
+  .option-circle{width:20px;height:20px;border-radius:50%;border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 200ms;}
+  .option.correct .option-circle{border-color:var(--emerald);background:var(--emerald);}
+  .option.correct .option-circle svg{width:10px;height:10px;stroke:white;stroke-width:3;}
+  .option.selected .option-circle{border-color:var(--purple);background:var(--purple);}
+  .check-btn{margin-top:14px;background:var(--purple);color:white;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:all 200ms var(--ease);}
+  .check-btn:hover{background:#6D28D9;}
+  .explanation{margin-top:16px;padding:14px 16px;background:var(--emerald-tint);border-radius:10px;font-size:13px;color:var(--emerald);line-height:1.6;display:none;}
+  .explanation.show{display:block;}
+
+  /* Practice problems strip */
+  .practice-strip{margin-top:48px;padding-top:32px;border-top:1px solid var(--border);}
+  .strip-title{font-size:18px;font-weight:700;margin-bottom:16px;}
+  .practice-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .practice-card{background:var(--surface-card);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all 200ms var(--ease);}
+  .practice-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+  .practice-num{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:6px;}
+  .practice-title{font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:8px;}
+  .practice-meta{display:flex;align-items:center;justify-content:space-between;}
+  .diff-easy{color:var(--emerald);font-size:12px;font-weight:600;}
+  .diff-medium{color:var(--gold);font-size:12px;font-weight:600;}
+  .diff-hard{color:var(--rose);font-size:12px;font-weight:600;}
+  .solve-link{color:var(--purple);font-size:12px;font-weight:600;display:flex;align-items:center;gap:3px;}
+
+  /* Footer nav */
+  .lesson-footer{border-top:1px solid var(--border);background:var(--surface-card);padding:16px 64px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .nav-btn{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-size:14px;font-weight:600;transition:all 200ms var(--ease);cursor:pointer;}
+  .nav-btn.prev{color:var(--text-secondary);border:1px solid var(--border);}
+  .nav-btn.prev:hover{background:var(--navy-50);color:var(--navy-900);}
+  .nav-btn.next{background:var(--navy-900);color:white;}
+  .nav-btn.next:hover{background:var(--navy-700);}
+  .nav-btn svg{width:15px;height:15px;}
+  .footer-lesson-name{font-size:13px;color:var(--text-muted);}
+
+  .watermark{position:fixed;bottom:16px;right:16px;background:rgba(15,23,42,0.85);color:white;font-size:12px;font-weight:500;padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-md);z-index:100;backdrop-filter:blur(8px);}
+</style>
+</head>
+<body>
+<div class="lesson-shell">
+
+  <!-- Topbar -->
+  <header class="lesson-topbar">
+    <a class="back-btn" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to course
+    </a>
+    <div class="lesson-progress-row">
+      <span class="lesson-counter">Lesson <strong>13</strong> of 18</span>
+      <div class="top-progress"><div class="top-progress-fill"></div></div>
+      <span style="font-size:12px;color:var(--text-muted);">72%</span>
+    </div>
+    <div class="topbar-right">
+      <div class="xp-chip">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        +30 XP on completion
+      </div>
+      <button class="save-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save
+      </button>
+    </div>
+  </header>
+
+  <div class="lesson-main">
+
+    <!-- Outline -->
+    <aside class="lesson-outline">
+      <div class="outline-section-label">Discrete Mathematics</div>
+
+      <div class="outline-item done">
+        <div class="outline-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        1. Sets and Logic
+        <span class="outline-num">8 min</span>
+      </div>
+      <div class="outline-item done">
+        <div class="outline-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        2. Relations & Functions
+        <span class="outline-num">10 min</span>
+      </div>
+      <div class="outline-item done">
+        <div class="outline-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        3. Proof Techniques
+        <span class="outline-num">14 min</span>
+      </div>
+      <div class="outline-item done">
+        <div class="outline-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        4. Induction
+        <span class="outline-num">12 min</span>
+      </div>
+      <div class="outline-item done">
+        <div class="outline-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        5. Combinatorics
+        <span class="outline-num">15 min</span>
+      </div>
+      <div style="height:1px;background:var(--border);margin:8px 16px;"></div>
+      <div class="outline-item done">
+        <div class="outline-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        10. Intro to Graphs
+        <span class="outline-num">11 min</span>
+      </div>
+      <div class="outline-item done">
+        <div class="outline-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        11. Graph Traversal
+        <span class="outline-num">13 min</span>
+      </div>
+      <div class="outline-item done">
+        <div class="outline-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        12. Trees & Spanning
+        <span class="outline-num">16 min</span>
+      </div>
+      <div class="outline-item active">
+        <div class="outline-dot active"></div>
+        13. Graph Coloring
+        <span class="outline-num">8 min</span>
+      </div>
+      <div class="outline-item">
+        <div class="outline-dot inactive"></div>
+        14. Eulerian Paths
+        <span class="outline-num">10 min</span>
+      </div>
+      <div class="outline-item">
+        <div class="outline-dot inactive"></div>
+        15. Hamiltonian Cycles
+        <span class="outline-num">9 min</span>
+      </div>
+      <div class="outline-item">
+        <div class="outline-dot inactive"></div>
+        16. Planar Graphs
+        <span class="outline-num">11 min</span>
+      </div>
+      <div class="outline-item">
+        <div class="outline-dot inactive"></div>
+        17. Network Flow
+        <span class="outline-num">18 min</span>
+      </div>
+      <div class="outline-item">
+        <div class="outline-dot inactive"></div>
+        18. Graph Algorithms
+        <span class="outline-num">20 min</span>
+      </div>
+    </aside>
+
+    <!-- Reading content -->
+    <div class="lesson-reading">
+      <div class="reading-inner">
+
+        <div class="lesson-eyebrow">Discrete Mathematics · Lesson 13</div>
+        <h1 class="lesson-title">Graph Coloring</h1>
+        <div class="lesson-meta">
+          <div class="lesson-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ~8 min read
+          </div>
+          <div class="lesson-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            3 practice problems
+          </div>
+          <div class="lesson-meta-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="var(--gold)" stroke-width="1"/></svg>
+            <span style="color:var(--gold);font-weight:600;">+30 XP</span>
+          </div>
+        </div>
+
+        <div class="prose">
+          <p>Graph coloring is one of the most beautiful and widely-studied problems in combinatorics. At its core, the question is deceptively simple: <strong>given a graph, can we assign colors to vertices such that no two adjacent vertices share the same color?</strong></p>
+
+          <div class="callout definition">
+            <div class="callout-title">Definition</div>
+            A <strong>proper coloring</strong> of graph <span style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--purple-tint);color:var(--purple);padding:1px 5px;border-radius:3px;">G = (V, E)</span> is a function <span style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--purple-tint);color:var(--purple);padding:1px 5px;border-radius:3px;">c: V → {1, 2, …, k}</span> such that for every edge <span style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--purple-tint);color:var(--purple);padding:1px 5px;border-radius:3px;">(u,v) ∈ E</span>, we have <span style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--purple-tint);color:var(--purple);padding:1px 5px;border-radius:3px;">c(u) ≠ c(v)</span>.
+          </div>
+
+          <p>The <strong>chromatic number</strong> χ(G) is the minimum <span style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--purple-tint);color:var(--purple);padding:1px 5px;border-radius:3px;">k</span> for which a proper k-coloring exists. Computing χ(G) is NP-hard in general — but for small graphs (or graphs with special structure), we can find it efficiently.</p>
+
+          <h2>Why it matters</h2>
+          <p>Graph coloring appears everywhere: scheduling problems (classes that share students can't be at the same time), register allocation in compilers (variables that are "live" simultaneously need different registers), and map coloring (regions sharing a border get different colors).</p>
+
+          <div class="callout theorem">
+            <div class="callout-title">Four Color Theorem (1976)</div>
+            Every planar graph is 4-colorable. That is, if a graph can be drawn in the plane without edge crossings, then χ(G) ≤ 4. The proof required computer assistance and remains one of the most famous results in mathematics.
+          </div>
+
+          <h2>The greedy algorithm</h2>
+          <p>The simplest approach: process vertices in some order, and assign each vertex the smallest color not used by any of its already-colored neighbors.</p>
+
+          <div class="code-block"><span class="kw">def</span> greedy_color(adj, n):
+    color = [-1] * n
+    <span class="kw">for</span> v <span class="kw">in</span> range(n):
+        used = {color[u] <span class="kw">for</span> u <span class="kw">in</span> adj[v] <span class="kw">if</span> color[u] != -<span class="nm">1</span>}
+        color[v] = next(c <span class="kw">for</span> c <span class="kw">in</span> range(n) <span class="kw">if</span> c <span class="kw">not in</span> used)
+    <span class="kw">return</span> max(color) + <span class="nm">1</span></div>
+
+          <p>This is fast — <span style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--purple-tint);color:var(--purple);padding:1px 5px;border-radius:3px;">O(V + E)</span> — but not optimal. The number of colors used depends on the vertex ordering.</p>
+        </div>
+
+        <!-- Inline question -->
+        <div class="question-card">
+          <div class="question-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Quick check
+          </div>
+          <div class="question-text">What is the chromatic number χ(K₅) of the complete graph on 5 vertices?</div>
+          <div class="options">
+            <div class="option">
+              <div class="option-circle"></div>
+              3 — it can always be done with 3 colors
+            </div>
+            <div class="option">
+              <div class="option-circle"></div>
+              4 — by the four color theorem
+            </div>
+            <div class="option correct">
+              <div class="option-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              5 — every vertex is adjacent to every other vertex
+            </div>
+            <div class="option">
+              <div class="option-circle"></div>
+              It depends on the vertex ordering
+            </div>
+          </div>
+          <div class="explanation show">
+            ✓ Correct! In K₅, every pair of vertices is connected, so all 5 vertices must receive different colors. χ(Kₙ) = n for any complete graph.
+          </div>
+        </div>
+
+        <div class="prose">
+          <h2>Bipartite graphs are always 2-colorable</h2>
+          <p>A graph is <strong>bipartite</strong> if its vertices can be split into two sets such that every edge crosses between the sets. Such graphs have χ(G) ≤ 2 — and a simple BFS coloring discovers whether a graph is bipartite in <span style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--purple-tint);color:var(--purple);padding:1px 5px;border-radius:3px;">O(V + E)</span>.</p>
+
+          <div class="callout example">
+            <div class="callout-title">Example</div>
+            A cycle graph Cₙ is bipartite if and only if n is even. An even cycle alternates between two colors perfectly. An odd cycle (like a triangle C₃) requires 3 colors.
+          </div>
+        </div>
+
+        <!-- Practice problems -->
+        <div class="practice-strip">
+          <div class="strip-title">Practice problems</div>
+          <div class="practice-cards">
+            <div class="practice-card">
+              <div class="practice-num">Problem 1</div>
+              <div class="practice-title">Chromatic Number</div>
+              <div class="practice-meta">
+                <span class="diff-medium">Medium</span>
+                <a class="solve-link" href="#">Solve <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+              </div>
+            </div>
+            <div class="practice-card">
+              <div class="practice-num">Problem 2</div>
+              <div class="practice-title">Bipartite Check</div>
+              <div class="practice-meta">
+                <span class="diff-easy">Easy</span>
+                <a class="solve-link" href="#">Solve <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+              </div>
+            </div>
+            <div class="practice-card">
+              <div class="practice-num">Problem 3</div>
+              <div class="practice-title">Exam Schedule</div>
+              <div class="practice-meta">
+                <span class="diff-hard">Hard</span>
+                <a class="solve-link" href="#">Solve <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer nav -->
+  <footer class="lesson-footer">
+    <button class="nav-btn prev">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <div>
+        <div style="font-size:11px;color:var(--text-muted);font-weight:500;">Previous</div>
+        Trees & Spanning
+      </div>
+    </button>
+    <div class="footer-lesson-name" style="font-size:13px;color:var(--text-muted);">Lesson 13 of 18 · Discrete Mathematics</div>
+    <button class="nav-btn next">
+      <div style="text-align:right;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);font-weight:500;">Next up</div>
+        Eulerian Paths
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </footer>
+</div>
+<div class="watermark">by Shusei — Sample Only</div>
+</body>
+</html>

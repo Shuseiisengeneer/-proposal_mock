@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>quanta — 404 Not Found</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{--navy-900:#1B2845;--navy-700:#2D3E66;--purple:#7C3AED;--purple-tint:#F3EEFF;--emerald:#059669;--surface:#FAFAF9;--surface-card:#FFFFFF;--surface-muted:#F4F4F2;--border:#E7E5E4;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--shadow-md:0 8px 24px rgba(15,23,42,0.08);--ease:cubic-bezier(0.16,1,0.3,1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--surface);color:var(--text-primary);font-family:'Inter',system-ui,sans-serif;font-feature-settings:'cv11','ss01','ss03';font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;}
+  a{color:inherit;text-decoration:none;}button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+  nav{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;border-bottom:1px solid var(--border);background:var(--surface-card);}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--navy-900),var(--purple));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:18px;}
+  .brand-name{font-weight:700;font-size:17px;letter-spacing:-0.02em;color:var(--navy-900);}
+
+  .page{flex:1;display:flex;align-items:center;justify-content:center;padding:64px;position:relative;overflow:hidden;}
+  .bg-math{position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;}
+  .bg-math-text{font-size:480px;font-weight:800;letter-spacing:-0.04em;background:linear-gradient(135deg,var(--purple),var(--navy-900));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0.06;font-family:'JetBrains Mono',monospace;user-select:none;}
+
+  .center{text-align:center;position:relative;z-index:1;max-width:540px;}
+  .error-num{font-family:'JetBrains Mono',monospace;font-size:120px;font-weight:700;line-height:1;background:linear-gradient(135deg,var(--purple),var(--navy-900));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
+  .math-joke{font-family:'JetBrains Mono',monospace;font-size:17px;color:var(--text-muted);margin-bottom:32px;display:inline-block;background:var(--surface-muted);border:1px solid var(--border);padding:10px 20px;border-radius:10px;}
+  .error-title{font-size:28px;font-weight:700;letter-spacing:-0.02em;margin-bottom:12px;}
+  .error-body{font-size:16px;color:var(--text-secondary);margin-bottom:40px;line-height:1.65;}
+  .error-body strong{color:var(--text-primary);}
+
+  .btn-row{display:flex;align-items:center;justify-content:center;gap:12px;}
+  .btn-primary{background:var(--navy-900);color:white;border-radius:12px;padding:13px 22px;font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:8px;transition:all 200ms var(--ease);}
+  .btn-primary:hover{background:var(--navy-700);transform:translateY(-1px);}
+  .btn-primary svg{width:15px;height:15px;}
+  .btn-secondary{border:1.5px solid var(--border);background:var(--surface-card);color:var(--text-primary);border-radius:12px;padding:12px 22px;font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:8px;transition:all 200ms var(--ease);}
+  .btn-secondary:hover{background:var(--surface-muted);}
+
+  .related{margin-top:64px;padding-top:32px;border-top:1px solid var(--border);text-align:left;}
+  .related-title{font-size:14px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px;text-align:center;}
+  .related-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface-card);border:1px solid var(--border);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:500;color:var(--text-secondary);transition:all 200ms var(--ease);}
+  .chip:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-tint);}
+  .chip svg{width:13px;height:13px;}
+
+  .watermark{position:fixed;bottom:16px;right:16px;background:rgba(15,23,42,0.85);color:white;font-size:12px;font-weight:500;padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-md);z-index:100;backdrop-filter:blur(8px);}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">
+    <div class="brand-logo">Q</div>
+    <span class="brand-name">quanta</span>
+  </div>
+  <a href="#" style="font-size:14px;color:var(--text-muted);">← Back to dashboard</a>
+</nav>
+
+<div class="page">
+  <div class="bg-math"><span class="bg-math-text">∅</span></div>
+  <div class="center">
+    <div class="error-num">404</div>
+    <div class="math-joke">lim<sub style="-webkit-text-fill-color:var(--text-muted);">x→404</sub> f(x) = ∅</div>
+    <h1 class="error-title">This page doesn't exist.</h1>
+    <p class="error-body">Either the URL is wrong, or this content was moved or deleted. The good news: <strong>1,200+ problems and 48 courses</strong> are still waiting for you.</p>
+    <div class="btn-row">
+      <a class="btn-primary" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+        Back to Dashboard
+      </a>
+      <a class="btn-secondary" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        Browse problems
+      </a>
+    </div>
+
+    <div class="related">
+      <div class="related-title">Maybe you were looking for</div>
+      <div class="related-chips">
+        <a class="chip" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+          Dashboard
+        </a>
+        <a class="chip" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+          Skills & Goals
+        </a>
+        <a class="chip" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/></svg>
+          Competitions
+        </a>
+        <a class="chip" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          Leaderboards
+        </a>
+        <a class="chip" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          Help center
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="watermark">by Shusei — Sample Only</div>
+</body>
+</html>

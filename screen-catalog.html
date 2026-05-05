@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>quanta — Course Catalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{--navy-900:#1B2845;--navy-700:#2D3E66;--gold:#F59E0B;--gold-tint:#FEF3C7;--emerald:#059669;--emerald-tint:#ECFDF5;--purple:#7C3AED;--purple-tint:#F3EEFF;--rose:#F43F5E;--rose-tint:#FFF1F2;--sky:#0EA5E9;--sky-tint:#E0F2FE;--surface:#FAFAF9;--surface-card:#FFFFFF;--surface-muted:#F4F4F2;--border:#E7E5E4;--border-strong:#D4D4D2;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--sidebar-w:240px;--shadow-sm:0 2px 8px rgba(15,23,42,0.06);--shadow-md:0 8px 24px rgba(15,23,42,0.08);--ease:cubic-bezier(0.16,1,0.3,1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--surface);color:var(--text-primary);font-family:'Inter',system-ui,sans-serif;font-feature-settings:'cv11','ss01','ss03';font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+  /* Sidebar */
+  .sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--surface-card);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;}
+  .sb-logo{height:64px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid var(--border);}
+  .sb-logo-mark{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--navy-900),var(--purple));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:18px;flex-shrink:0;}
+  .sb-logo-name{font-weight:700;font-size:17px;letter-spacing:-0.02em;color:var(--navy-900);}
+  .sb-nav{flex:1;padding:16px 12px;overflow-y:auto;}
+  .sb-section{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);padding:0 8px;margin:16px 0 6px;}
+  .sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;font-size:14px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 150ms;margin-bottom:2px;}
+  .sb-item:hover{background:var(--surface-muted);color:var(--text-primary);}
+  .sb-item.active{background:var(--purple-tint);color:var(--purple);font-weight:600;}
+  .sb-item svg{width:17px;height:17px;flex-shrink:0;}
+  .sb-item .badge{margin-left:auto;background:var(--purple);color:white;font-size:10px;font-weight:700;padding:2px 6px;border-radius:999px;}
+  .sb-footer{padding:16px;border-top:1px solid var(--border);}
+  .sb-user{display:flex;align-items:center;gap:10px;}
+  .sb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--navy-900));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;flex-shrink:0;}
+  .sb-uname{font-size:13px;font-weight:600;color:var(--text-primary);}
+  .sb-urole{font-size:11px;color:var(--text-muted);}
+  .sb-xp{margin-left:auto;font-size:11px;font-weight:700;color:var(--purple);font-family:'JetBrains Mono',monospace;}
+
+  /* Main layout */
+  .main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;}
+  .topbar{height:64px;display:flex;align-items:center;gap:16px;padding:0 32px;border-bottom:1px solid var(--border);background:rgba(250,250,249,0.85);backdrop-filter:saturate(180%) blur(12px);position:sticky;top:0;z-index:50;}
+  .topbar-title{font-size:17px;font-weight:700;letter-spacing:-0.01em;color:var(--text-primary);}
+  .topbar-sub{font-size:13px;color:var(--text-muted);}
+  .topbar-sep{width:1px;height:20px;background:var(--border);}
+  .search-wrap{flex:1;max-width:400px;position:relative;}
+  .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--text-muted);}
+  .search-inp{width:100%;height:38px;border:1.5px solid var(--border);border-radius:10px;padding:0 12px 0 36px;font-family:inherit;font-size:14px;color:var(--text-primary);background:var(--surface-card);outline:none;transition:all 200ms;}
+  .search-inp:focus{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-tint);}
+  .search-inp::placeholder{color:var(--text-muted);}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+  .xp-pill{display:flex;align-items:center;gap:6px;background:var(--purple-tint);border:1px solid rgba(124,58,237,0.2);border-radius:999px;padding:5px 12px;}
+  .xp-pill svg{width:13px;height:13px;color:var(--purple);}
+  .xp-pill span{font-size:13px;font-weight:700;color:var(--purple);font-family:'JetBrains Mono',monospace;}
+  .icon-btn{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:all 150ms;position:relative;}
+  .icon-btn:hover{background:var(--surface-muted);color:var(--text-primary);}
+  .icon-btn svg{width:17px;height:17px;}
+  .notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--rose);border-radius:50%;border:2px solid var(--surface-card);}
+  .top-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--navy-900));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0;}
+
+  .content{flex:1;padding:32px;}
+
+  /* Catalog layout: filter sidebar + grid */
+  .catalog-layout{display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start;}
+
+  /* Filter rail */
+  .filter-rail{background:var(--surface-card);border:1px solid var(--border);border-radius:16px;padding:20px;position:sticky;top:80px;}
+  .fr-section{margin-bottom:24px;}
+  .fr-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:12px;}
+  .fr-options{display:flex;flex-direction:column;gap:4px;}
+  .fr-opt{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 150ms;}
+  .fr-opt:hover{background:var(--surface-muted);}
+  .fr-opt.active{background:var(--purple-tint);color:var(--purple);font-weight:600;}
+  .fr-opt-count{margin-left:auto;font-size:12px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;}
+  .fr-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+  .fr-level-row{display:flex;gap:6px;flex-wrap:wrap;}
+  .level-chip{padding:5px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1.5px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:all 150ms;}
+  .level-chip:hover{border-color:var(--purple);color:var(--purple);}
+  .level-chip.active{border-color:var(--purple);background:var(--purple-tint);color:var(--purple);}
+  .level-chip.beginner.active{border-color:var(--emerald);background:var(--emerald-tint);color:var(--emerald);}
+  .level-chip.advanced.active{border-color:var(--rose);background:var(--rose-tint);color:var(--rose);}
+
+  .fr-range{margin-top:6px;}
+  .range-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:6px;}
+  input[type=range]{width:100%;accent-color:var(--purple);}
+
+  /* Catalog header row */
+  .catalog-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+  .catalog-count{font-size:14px;color:var(--text-secondary);}
+  .catalog-count strong{color:var(--text-primary);font-weight:700;}
+  .sort-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-muted);}
+  .sort-select{border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:13px;color:var(--text-primary);background:var(--surface-card);outline:none;cursor:pointer;}
+
+  /* Active filters */
+  .active-filters{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+  .af-chip{display:inline-flex;align-items:center;gap:6px;background:var(--purple-tint);border:1px solid rgba(124,58,237,0.25);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--purple);}
+  .af-chip button{width:14px;height:14px;border-radius:50%;background:rgba(124,58,237,0.2);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+  .af-clear{font-size:12px;color:var(--text-muted);font-weight:500;padding:5px 10px;border-radius:999px;transition:all 150ms;}
+  .af-clear:hover{background:var(--surface-muted);color:var(--text-secondary);}
+
+  /* Course grid */
+  .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .course-card{background:var(--surface-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 250ms var(--ease);}
+  .course-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--border-strong);}
+  .cc-banner{height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+  .cc-glyph{position:absolute;font-size:96px;font-weight:800;opacity:0.15;color:white;font-family:'JetBrains Mono',monospace;right:-16px;bottom:-20px;line-height:1;}
+  .cc-badge{position:absolute;top:12px;left:12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;background:rgba(255,255,255,0.2);color:white;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.25);}
+  .cc-body{padding:18px;}
+  .cc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+  .cc-topic{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);}
+  .cc-diff{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;}
+  .cc-diff.beginner{background:var(--emerald-tint);color:var(--emerald);}
+  .cc-diff.intermediate{background:var(--gold-tint);color:#B45309;}
+  .cc-diff.advanced{background:var(--rose-tint);color:var(--rose);}
+  .cc-title{font-size:15px;font-weight:700;color:var(--text-primary);letter-spacing:-0.01em;margin-bottom:6px;line-height:1.3;}
+  .cc-desc{font-size:12px;color:var(--text-secondary);line-height:1.55;margin-bottom:14px;}
+  .cc-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-muted);margin-bottom:14px;}
+  .cc-meta span{display:flex;align-items:center;gap:4px;}
+  .cc-meta svg{width:12px;height:12px;}
+  .cc-footer{display:flex;align-items:center;justify-content:space-between;}
+  .cc-stars{display:flex;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--gold);}
+  .cc-btn{background:var(--navy-900);color:white;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px;transition:all 200ms;}
+  .cc-btn:hover{background:var(--navy-700);}
+  .cc-btn.enrolled{background:var(--purple-tint);color:var(--purple);}
+  .cc-btn.enrolled:hover{background:var(--purple);color:white;}
+  .cc-progress{margin-bottom:14px;}
+  .cc-progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px;}
+  .cc-progress-bar{height:4px;background:var(--surface-muted);border-radius:999px;overflow:hidden;}
+  .cc-progress-fill{height:100%;background:var(--purple);border-radius:999px;}
+  .cc-new{position:absolute;top:12px;right:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;background:var(--gold);color:white;padding:3px 7px;border-radius:999px;}
+
+  /* Pagination */
+  .pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:32px;}
+  .pg-btn{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--text-secondary);border:1.5px solid var(--border);transition:all 150ms;cursor:pointer;}
+  .pg-btn:hover{border-color:var(--purple);color:var(--purple);}
+  .pg-btn.active{background:var(--purple);color:white;border-color:var(--purple);}
+  .pg-btn.nav{color:var(--text-muted);}
+
+  .watermark{position:fixed;bottom:16px;right:16px;background:rgba(15,23,42,0.85);color:white;font-size:12px;font-weight:500;padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-md);z-index:100;backdrop-filter:blur(8px);}
+</style>
+</head>
+<body>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-mark">Q</div>
+    <span class="sb-logo-name">quanta</span>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Learn</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>Dashboard</div>
+    <div class="sb-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Courses<span class="badge">48</span></div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>Problems</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Skills & Goals</div>
+    <div class="sb-section">Compete</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/></svg>Competitions</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Leaderboards</div>
+    <div class="sb-section">Account</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>Settings</div>
+  </nav>
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-av">S</div>
+      <div><div class="sb-uname">shusei</div><div class="sb-urole">Pro member</div></div>
+      <div class="sb-xp">1,247</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Course Catalog</div>
+    <div class="topbar-sep"></div>
+    <div class="topbar-sub">48 courses available</div>
+    <div class="search-wrap" style="margin-left:16px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input class="search-inp" type="text" placeholder="Search courses, topics…" value=""/>
+    </div>
+    <div class="topbar-right">
+      <div class="xp-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>1,247 XP</span></div>
+      <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="notif-dot"></div></button>
+      <div class="top-av">S</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="catalog-layout">
+      <!-- Filter Rail -->
+      <div class="filter-rail">
+        <div class="fr-section">
+          <div class="fr-title">Category</div>
+          <div class="fr-options">
+            <div class="fr-opt active"><div class="fr-dot" style="background:var(--purple)"></div>All Courses<span class="fr-opt-count">48</span></div>
+            <div class="fr-opt"><div class="fr-dot" style="background:var(--sky)"></div>Mathematics<span class="fr-opt-count">18</span></div>
+            <div class="fr-opt"><div class="fr-dot" style="background:var(--emerald)"></div>Algorithms<span class="fr-opt-count">14</span></div>
+            <div class="fr-opt"><div class="fr-dot" style="background:var(--gold)"></div>Number Theory<span class="fr-opt-count">8</span></div>
+            <div class="fr-opt"><div class="fr-dot" style="background:var(--rose)"></div>Graph Theory<span class="fr-opt-count">6</span></div>
+            <div class="fr-opt"><div class="fr-dot" style="background:#8B5CF6"></div>Cryptography<span class="fr-opt-count">2</span></div>
+          </div>
+        </div>
+        <div class="fr-section">
+          <div class="fr-title">Level</div>
+          <div class="fr-level-row">
+            <div class="level-chip beginner active">Beginner</div>
+            <div class="level-chip intermediate active">Intermediate</div>
+            <div class="level-chip advanced">Advanced</div>
+          </div>
+        </div>
+        <div class="fr-section">
+          <div class="fr-title">Duration</div>
+          <div class="fr-range">
+            <div class="range-row"><span>1 hr</span><span>20+ hrs</span></div>
+            <input type="range" min="1" max="20" value="15"/>
+          </div>
+        </div>
+        <div class="fr-section">
+          <div class="fr-title">Status</div>
+          <div class="fr-options">
+            <div class="fr-opt active"><div class="fr-dot" style="background:var(--emerald)"></div>All<span class="fr-opt-count">48</span></div>
+            <div class="fr-opt"><div class="fr-dot" style="background:var(--purple)"></div>Enrolled<span class="fr-opt-count">4</span></div>
+            <div class="fr-opt"><div class="fr-dot" style="background:var(--gold)"></div>Not started<span class="fr-opt-count">44</span></div>
+            <div class="fr-opt"><div class="fr-dot" style="background:var(--emerald)"></div>Completed<span class="fr-opt-count">2</span></div>
+          </div>
+        </div>
+        <div class="fr-section" style="margin-bottom:0;">
+          <div class="fr-title">Rating</div>
+          <div class="fr-options">
+            <div class="fr-opt active">⭐⭐⭐⭐⭐ 5.0<span class="fr-opt-count">12</span></div>
+            <div class="fr-opt">⭐⭐⭐⭐+ 4.0+<span class="fr-opt-count">31</span></div>
+            <div class="fr-opt">⭐⭐⭐+ 3.0+<span class="fr-opt-count">48</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div>
+        <div class="catalog-header">
+          <div class="catalog-count"><strong>48</strong> courses match your filters</div>
+          <div class="sort-wrap">Sort by: <select class="sort-select"><option>Most Popular</option><option>Newest</option><option>Highest Rated</option><option>Duration</option></select></div>
+        </div>
+        <div class="active-filters">
+          <div class="af-chip">Beginner <button>×</button></div>
+          <div class="af-chip">Intermediate <button>×</button></div>
+          <button class="af-clear">Clear all</button>
+        </div>
+
+        <div class="course-grid">
+          <!-- Card 1 — enrolled with progress -->
+          <div class="course-card">
+            <div class="cc-banner" style="background:linear-gradient(135deg,#1B2845,#7C3AED);">
+              <div class="cc-glyph">∀x</div>
+              <div class="cc-badge">Mathematics</div>
+            </div>
+            <div class="cc-body">
+              <div class="cc-top"><span class="cc-topic">Proof Theory</span><span class="cc-diff intermediate">Intermediate</span></div>
+              <div class="cc-title">Mathematical Proofs & Logic</div>
+              <div class="cc-desc">Master induction, contradiction, and formal proof structures used in competitive math.</div>
+              <div class="cc-progress">
+                <div class="cc-progress-label"><span>12 / 24 lessons</span><span style="color:var(--purple);font-weight:600;">57%</span></div>
+                <div class="cc-progress-bar"><div class="cc-progress-fill" style="width:57%"></div></div>
+              </div>
+              <div class="cc-meta">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8h 20m</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>320 XP</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>48 problems</span>
+              </div>
+              <div class="cc-footer">
+                <div class="cc-stars">★★★★★ <span style="color:var(--text-muted);font-weight:400;">4.9</span></div>
+                <button class="cc-btn enrolled">Continue →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="course-card">
+            <div class="cc-banner" style="background:linear-gradient(135deg,#065F46,#059669);">
+              <div class="cc-glyph">O(n)</div>
+              <div class="cc-badge">Algorithms</div>
+            </div>
+            <div class="cc-body">
+              <div class="cc-top"><span class="cc-topic">CS Fundamentals</span><span class="cc-diff beginner">Beginner</span></div>
+              <div class="cc-title">Algorithms & Big-O Analysis</div>
+              <div class="cc-desc">From sorting to searching — build intuition for algorithmic complexity from scratch.</div>
+              <div class="cc-progress">
+                <div class="cc-progress-label"><span>6 / 30 lessons</span><span style="color:var(--purple);font-weight:600;">20%</span></div>
+                <div class="cc-progress-bar"><div class="cc-progress-fill" style="width:20%"></div></div>
+              </div>
+              <div class="cc-meta">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>12h 0m</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>480 XP</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>72 problems</span>
+              </div>
+              <div class="cc-footer">
+                <div class="cc-stars">★★★★★ <span style="color:var(--text-muted);font-weight:400;">4.8</span></div>
+                <button class="cc-btn enrolled">Continue →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 — new -->
+          <div class="course-card">
+            <div class="cc-banner" style="background:linear-gradient(135deg,#92400E,#F59E0B);position:relative;">
+              <div class="cc-glyph">p|q</div>
+              <div class="cc-badge">Number Theory</div>
+              <div class="cc-new">New</div>
+            </div>
+            <div class="cc-body">
+              <div class="cc-top"><span class="cc-topic">Number Theory</span><span class="cc-diff intermediate">Intermediate</span></div>
+              <div class="cc-title">Modular Arithmetic Deep Dive</div>
+              <div class="cc-desc">Congruences, Euler's theorem, CRT — the toolkit behind cryptography and olympiad problems.</div>
+              <div class="cc-meta" style="margin-top:14px;">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10h 30m</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>400 XP</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>60 problems</span>
+              </div>
+              <div class="cc-footer">
+                <div class="cc-stars">★★★★★ <span style="color:var(--text-muted);font-weight:400;">5.0</span></div>
+                <button class="cc-btn">Enroll free</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="course-card">
+            <div class="cc-banner" style="background:linear-gradient(135deg,#0C4A6E,#0EA5E9);">
+              <div class="cc-glyph">G(V,E)</div>
+              <div class="cc-badge">Graph Theory</div>
+            </div>
+            <div class="cc-body">
+              <div class="cc-top"><span class="cc-topic">Graph Theory</span><span class="cc-diff intermediate">Intermediate</span></div>
+              <div class="cc-title">Graph Theory & Network Flow</div>
+              <div class="cc-desc">Trees, cycles, min-cut, max-flow — core graph algorithms for competitive programming and research.</div>
+              <div class="cc-meta" style="margin-top:14px;">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>9h 45m</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>360 XP</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>55 problems</span>
+              </div>
+              <div class="cc-footer">
+                <div class="cc-stars">★★★★☆ <span style="color:var(--text-muted);font-weight:400;">4.7</span></div>
+                <button class="cc-btn">Enroll free</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="course-card">
+            <div class="cc-banner" style="background:linear-gradient(135deg,#4C1D95,#8B5CF6);">
+              <div class="cc-glyph">RSA</div>
+              <div class="cc-badge">Cryptography</div>
+            </div>
+            <div class="cc-body">
+              <div class="cc-top"><span class="cc-topic">Cryptography</span><span class="cc-diff advanced">Advanced</span></div>
+              <div class="cc-title">Introduction to Cryptography</div>
+              <div class="cc-desc">RSA, elliptic curves, discrete log — math behind real-world encryption systems.</div>
+              <div class="cc-meta" style="margin-top:14px;">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>14h 0m</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>560 XP</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>88 problems</span>
+              </div>
+              <div class="cc-footer">
+                <div class="cc-stars">★★★★★ <span style="color:var(--text-muted);font-weight:400;">4.9</span></div>
+                <button class="cc-btn">Enroll free</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="course-card">
+            <div class="cc-banner" style="background:linear-gradient(135deg,#881337,#F43F5E);">
+              <div class="cc-glyph">Σ∂</div>
+              <div class="cc-badge">Mathematics</div>
+            </div>
+            <div class="cc-body">
+              <div class="cc-top"><span class="cc-topic">Calculus</span><span class="cc-diff beginner">Beginner</span></div>
+              <div class="cc-title">Calculus from First Principles</div>
+              <div class="cc-desc">Limits, derivatives, integrals — rigorously built from the ground up for math-minded learners.</div>
+              <div class="cc-meta" style="margin-top:14px;">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>11h 15m</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>440 XP</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>66 problems</span>
+              </div>
+              <div class="cc-footer">
+                <div class="cc-stars">★★★★☆ <span style="color:var(--text-muted);font-weight:400;">4.6</span></div>
+                <button class="cc-btn">Enroll free</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pagination">
+          <div class="pg-btn nav">‹</div>
+          <div class="pg-btn active">1</div>
+          <div class="pg-btn">2</div>
+          <div class="pg-btn">3</div>
+          <div class="pg-btn">…</div>
+          <div class="pg-btn">8</div>
+          <div class="pg-btn nav">›</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="watermark">by Shusei — Sample Only</div>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>quanta — Search Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{--navy-900:#1B2845;--navy-700:#2D3E66;--gold:#F59E0B;--gold-tint:#FEF3C7;--emerald:#059669;--emerald-tint:#ECFDF5;--purple:#7C3AED;--purple-tint:#F3EEFF;--rose:#F43F5E;--rose-tint:#FFF1F2;--sky:#0EA5E9;--sky-tint:#E0F2FE;--surface:#FAFAF9;--surface-card:#FFFFFF;--surface-muted:#F4F4F2;--border:#E7E5E4;--border-strong:#D4D4D2;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--sidebar-w:240px;--shadow-sm:0 2px 8px rgba(15,23,42,0.06);--shadow-md:0 8px 24px rgba(15,23,42,0.08);--ease:cubic-bezier(0.16,1,0.3,1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--surface);color:var(--text-primary);font-family:'Inter',system-ui,sans-serif;font-feature-settings:'cv11','ss01','ss03';font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+  /* Sidebar */
+  .sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--surface-card);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;}
+  .sb-logo{height:64px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid var(--border);}
+  .sb-logo-mark{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--navy-900),var(--purple));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:18px;flex-shrink:0;}
+  .sb-logo-name{font-weight:700;font-size:17px;letter-spacing:-0.02em;color:var(--navy-900);}
+  .sb-nav{flex:1;padding:16px 12px;overflow-y:auto;}
+  .sb-section{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);padding:0 8px;margin:16px 0 6px;}
+  .sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;font-size:14px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 150ms;margin-bottom:2px;}
+  .sb-item:hover{background:var(--surface-muted);color:var(--text-primary);}
+  .sb-item.active{background:var(--purple-tint);color:var(--purple);font-weight:600;}
+  .sb-item svg{width:17px;height:17px;flex-shrink:0;}
+  .sb-footer{padding:16px;border-top:1px solid var(--border);}
+  .sb-user{display:flex;align-items:center;gap:10px;}
+  .sb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--navy-900));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;flex-shrink:0;}
+  .sb-uname{font-size:13px;font-weight:600;color:var(--text-primary);}
+  .sb-urole{font-size:11px;color:var(--text-muted);}
+  .sb-xp{margin-left:auto;font-size:11px;font-weight:700;color:var(--purple);font-family:'JetBrains Mono',monospace;}
+
+  /* Main */
+  .main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;}
+  .topbar{height:64px;display:flex;align-items:center;gap:16px;padding:0 32px;border-bottom:1px solid var(--border);background:rgba(250,250,249,0.85);backdrop-filter:saturate(180%) blur(12px);position:sticky;top:0;z-index:50;}
+  .search-big{flex:1;max-width:600px;position:relative;}
+  .search-big svg.si{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--purple);}
+  .search-big input{width:100%;height:46px;border:2px solid var(--purple);border-radius:12px;padding:0 48px 0 44px;font-family:inherit;font-size:15px;color:var(--text-primary);background:var(--surface-card);outline:none;box-shadow:0 0 0 4px var(--purple-tint);}
+  .search-big .kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:600;color:var(--text-muted);background:var(--surface-muted);border:1px solid var(--border);border-radius:5px;padding:2px 6px;font-family:'JetBrains Mono',monospace;}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+  .xp-pill{display:flex;align-items:center;gap:6px;background:var(--purple-tint);border:1px solid rgba(124,58,237,0.2);border-radius:999px;padding:5px 12px;}
+  .xp-pill svg{width:13px;height:13px;color:var(--purple);}
+  .xp-pill span{font-size:13px;font-weight:700;color:var(--purple);font-family:'JetBrains Mono',monospace;}
+  .icon-btn{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:all 150ms;position:relative;}
+  .icon-btn:hover{background:var(--surface-muted);color:var(--text-primary);}
+  .icon-btn svg{width:17px;height:17px;}
+  .notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--rose);border-radius:50%;border:2px solid var(--surface-card);}
+  .top-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--navy-900));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0;}
+
+  .content{flex:1;padding:32px;display:grid;grid-template-columns:1fr 260px;gap:28px;align-items:start;}
+
+  /* Results area */
+  .results{display:flex;flex-direction:column;gap:0;}
+
+  .results-meta{font-size:14px;color:var(--text-muted);margin-bottom:24px;}
+  .results-meta strong{color:var(--text-primary);}
+  .results-meta .hi{color:var(--purple);font-weight:700;}
+
+  /* Type tabs */
+  .type-tabs{display:flex;align-items:center;gap:2px;border-bottom:1px solid var(--border);margin-bottom:24px;}
+  .t-tab{padding:10px 16px;font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 150ms;}
+  .t-tab:hover{color:var(--text-secondary);}
+  .t-tab.active{color:var(--purple);font-weight:700;border-bottom-color:var(--purple);}
+  .t-tab .cnt{font-size:12px;font-weight:600;background:var(--surface-muted);color:var(--text-muted);padding:1px 6px;border-radius:999px;margin-left:4px;}
+  .t-tab.active .cnt{background:var(--purple-tint);color:var(--purple);}
+
+  /* Result groups */
+  .result-group{margin-bottom:32px;}
+  .rg-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .rg-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);}
+  .rg-count{font-size:12px;color:var(--text-muted);font-weight:500;}
+  .rg-more{margin-left:auto;font-size:13px;font-weight:600;color:var(--purple);}
+  .rg-more:hover{text-decoration:underline;}
+
+  /* Result cards */
+  .result-card{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:var(--surface-card);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all 200ms;margin-bottom:6px;}
+  .result-card:last-child{margin-bottom:0;}
+  .result-card:hover{border-color:var(--purple);box-shadow:var(--shadow-sm);}
+  .rc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .rc-icon svg{width:16px;height:16px;}
+  .rc-body{flex:1;min-width:0;}
+  .rc-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:2px;}
+  .rc-title mark{background:var(--gold-tint);color:#92400E;border-radius:3px;padding:0 2px;font-weight:700;}
+  .rc-meta{font-size:12px;color:var(--text-muted);}
+  .rc-meta span{display:inline-flex;align-items:center;gap:3px;}
+  .rc-meta span+span::before{content:"·";margin:0 4px;}
+  .rc-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:600;margin-top:4px;}
+  .rc-badge.easy{background:var(--emerald-tint);color:var(--emerald);}
+  .rc-badge.medium{background:var(--gold-tint);color:#B45309;}
+  .rc-badge.hard{background:var(--rose-tint);color:var(--rose);}
+  .rc-badge.course{background:var(--purple-tint);color:var(--purple);}
+  .rc-badge.lesson{background:var(--sky-tint);color:var(--sky);}
+  .rc-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+  .rc-xp{font-size:12px;font-weight:700;color:var(--purple);font-family:'JetBrains Mono',monospace;}
+  .rc-chevron{color:var(--text-muted);}
+  .rc-chevron svg{width:14px;height:14px;}
+
+  /* Sidebar panel */
+  .side-panel{display:flex;flex-direction:column;gap:16px;position:sticky;top:80px;}
+  .side-card{background:var(--surface-card);border:1px solid var(--border);border-radius:14px;padding:18px;}
+  .side-card-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:12px;}
+
+  /* Recent searches */
+  .recent-list{display:flex;flex-direction:column;gap:4px;}
+  .recent-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;font-size:13px;color:var(--text-secondary);cursor:pointer;transition:all 150ms;}
+  .recent-item:hover{background:var(--surface-muted);color:var(--text-primary);}
+  .recent-item svg{width:13px;height:13px;color:var(--text-muted);flex-shrink:0;}
+  .recent-item .ri-x{margin-left:auto;width:14px;height:14px;color:var(--text-muted);opacity:0;transition:opacity 150ms;}
+  .recent-item:hover .ri-x{opacity:1;}
+
+  /* Popular topics */
+  .topics-wrap{display:flex;flex-wrap:wrap;gap:6px;}
+  .topic-chip{padding:5px 10px;border-radius:999px;font-size:12px;font-weight:600;color:var(--text-secondary);background:var(--surface-muted);border:1px solid var(--border);cursor:pointer;transition:all 150ms;}
+  .topic-chip:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-tint);}
+
+  .watermark{position:fixed;bottom:16px;right:16px;background:rgba(15,23,42,0.85);color:white;font-size:12px;font-weight:500;padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-md);z-index:100;backdrop-filter:blur(8px);}
+</style>
+</head>
+<body>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-mark">Q</div>
+    <span class="sb-logo-name">quanta</span>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Learn</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>Dashboard</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Courses</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>Problems</div>
+    <div class="sb-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Search</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Skills & Goals</div>
+    <div class="sb-section">Compete</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/></svg>Competitions</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Leaderboards</div>
+    <div class="sb-section">Account</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</div>
+    <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>Settings</div>
+  </nav>
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-av">S</div>
+      <div><div class="sb-uname">shusei</div><div class="sb-urole">Pro member</div></div>
+      <div class="sb-xp">1,247</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="search-big">
+      <svg class="si" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" value="graph coloring" autofocus/>
+      <span class="kbd">ESC</span>
+    </div>
+    <div class="topbar-right">
+      <div class="xp-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>1,247 XP</span></div>
+      <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="notif-dot"></div></button>
+      <div class="top-av">S</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Results -->
+    <div class="results">
+      <div class="results-meta">Showing <strong>18 results</strong> for "<span class="hi">graph coloring</span>" · 0.04s</div>
+
+      <div class="type-tabs">
+        <div class="t-tab active">All <span class="cnt">18</span></div>
+        <div class="t-tab">Problems <span class="cnt">8</span></div>
+        <div class="t-tab">Lessons <span class="cnt">6</span></div>
+        <div class="t-tab">Courses <span class="cnt">3</span></div>
+        <div class="t-tab">Users <span class="cnt">1</span></div>
+      </div>
+
+      <!-- Problems group -->
+      <div class="result-group">
+        <div class="rg-header">
+          <div class="rg-title">Problems</div>
+          <div class="rg-count">8 results</div>
+          <button class="rg-more">Show all →</button>
+        </div>
+
+        <div class="result-card">
+          <div class="rc-icon" style="background:var(--purple-tint);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
+          <div class="rc-body">
+            <div class="rc-title">Chromatic Number of a <mark>Graph</mark> — K₄ <mark>Coloring</mark></div>
+            <div class="rc-meta">
+              <span>Graph Theory</span><span>38 solves</span><span>+40 XP</span>
+            </div>
+            <span class="rc-badge medium">Medium</span>
+          </div>
+          <div class="rc-right">
+            <span class="rc-xp">+40 XP</span>
+            <span class="rc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <div class="rc-icon" style="background:var(--sky-tint);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--sky)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
+          <div class="rc-body">
+            <div class="rc-title">Four <mark>Color</mark> Theorem — Planar <mark>Graph</mark> Proof</div>
+            <div class="rc-meta">
+              <span>Graph Theory</span><span>12 solves</span><span>+80 XP</span>
+            </div>
+            <span class="rc-badge hard">Hard</span>
+          </div>
+          <div class="rc-right">
+            <span class="rc-xp">+80 XP</span>
+            <span class="rc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <div class="rc-icon" style="background:var(--emerald-tint);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg></div>
+          <div class="rc-body">
+            <div class="rc-title">Greedy <mark>Graph Coloring</mark> Algorithm</div>
+            <div class="rc-meta">
+              <span>Graph Theory</span><span>87 solves</span><span>+20 XP</span>
+            </div>
+            <span class="rc-badge easy">Easy</span>
+          </div>
+          <div class="rc-right">
+            <span class="rc-xp">+20 XP</span>
+            <span class="rc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lessons group -->
+      <div class="result-group">
+        <div class="rg-header">
+          <div class="rg-title">Lessons</div>
+          <div class="rg-count">6 results</div>
+          <button class="rg-more">Show all →</button>
+        </div>
+
+        <div class="result-card">
+          <div class="rc-icon" style="background:var(--navy-900);"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <div class="rc-body">
+            <div class="rc-title"><mark>Graph Coloring</mark> — Introduction & Basics</div>
+            <div class="rc-meta">
+              <span>Graph Theory & Network Flow</span><span>Lesson 5 of 18</span><span>~12 min</span>
+            </div>
+            <span class="rc-badge lesson">Lesson</span>
+          </div>
+          <div class="rc-right">
+            <span class="rc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <div class="rc-icon" style="background:var(--navy-900);"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <div class="rc-body">
+            <div class="rc-title">Chromatic Polynomials & <mark>Graph Color</mark>ing Properties</div>
+            <div class="rc-meta">
+              <span>Graph Theory & Network Flow</span><span>Lesson 6 of 18</span><span>~18 min</span>
+            </div>
+            <span class="rc-badge lesson">Lesson</span>
+          </div>
+          <div class="rc-right">
+            <span class="rc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <div class="rc-icon" style="background:var(--navy-900);"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <div class="rc-body">
+            <div class="rc-title">Edge <mark>Coloring</mark> and Vizing's Theorem</div>
+            <div class="rc-meta">
+              <span>Graph Theory & Network Flow</span><span>Lesson 7 of 18</span><span>~15 min</span>
+            </div>
+            <span class="rc-badge lesson">Lesson</span>
+          </div>
+          <div class="rc-right">
+            <span class="rc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Courses group -->
+      <div class="result-group">
+        <div class="rg-header">
+          <div class="rg-title">Courses</div>
+          <div class="rg-count">3 results</div>
+        </div>
+
+        <div class="result-card">
+          <div class="rc-icon" style="background:var(--sky);"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <div class="rc-body">
+            <div class="rc-title"><mark>Graph</mark> Theory & Network Flow</div>
+            <div class="rc-meta">
+              <span>18 lessons</span><span>9h 45m</span><span>360 XP</span>
+            </div>
+            <span class="rc-badge course">Enrolled</span>
+          </div>
+          <div class="rc-right">
+            <span style="font-size:12px;color:var(--emerald);font-weight:600;">20% done</span>
+            <span class="rc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <div class="rc-icon" style="background:var(--rose);"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <div class="rc-body">
+            <div class="rc-title">Advanced <mark>Graph</mark> Algorithms & Applications</div>
+            <div class="rc-meta">
+              <span>24 lessons</span><span>14h 0m</span><span>520 XP</span>
+            </div>
+            <span class="rc-badge" style="background:var(--surface-muted);color:var(--text-muted);">Not enrolled</span>
+          </div>
+          <div class="rc-right">
+            <span class="rc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side panel -->
+    <div class="side-panel">
+      <div class="side-card">
+        <div class="side-card-title">Recent Searches</div>
+        <div class="recent-list">
+          <div class="recent-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>graph coloring<svg class="ri-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+          <div class="recent-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>modular arithmetic<svg class="ri-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+          <div class="recent-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>dijkstra<svg class="ri-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+          <div class="recent-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>euler's theorem<svg class="ri-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="side-card">
+        <div class="side-card-title">Popular Topics</div>
+        <div class="topics-wrap">
+          <div class="topic-chip">Graph Theory</div>
+          <div class="topic-chip">Modular Arithmetic</div>
+          <div class="topic-chip">Dynamic Programming</div>
+          <div class="topic-chip">Induction</div>
+          <div class="topic-chip">Combinatorics</div>
+          <div class="topic-chip">RSA</div>
+          <div class="topic-chip">BFS / DFS</div>
+          <div class="topic-chip">Primes</div>
+          <div class="topic-chip">Proofs</div>
+          <div class="topic-chip">Sorting</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="watermark">by Shusei — Sample Only</div>
+</body>
+</html>

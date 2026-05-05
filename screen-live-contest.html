@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>quanta — Spring Math Blitz · Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{--navy-900:#1B2845;--navy-700:#2D3E66;--gold:#F59E0B;--gold-tint:#FEF3C7;--emerald:#059669;--emerald-tint:#ECFDF5;--purple:#7C3AED;--purple-tint:#F3EEFF;--rose:#F43F5E;--rose-tint:#FFF1F2;--sky:#0EA5E9;--surface:#FAFAF9;--surface-card:#FFFFFF;--surface-muted:#F4F4F2;--border:#E7E5E4;--border-strong:#D4D4D2;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--editor-bg:#0F172A;--shadow-sm:0 2px 8px rgba(15,23,42,0.06);--shadow-md:0 8px 24px rgba(15,23,42,0.08);--ease:cubic-bezier(0.16,1,0.3,1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--editor-bg);color:var(--text-primary);font-family:'Inter',system-ui,sans-serif;font-feature-settings:'cv11','ss01','ss03';font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;height:100vh;overflow:hidden;}
+  a{color:inherit;text-decoration:none;}button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+  /* Contest topbar — dark */
+  .contest-topbar{height:56px;background:var(--navy-900);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;padding:0 20px;gap:16px;position:relative;z-index:100;}
+  .ct-back{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);font-size:13px;font-weight:500;padding:6px 10px;border-radius:8px;transition:all 150ms;}
+  .ct-back:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.9);}
+  .ct-back svg{width:14px;height:14px;}
+  .ct-sep{width:1px;height:20px;background:rgba(255,255,255,0.1);}
+  .ct-title{font-size:14px;font-weight:700;color:white;letter-spacing:-0.01em;}
+  .live-badge{display:flex;align-items:center;gap:6px;background:rgba(244,63,94,0.2);border:1px solid rgba(244,63,94,0.35);border-radius:999px;padding:4px 10px;}
+  .live-dot{width:7px;height:7px;background:var(--rose);border-radius:50%;flex-shrink:0;animation:pulse-opacity 1.5s ease-in-out infinite;}
+  @keyframes pulse-opacity{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .live-text{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--rose);}
+  .ct-participants{font-size:13px;color:rgba(255,255,255,0.5);}
+  .ct-participants strong{color:rgba(255,255,255,0.85);}
+  .ct-timer{margin-left:auto;display:flex;align-items:center;gap:8px;}
+  .timer-label{font-size:12px;color:rgba(255,255,255,0.5);font-weight:500;}
+  .timer-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:white;letter-spacing:0.02em;}
+  .timer-val.warning{color:var(--gold);}
+  .timer-val.danger{color:var(--rose);}
+  .ct-rank{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border-radius:999px;padding:5px 12px;}
+  .ct-rank svg{width:13px;height:13px;color:var(--gold);}
+  .ct-rank-val{font-size:13px;font-weight:700;color:white;font-family:'JetBrains Mono',monospace;}
+  .ct-rank-label{font-size:12px;color:rgba(255,255,255,0.5);}
+  .ct-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--navy-700));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;}
+
+  /* Problem tabs bar */
+  .prob-tabs{height:44px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;padding:0 20px;gap:4px;}
+  .prob-tab{display:flex;align-items:center;gap:7px;padding:6px 14px;border-radius:8px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 150ms;}
+  .prob-tab:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.8);}
+  .prob-tab.active{background:var(--purple);color:white;}
+  .prob-tab.solved{color:var(--emerald);}
+  .prob-tab.solved .pt-dot{background:var(--emerald);}
+  .prob-tab.wrong .pt-dot{background:var(--rose);}
+  .prob-tab.wrong{color:var(--rose);}
+  .pt-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.3);}
+  .pt-dot.active{background:white;}
+  .prob-tab-sep{width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 4px;}
+  .submit-main-btn{margin-left:auto;background:var(--emerald);color:white;border-radius:9px;padding:7px 18px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;transition:all 200ms;}
+  .submit-main-btn:hover{background:#047857;}
+  .submit-main-btn svg{width:14px;height:14px;}
+
+  /* Main split */
+  .contest-split{display:grid;grid-template-columns:42% 1fr 280px;height:calc(100vh - 100px);}
+
+  /* Problem pane */
+  .problem-pane{background:var(--surface-card);border-right:1px solid rgba(255,255,255,0.06);overflow-y:auto;padding:28px;}
+  .prob-header{margin-bottom:20px;}
+  .prob-num{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:6px;}
+  .prob-title{font-size:22px;font-weight:800;letter-spacing:-0.02em;color:var(--text-primary);margin-bottom:12px;}
+  .prob-chips{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .prob-chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;}
+  .chip-medium{background:var(--gold-tint);color:#B45309;}
+  .chip-topic{background:var(--surface-muted);color:var(--text-secondary);border:1px solid var(--border);}
+  .chip-xp{background:var(--purple-tint);color:var(--purple);}
+  .prob-divider{height:1px;background:var(--border);margin:20px 0;}
+  .prob-body{font-size:14px;color:var(--text-secondary);line-height:1.75;}
+  .prob-body p{margin-bottom:14px;}
+  .prob-body .math{font-family:'JetBrains Mono',monospace;background:var(--surface-muted);color:var(--text-primary);padding:1px 6px;border-radius:4px;font-size:13px;}
+  .prob-body strong{color:var(--text-primary);}
+  .example-block{background:var(--surface-muted);border:1px solid var(--border);border-radius:10px;padding:14px;margin:14px 0;font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .example-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:6px;font-family:'Inter',sans-serif;}
+  .example-io{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .ex-col-label{font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px;}
+  .ex-val{color:var(--text-primary);}
+  .constraints{margin-top:14px;}
+  .constraints ul{padding-left:20px;display:flex;flex-direction:column;gap:4px;}
+  .constraints li{font-size:13px;color:var(--text-secondary);}
+  .constraints li .math{font-family:'JetBrains Mono',monospace;background:var(--surface-muted);color:var(--text-primary);padding:1px 5px;border-radius:3px;font-size:12px;}
+
+  /* Editor pane */
+  .editor-pane{background:var(--editor-bg);display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,0.06);}
+  .editor-toolbar{height:42px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;padding:0 16px;gap:10px;}
+  .lang-select{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:4px 10px;font-family:inherit;font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);cursor:pointer;outline:none;}
+  .editor-actions{margin-left:auto;display:flex;align-items:center;gap:8px;}
+  .ed-btn{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);transition:all 150ms;}
+  .ed-btn:hover{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.9);}
+  .ed-btn svg{width:13px;height:13px;}
+  .run-btn{background:rgba(5,150,105,0.2);color:#6EE7B7;border-color:rgba(5,150,105,0.3);}
+  .run-btn:hover{background:rgba(5,150,105,0.35);}
+
+  .editor-area{flex:1;padding:20px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;overflow-y:auto;position:relative;}
+  .line-nums{position:absolute;left:0;top:0;padding:20px 0;width:40px;text-align:right;color:rgba(255,255,255,0.2);font-size:12px;line-height:1.65;user-select:none;}
+  .code-wrap{margin-left:48px;}
+  .kw{color:#C084FC;} /* keywords — purple */
+  .fn{color:#60A5FA;} /* functions — blue */
+  .str{color:#86EFAC;} /* strings — green */
+  .cm{color:#94A3B8;font-style:italic;} /* comment — gray */
+  .op{color:#F472B6;} /* operators — pink */
+  .num{color:#FCD34D;} /* numbers — amber */
+  .var{color:#E2E8F0;} /* variables — white */
+  .indent{display:inline-block;width:20px;}
+
+  .editor-status{height:28px;background:rgba(255,255,255,0.03);border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;padding:0 16px;gap:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.3);}
+  .status-item{display:flex;align-items:center;gap:5px;}
+  .status-ok{color:#6EE7B7;}
+
+  /* Standings pane */
+  .standings-pane{background:var(--editor-bg);overflow-y:auto;display:flex;flex-direction:column;}
+  .sp-header{padding:16px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--editor-bg);}
+  .sp-title{font-size:13px;font-weight:700;color:rgba(255,255,255,0.85);}
+  .sp-count{font-size:12px;color:rgba(255,255,255,0.4);}
+  .sp-list{flex:1;padding:8px;}
+  .sp-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;cursor:pointer;transition:all 150ms;}
+  .sp-row:hover{background:rgba(255,255,255,0.04);}
+  .sp-row.you{background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);}
+  .sp-rank{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;width:26px;text-align:right;flex-shrink:0;}
+  .sp-rank.gold{color:var(--gold);}
+  .sp-rank.silver{color:#94A3B8;}
+  .sp-rank.bronze{color:#CD7C2F;}
+  .sp-rank.you-rank{color:var(--purple);}
+  .sp-rank.normal{color:rgba(255,255,255,0.4);}
+  .sp-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0;}
+  .sp-name{flex:1;font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .sp-name.you-name{color:white;}
+  .sp-score{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);}
+  .sp-score.you-score{color:var(--purple);}
+  .sp-solved{display:flex;gap:3px;}
+  .sp-dot{width:10px;height:10px;border-radius:50%;}
+  .sp-dot.s{background:var(--emerald);}
+  .sp-dot.w{background:var(--rose);}
+  .sp-dot.p{background:rgba(255,255,255,0.15);}
+
+  /* Output pane at bottom of editor */
+  .output-pane{height:140px;background:rgba(0,0,0,0.3);border-top:1px solid rgba(255,255,255,0.08);padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;overflow-y:auto;}
+  .out-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .out-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:2px 7px;border-radius:999px;}
+  .out-tag.accepted{background:rgba(5,150,105,0.25);color:#6EE7B7;}
+  .out-tag.running{background:rgba(245,158,11,0.25);color:#FCD34D;}
+  .out-label{font-size:12px;color:rgba(255,255,255,0.4);}
+  .out-line{color:rgba(255,255,255,0.7);margin-bottom:3px;}
+  .out-line.ok{color:#6EE7B7;}
+  .out-line.err{color:#FCA5A5;}
+  .out-time{color:rgba(255,255,255,0.3);}
+
+  .watermark{position:fixed;bottom:16px;right:16px;background:rgba(15,23,42,0.85);color:white;font-size:12px;font-weight:500;padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-md);z-index:100;backdrop-filter:blur(8px);}
+</style>
+</head>
+<body>
+<!-- Contest topbar -->
+<div class="contest-topbar">
+  <button class="ct-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Exit contest
+  </button>
+  <div class="ct-sep"></div>
+  <div class="ct-title">Spring Math Blitz 2026</div>
+  <div class="live-badge"><div class="live-dot"></div><span class="live-text">Live</span></div>
+  <div class="ct-participants"><strong>196</strong> participants</div>
+  <div class="ct-timer">
+    <span class="timer-label">Time remaining</span>
+    <span class="timer-val warning">1:42:17</span>
+  </div>
+  <div class="ct-rank">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+    <span class="ct-rank-val">#14</span>
+    <span class="ct-rank-label">current rank</span>
+  </div>
+  <div class="ct-avatar">S</div>
+</div>
+
+<!-- Problem tabs -->
+<div class="prob-tabs">
+  <div class="prob-tab solved"><div class="pt-dot"></div>P1 — Modular Inverse</div>
+  <div class="prob-tab solved"><div class="pt-dot"></div>P2 — GCD Chains</div>
+  <div class="prob-tab active"><div class="pt-dot active"></div>P3 — Chromatic Number</div>
+  <div class="prob-tab"><div class="pt-dot"></div>P4 — Flow Networks</div>
+  <div class="prob-tab"><div class="pt-dot"></div>P5 — Prime Factorization</div>
+  <div class="prob-tab wrong"><div class="pt-dot"></div>P6 — Euler Path</div>
+  <div class="prob-tab-sep"></div>
+  <button class="submit-main-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    Submit P3
+  </button>
+</div>
+
+<!-- Main 3-column split -->
+<div class="contest-split">
+  <!-- Problem Statement -->
+  <div class="problem-pane">
+    <div class="prob-header">
+      <div class="prob-num">Problem 3 of 6</div>
+      <div class="prob-title">Chromatic Number</div>
+      <div class="prob-chips">
+        <span class="prob-chip chip-medium">Medium</span>
+        <span class="prob-chip chip-topic">Graph Theory</span>
+        <span class="prob-chip chip-xp">+40 XP</span>
+      </div>
+    </div>
+    <div class="prob-divider"></div>
+    <div class="prob-body">
+      <p>Given a simple undirected graph <span class="math">G = (V, E)</span>, find the <strong>chromatic number</strong> <span class="math">χ(G)</span> — the minimum number of colors needed to color the vertices such that no two adjacent vertices share the same color.</p>
+      <p>For a <strong>complete graph</strong> <span class="math">K_n</span>, every pair of distinct vertices is adjacent, requiring exactly <span class="math">n</span> colors. Your task is to determine <span class="math">χ(G)</span> for a general sparse graph using backtracking.</p>
+      <p>The graph is given as an adjacency list with <span class="math">n ≤ 10</span> vertices and <span class="math">m ≤ 20</span> edges.</p>
+
+      <div class="example-block">
+        <div class="example-label">Example 1</div>
+        <div class="example-io">
+          <div><div class="ex-col-label">Input</div><div class="ex-val">4 6<br/>0 1<br/>0 2<br/>0 3<br/>1 2<br/>1 3<br/>2 3</div></div>
+          <div><div class="ex-col-label">Output</div><div class="ex-val">4</div></div>
+        </div>
+      </div>
+
+      <div class="example-block">
+        <div class="example-label">Example 2</div>
+        <div class="example-io">
+          <div><div class="ex-col-label">Input</div><div class="ex-val">3 2<br/>0 1<br/>1 2</div></div>
+          <div><div class="ex-col-label">Output</div><div class="ex-val">2</div></div>
+        </div>
+      </div>
+
+      <div class="constraints">
+        <p><strong>Constraints</strong></p>
+        <ul>
+          <li><span class="math">1 ≤ n ≤ 10</span></li>
+          <li><span class="math">0 ≤ m ≤ n(n-1)/2</span></li>
+          <li>Graph is simple and undirected</li>
+          <li>Time limit: <span class="math">2 seconds</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Editor -->
+  <div class="editor-pane">
+    <div class="editor-toolbar">
+      <select class="lang-select"><option>Python 3</option><option>C++17</option><option>Java 21</option><option>JavaScript</option></select>
+      <div class="editor-actions">
+        <button class="ed-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Reset</button>
+        <button class="ed-btn run-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run tests</button>
+      </div>
+    </div>
+    <div class="editor-area">
+      <div class="line-nums">1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28</div>
+      <div class="code-wrap"><pre><span class="kw">import</span> <span class="var">sys</span>
+<span class="kw">from</span> <span class="var">itertools</span> <span class="kw">import</span> <span class="fn">product</span>
+
+<span class="kw">def</span> <span class="fn">chromatic_number</span>(<span class="var">n</span>, <span class="var">adj</span>):
+<span class="indent">  </span><span class="kw">def</span> <span class="fn">is_valid</span>(<span class="var">coloring</span>, <span class="var">k</span>):
+<span class="indent">    </span><span class="indent">  </span><span class="kw">for</span> <span class="var">u</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="var">n</span>):
+<span class="indent">    </span><span class="indent">    </span><span class="kw">for</span> <span class="var">v</span> <span class="kw">in</span> <span class="var">adj</span>[<span class="var">u</span>]:
+<span class="indent">    </span><span class="indent">      </span><span class="kw">if</span> <span class="var">coloring</span>[<span class="var">u</span>] <span class="op">==</span> <span class="var">coloring</span>[<span class="var">v</span>]:
+<span class="indent">    </span><span class="indent">        </span><span class="kw">return</span> <span class="kw">False</span>
+<span class="indent">    </span><span class="kw">return</span> <span class="kw">True</span>
+
+<span class="indent">  </span><span class="kw">for</span> <span class="var">k</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="var">n</span> <span class="op">+</span> <span class="num">1</span>):
+<span class="indent">    </span><span class="kw">for</span> <span class="var">coloring</span> <span class="kw">in</span> <span class="fn">product</span>(<span class="fn">range</span>(<span class="var">k</span>), <span class="var">repeat</span><span class="op">=</span><span class="var">n</span>):
+<span class="indent">      </span><span class="kw">if</span> <span class="fn">is_valid</span>(<span class="var">coloring</span>, <span class="var">k</span>):
+<span class="indent">        </span><span class="kw">return</span> <span class="var">k</span>
+<span class="indent">  </span><span class="kw">return</span> <span class="var">n</span>
+
+<span class="var">n</span>, <span class="var">m</span> <span class="op">=</span> <span class="fn">map</span>(<span class="fn">int</span>, <span class="var">input</span>().<span class="fn">split</span>())
+<span class="var">adj</span> <span class="op">=</span> [[] <span class="kw">for</span> <span class="var">_</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="var">n</span>)]
+<span class="kw">for</span> <span class="var">_</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="var">m</span>):
+<span class="indent">  </span><span class="var">u</span>, <span class="var">v</span> <span class="op">=</span> <span class="fn">map</span>(<span class="fn">int</span>, <span class="var">input</span>().<span class="fn">split</span>())
+<span class="indent">  </span><span class="var">adj</span>[<span class="var">u</span>].<span class="fn">append</span>(<span class="var">v</span>)
+<span class="indent">  </span><span class="var">adj</span>[<span class="var">v</span>].<span class="fn">append</span>(<span class="var">u</span>)
+
+<span class="fn">print</span>(<span class="fn">chromatic_number</span>(<span class="var">n</span>, <span class="var">adj</span>))</pre></div>
+    </div>
+    <div class="output-pane">
+      <div class="out-header">
+        <span class="out-tag accepted">✓ Tests passed</span>
+        <span class="out-label">Last run: 2 min ago</span>
+      </div>
+      <div class="out-line ok">Test 1: 4 ✓ (expected: 4)</div>
+      <div class="out-line ok">Test 2: 2 ✓ (expected: 2)</div>
+      <div class="out-line ok">Test 3: 3 ✓ (expected: 3)</div>
+      <div class="out-time">Runtime: 84ms · Memory: 12.4MB</div>
+    </div>
+    <div class="editor-status">
+      <span class="status-item status-ok">● Python 3</span>
+      <span class="status-item">Ln 24, Col 1</span>
+      <span class="status-item">UTF-8</span>
+      <span class="status-item">28 lines</span>
+    </div>
+  </div>
+
+  <!-- Live standings -->
+  <div class="standings-pane">
+    <div class="sp-header">
+      <span class="sp-title">Live Standings</span>
+      <span class="sp-count">196 participants</span>
+    </div>
+    <div class="sp-list">
+      <div class="sp-row">
+        <span class="sp-rank gold">#1</span>
+        <div class="sp-av" style="background:linear-gradient(135deg,#92400E,#F59E0B);">D</div>
+        <span class="sp-name">dubon</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">420</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank silver">#2</span>
+        <div class="sp-av" style="background:linear-gradient(135deg,#1E40AF,#3B82F6);">P</div>
+        <span class="sp-name">pradeep_8922</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">320</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank bronze">#3</span>
+        <div class="sp-av" style="background:linear-gradient(135deg,#065F46,#10B981);">A</div>
+        <span class="sp-name">arsenii</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot w"></div></div>
+        <span class="sp-score">280</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#4</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">L</div>
+        <span class="sp-name">lena_codes</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot w"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">240</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#5</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">K</div>
+        <span class="sp-name">kai_euler</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">200</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#6</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">M</div>
+        <span class="sp-name">mathisfun99</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">190</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#7</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">Z</div>
+        <span class="sp-name">z3ros</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot w"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">160</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#8</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">T</div>
+        <span class="sp-name">theta_waves</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">155</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#9</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">R</div>
+        <span class="sp-name">recurse_mx</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">140</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#10</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">V</div>
+        <span class="sp-name">vxr7</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">130</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#11</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">N</div>
+        <span class="sp-name">n_body_problem</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">120</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#12</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">Q</div>
+        <span class="sp-name">qsort_queen</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">115</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#13</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">B</div>
+        <span class="sp-name">bayes_brain</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">110</span>
+      </div>
+      <!-- YOU row -->
+      <div class="sp-row you">
+        <span class="sp-rank you-rank">#14</span>
+        <div class="sp-av" style="background:linear-gradient(135deg,var(--purple),var(--navy-700));">S</div>
+        <span class="sp-name you-name">shusei (you)</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score you-score">200</span>
+      </div>
+      <div class="sp-row">
+        <span class="sp-rank normal">#15</span>
+        <div class="sp-av" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);">X</div>
+        <span class="sp-name">ximena_r</span>
+        <div class="sp-solved"><div class="sp-dot s"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div><div class="sp-dot p"></div></div>
+        <span class="sp-score">95</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="watermark">by Shusei — Sample Only</div>
+</body>
+</html>

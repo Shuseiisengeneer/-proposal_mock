@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>quanta — Create account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{--navy-900:#1B2845;--navy-700:#2D3E66;--gold:#F59E0B;--gold-tint:#FEF3C7;--emerald:#059669;--emerald-tint:#ECFDF5;--purple:#7C3AED;--purple-tint:#F3EEFF;--rose:#F43F5E;--sky:#0EA5E9;--surface:#FAFAF9;--surface-card:#FFFFFF;--surface-muted:#F4F4F2;--border:#E7E5E4;--border-strong:#D4D4D2;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--shadow-md:0 8px 24px rgba(15,23,42,0.08);--ease:cubic-bezier(0.16,1,0.3,1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--surface);color:var(--text-primary);font-family:'Inter',system-ui,sans-serif;font-feature-settings:'cv11','ss01','ss03';font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;height:100vh;}
+  a{color:inherit;text-decoration:none;}button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+
+  /* Left panel */
+  .left-panel{background:linear-gradient(150deg,var(--navy-900) 0%,var(--navy-700) 40%,var(--purple) 100%);display:flex;flex-direction:column;padding:48px;position:relative;overflow:hidden;}
+  .left-panel::before{content:"∫Σ∂π∇";position:absolute;font-size:300px;font-weight:800;color:rgba(255,255,255,0.04);right:-80px;top:-60px;line-height:1.1;font-family:'Inter',sans-serif;}
+  .left-panel::after{content:"∞ω";position:absolute;font-size:200px;font-weight:800;color:rgba(255,255,255,0.03);left:-40px;bottom:-20px;line-height:1.2;font-family:'Inter',sans-serif;}
+  .left-logo{display:flex;align-items:center;gap:10px;margin-bottom:auto;position:relative;z-index:1;}
+  .left-logo-mark{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:18px;}
+  .left-logo-name{color:white;font-weight:700;font-size:17px;}
+  .left-hero{position:relative;z-index:1;margin-bottom:auto;}
+  .left-quote{font-size:36px;font-weight:800;letter-spacing:-0.025em;color:white;line-height:1.15;margin-bottom:20px;}
+  .left-sub{font-size:15px;color:rgba(255,255,255,0.7);line-height:1.6;}
+  /* Floating card */
+  .left-card{position:relative;z-index:1;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(12px);border-radius:16px;padding:20px;margin-top:32px;}
+  .lc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .lc-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.1);padding:3px 8px;border-radius:999px;}
+  .lc-diff{font-size:11px;font-weight:600;color:var(--gold);background:rgba(245,158,11,0.2);padding:3px 8px;border-radius:999px;}
+  .lc-problem{font-size:14px;font-weight:600;color:white;margin-bottom:12px;line-height:1.5;}
+  .lc-input{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:white;margin-bottom:10px;}
+  .lc-accepted{background:rgba(5,150,105,0.2);border:1px solid rgba(5,150,105,0.3);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#6EE7B7;}
+  .lc-accepted svg{width:14px;height:14px;}
+  .left-social{display:flex;align-items:center;gap:8px;margin-top:20px;}
+  .mini-av{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700;margin-left:-6px;}
+  .mini-av:first-child{margin-left:0;}
+  .left-social-text{font-size:12px;color:rgba(255,255,255,0.6);}
+
+  /* Right panel */
+  .right-panel{background:var(--surface-card);display:flex;align-items:center;justify-content:center;padding:48px;}
+  .right-inner{width:100%;max-width:420px;}
+  .right-h1{font-size:28px;font-weight:800;letter-spacing:-0.025em;margin-bottom:6px;}
+  .right-sub{font-size:14px;color:var(--text-secondary);margin-bottom:32px;}
+  .right-sub a{color:var(--purple);font-weight:600;}
+
+  /* OAuth buttons */
+  .oauth-btn{width:100%;height:48px;border:1.5px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:10px;transition:all 200ms var(--ease);background:var(--surface-card);}
+  .oauth-btn:hover{background:var(--surface-muted);border-color:var(--border-strong);}
+  .oauth-icon{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+
+  .divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
+  .divider-line{flex:1;height:1px;background:var(--border);}
+  .divider-text{font-size:12px;color:var(--text-muted);font-weight:500;white-space:nowrap;}
+
+  /* Form */
+  .form-group{margin-bottom:16px;}
+  .form-label{display:block;font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px;}
+  .form-input{width:100%;height:48px;border:1.5px solid var(--border);border-radius:10px;padding:0 14px;font-family:inherit;font-size:14px;color:var(--text-primary);background:var(--surface-card);outline:none;transition:all 200ms var(--ease);}
+  .form-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-tint);}
+  .form-input::placeholder{color:var(--text-muted);}
+  .form-input-wrap{position:relative;}
+  .show-pass{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);cursor:pointer;}
+  .show-pass svg{width:16px;height:16px;}
+
+  .submit-btn{width:100%;height:48px;border-radius:12px;background:var(--purple);color:white;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;transition:all 200ms var(--ease);}
+  .submit-btn:hover{background:#6D28D9;transform:translateY(-1px);}
+
+  .terms{font-size:12px;color:var(--text-muted);text-align:center;margin-top:16px;line-height:1.6;}
+  .terms a{color:var(--text-secondary);font-weight:500;}
+  .signin-link{text-align:center;margin-top:24px;font-size:14px;color:var(--text-secondary);}
+  .signin-link a{color:var(--purple);font-weight:600;}
+
+  .watermark{position:fixed;bottom:16px;right:16px;background:rgba(15,23,42,0.85);color:white;font-size:12px;font-weight:500;padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-md);z-index:100;backdrop-filter:blur(8px);}
+</style>
+</head>
+<body>
+<div class="split">
+  <!-- LEFT -->
+  <div class="left-panel">
+    <div class="left-logo">
+      <div class="left-logo-mark">Q</div>
+      <span class="left-logo-name">quanta</span>
+    </div>
+
+    <div class="left-hero">
+      <div class="left-quote">"Where curiosity becomes competence."</div>
+      <div class="left-sub">Join 24,000+ learners who use quanta to go deeper into mathematics, algorithms, and computer science — one problem at a time.</div>
+      <div class="left-card">
+        <div class="lc-header">
+          <span class="lc-tag">Graph Theory</span>
+          <span class="lc-diff">Medium</span>
+        </div>
+        <div class="lc-problem">What is the chromatic number of a complete graph K₄?</div>
+        <div class="lc-input">4</div>
+        <div class="lc-accepted">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Accepted · +40 XP earned
+        </div>
+      </div>
+      <div class="left-social">
+        <div class="mini-av">D</div><div class="mini-av">P</div><div class="mini-av">A</div><div class="mini-av">M</div>
+        <span class="left-social-text">24,000+ learners and growing</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-panel">
+    <div class="right-inner">
+      <h1 class="right-h1">Create your account</h1>
+      <p class="right-sub">Free forever. No credit card required. <a href="#">Already have one? Sign in →</a></p>
+
+      <button class="oauth-btn">
+        <div class="oauth-icon" style="background:#4285F4;color:white;">G</div>
+        Continue with Google
+      </button>
+      <button class="oauth-btn">
+        <div class="oauth-icon" style="background:#000;color:white;">⌘</div>
+        Continue with Apple
+      </button>
+      <button class="oauth-btn">
+        <div class="oauth-icon" style="background:#24292E;color:white;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </div>
+        Continue with GitHub
+      </button>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">or sign up with email</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input class="form-input" type="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input class="form-input" type="text" placeholder="mathwizard42" value="shusei"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="form-input-wrap">
+          <input class="form-input" type="password" placeholder="At least 8 characters" style="padding-right:44px;"/>
+          <div class="show-pass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        </div>
+      </div>
+
+      <button class="submit-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+        Create account
+      </button>
+
+      <p class="terms">By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+    </div>
+  </div>
+</div>
+<div class="watermark">by Shusei — Sample Only</div>
+</body>
+</html>
