@@ -1,698 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Student Dashboard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>quanta — Mockup Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --navy: #0f1f3d;
-    --navy-2: #162a52;
-    --navy-3: #1d3567;
-    --blue: #4a90e2;
-    --light-blue: #6cb4f5;
-    --white: #ffffff;
-    --gray: #b8c2d6;
-    --gray-2: #8593ad;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.25);
-    --shadow-glow: 0 8px 32px rgba(74, 144, 226, 0.35);
-  }
+  :root{--navy:#1B2845;--purple:#7C3AED;--purple-tint:#F3EEFF;--surface:#FAFAF9;--surface-card:#FFFFFF;--surface-muted:#F4F4F2;--border:#E7E5E4;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--shadow-md:0 8px 24px rgba(15,23,42,0.08);--ease:cubic-bezier(0.16,1,0.3,1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--surface);color:var(--text-primary);font-family:'Inter',sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  header{background:var(--navy);padding:40px 48px 0;}
+  .hd-top{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+  .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#2D3E66,var(--purple));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:20px;}
+  .wordmark{font-size:20px;font-weight:800;color:white;letter-spacing:-0.02em;}
+  .tag{font-size:12px;font-weight:600;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.65);padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);}
+  h1{font-size:34px;font-weight:800;letter-spacing:-0.025em;color:white;margin-bottom:6px;}
+  .sub{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:32px;}
+  .tab-row{display:flex;gap:2px;}
+  .tab{padding:10px 20px;font-size:14px;font-weight:600;color:rgba(255,255,255,0.45);border-radius:10px 10px 0 0;cursor:pointer;}
+  .tab.active{background:var(--surface);color:var(--text-primary);}
 
-  .icon {
-    display: block;
-    width: 1em; height: 1em;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    flex-shrink: 0;
-  }
+  main{padding:36px 48px 64px;}
 
-  html, body {
-    background: #060c1c;
-    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    color: var(--white);
-    height: 100%;
-  }
+  .group{margin-bottom:44px;}
+  .group-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .group-title::after{content:"";flex:1;height:1px;background:var(--border);}
 
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-  }
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
 
-  .device {
-    width: 375px;
-    height: 812px;
-    background: var(--navy);
-    background-image:
-      radial-gradient(circle at 20% 0%, rgba(74, 144, 226, 0.18), transparent 40%),
-      radial-gradient(circle at 100% 30%, rgba(108, 180, 245, 0.12), transparent 50%);
-    position: relative;
-    overflow: hidden;
-    border-radius: 32px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  }
+  .card{background:var(--surface-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 250ms var(--ease);}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+  .thumb{height:150px;background:var(--surface-muted);overflow:hidden;}
+  .thumb img{width:100%;height:100%;object-fit:cover;object-position:top left;}
+  .card-body{padding:14px 16px 16px;}
+  .card-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:3px;}
+  .card-name{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px;}
+  .btns{display:flex;gap:8px;}
+  .btn-open{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:8px;font-size:12px;font-weight:700;background:var(--navy);color:white;transition:background 150ms;}
+  .btn-open:hover{background:#2D3E66;}
+  .btn-open svg{width:11px;height:11px;}
+  .btn-png{display:inline-flex;align-items:center;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;background:var(--surface-muted);color:var(--text-secondary);border:1px solid var(--border);transition:background 150ms;}
+  .btn-png:hover{background:var(--border);}
 
-  /* ----- Header ----- */
-  .header {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 72px;
-    padding: 14px 20px 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 10;
-    background: linear-gradient(180deg, rgba(15, 31, 61, 0.95) 60%, rgba(15, 31, 61, 0));
-    backdrop-filter: blur(8px);
-  }
-
-  .greet { display: flex; align-items: center; gap: 10px; }
-
-  .avatar {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6cb4f5, #4a90e2);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 18px; color: white;
-    border: 2px solid rgba(255,255,255,0.15);
-    box-shadow: 0 4px 12px rgba(74,144,226,0.4);
-  }
-
-  .greet-text .hello { font-size: 12px; color: var(--gray); font-weight: 600; }
-  .greet-text .name  { font-size: 16px; font-weight: 800; color: white; line-height: 1.1; }
-
-  .header-right { display: flex; align-items: center; gap: 10px; }
-
-  .icon-btn {
-    width: 40px; height: 40px;
-    border-radius: 14px;
-    background: rgba(255,255,255,0.08);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; color: white;
-    position: relative; cursor: pointer;
-    transition: transform .2s ease, background .2s ease;
-  }
-  .icon-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.14); }
-
-  .badge-dot {
-    position: absolute; top: 6px; right: 6px;
-    width: 8px; height: 8px;
-    background: var(--warning);
-    border-radius: 50%;
-    border: 2px solid var(--navy);
-  }
-
-  .streak {
-    display: flex; align-items: center; gap: 5px;
-    background: linear-gradient(135deg, #f59e0b, #ef4444);
-    padding: 8px 12px;
-    border-radius: 14px;
-    font-size: 14px; font-weight: 800; color: white;
-    box-shadow: 0 4px 12px rgba(245,158,11,0.35);
-    cursor: pointer;
-    transition: transform .2s ease;
-  }
-  .streak .icon { width: 18px; height: 18px; }
-  .streak:hover { transform: translateY(-2px); }
-
-  /* ----- Scroll body ----- */
-  .scroll {
-    position: absolute;
-    top: 72px; bottom: 76px;
-    left: 0; right: 0;
-    overflow-y: auto; overflow-x: hidden;
-    padding: 8px 20px 24px;
-    scrollbar-width: none;
-  }
-  .scroll::-webkit-scrollbar { display: none; }
-
-  /* ----- Progress card ----- */
-  .progress-card {
-    margin-top: 8px;
-    background: linear-gradient(135deg, #4a90e2 0%, #6cb4f5 100%);
-    border-radius: 20px;
-    padding: 18px;
-    display: flex; align-items: center; gap: 16px;
-    box-shadow: var(--shadow-glow);
-    position: relative; overflow: hidden;
-    cursor: pointer;
-    transition: transform .25s ease;
-  }
-  .progress-card:hover { transform: translateY(-3px); }
-  .progress-card::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 120px; height: 120px;
-    background: rgba(255,255,255,0.12);
-    border-radius: 50%;
-  }
-
-  .ring {
-    width: 88px; height: 88px;
-    flex-shrink: 0; position: relative; z-index: 1;
-  }
-  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .ring .track { fill: none; stroke: rgba(255,255,255,0.25); stroke-width: 8; }
-  .ring .bar {
-    fill: none; stroke: white; stroke-width: 8; stroke-linecap: round;
-    stroke-dasharray: 251.2;
-    stroke-dashoffset: 82.9;
-    filter: drop-shadow(0 0 6px rgba(255,255,255,0.6));
-  }
-  .ring-text {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column; font-weight: 900;
-  }
-  .ring-text .pct { font-size: 20px; line-height: 1; }
-  .ring-text .lbl { font-size: 9px; opacity: 0.85; letter-spacing: 0.5px; margin-top: 2px; }
-
-  .progress-info { z-index: 1; }
-  .progress-info .title { font-size: 13px; font-weight: 700; opacity: 0.9; margin-bottom: 4px; }
-  .progress-info .stat  { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
-  .progress-info .msg {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: rgba(255,255,255,0.22);
-    padding: 4px 10px; border-radius: 10px;
-    font-size: 12px; font-weight: 700;
-  }
-  .msg .icon { width: 14px; height: 14px; }
-
-  /* ----- Section ----- */
-  .section { margin-top: 22px; }
-  .section-head {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .section-title { font-size: 16px; font-weight: 800; color: white; }
-  .section-link { font-size: 12px; color: var(--light-blue); font-weight: 700; cursor: pointer; }
-  .section-link:hover { text-decoration: underline; }
-
-  /* ----- Daily quests ----- */
-  .quest-list { display: flex; flex-direction: column; gap: 10px; }
-  .quest {
-    background: var(--navy-2);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    padding: 12px 14px;
-    display: flex; align-items: center; gap: 12px;
-    cursor: pointer;
-    transition: transform .2s ease, background .2s ease, border-color .2s ease;
-  }
-  .quest:hover  { transform: translateY(-2px); background: var(--navy-3); }
-  .quest:active { background: var(--navy-3); border-color: var(--blue); }
-
-  .quest-icon {
-    width: 42px; height: 42px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; color: white;
-    flex-shrink: 0;
-  }
-  .quest-icon.q1 { background: linear-gradient(135deg, #4a90e2, #6cb4f5); }
-  .quest-icon.q2 { background: linear-gradient(135deg, #10b981, #34d399); }
-  .quest-icon.q3 { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
-
-  .quest-body { flex: 1; min-width: 0; }
-  .quest-title { font-size: 14px; font-weight: 700; color: white; margin-bottom: 4px; }
-  .quest-bar {
-    height: 4px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 4px; overflow: hidden;
-  }
-  .quest-bar > span {
-    display: block; height: 100%;
-    background: linear-gradient(90deg, var(--blue), var(--light-blue));
-    border-radius: 4px;
-  }
-
-  .quest-pts {
-    background: rgba(16,185,129,0.15);
-    color: var(--success);
-    font-size: 12px; font-weight: 800;
-    padding: 6px 10px; border-radius: 10px;
-    flex-shrink: 0;
-  }
-
-  /* ----- Continue learning ----- */
-  .h-scroll {
-    display: flex; gap: 12px;
-    overflow-x: auto; overflow-y: hidden;
-    margin: 0 -20px;
-    padding: 4px 20px 8px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-  .h-scroll::-webkit-scrollbar { display: none; }
-
-  .lesson {
-    flex: 0 0 168px;
-    background: var(--navy-2);
-    border-radius: 18px; overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.06);
-    cursor: pointer;
-    transition: transform .25s ease, box-shadow .25s ease;
-    scroll-snap-align: start;
-  }
-  .lesson:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
-
-  .thumb {
-    height: 96px;
-    display: flex; align-items: center; justify-content: center;
-    color: white; position: relative;
-  }
-  .thumb .icon {
-    width: 48px; height: 48px;
-    stroke-width: 1.5;
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
-  }
-  .thumb.l1 { background: linear-gradient(135deg, #4a90e2, #6cb4f5); }
-  .thumb.l2 { background: linear-gradient(135deg, #10b981, #34d399); }
-  .thumb.l3 { background: linear-gradient(135deg, #a78bfa, #f472b6); }
-  .thumb.l4 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
-
-  .thumb .tag {
-    position: absolute; top: 8px; left: 8px;
-    background: rgba(0,0,0,0.35); color: white;
-    font-size: 10px; font-weight: 700;
-    padding: 3px 8px; border-radius: 8px;
-    backdrop-filter: blur(4px);
-  }
-
-  .lesson-body { padding: 10px 12px 12px; }
-  .lesson-title {
-    font-size: 13px; font-weight: 800; color: white;
-    line-height: 1.25; margin-bottom: 8px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .lesson-progress {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 11px; color: var(--gray); font-weight: 700;
-  }
-  .lesson-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
-  .lesson-bar > span { display: block; height: 100%; background: var(--light-blue); border-radius: 4px; }
-
-  /* ----- Achievements ----- */
-  .achievements { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .badge {
-    background: var(--navy-2);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    padding: 14px 8px;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    cursor: pointer;
-    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-    position: relative; overflow: hidden;
-  }
-  .badge::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 50% 30%, rgba(108,180,245,0.25), transparent 60%);
-    opacity: 0;
-    transition: opacity .3s ease;
-  }
-  .badge:hover {
-    transform: translateY(-3px);
-    border-color: rgba(108,180,245,0.5);
-    box-shadow: 0 8px 20px rgba(74,144,226,0.25);
-  }
-  .badge:hover::before { opacity: 1; }
-
-  .badge-icon {
-    width: 52px; height: 52px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 26px; color: white;
-    position: relative; z-index: 1;
-  }
-  .badge-icon .icon { width: 28px; height: 28px; }
-  .badge-icon.b1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
-  .badge-icon.b2 { background: linear-gradient(135deg, #6cb4f5, #4a90e2); box-shadow: 0 4px 12px rgba(74,144,226,0.4); }
-  .badge-icon.b3 { background: linear-gradient(135deg, #f472b6, #a78bfa); box-shadow: 0 4px 12px rgba(167,139,250,0.4); }
-
-  .badge-name {
-    font-size: 11px; font-weight: 800; color: white;
-    text-align: center; z-index: 1; line-height: 1.2;
-  }
-
-  /* ----- Bottom Nav ----- */
-  .nav {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 76px;
-    background: rgba(15,31,61,0.92);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255,255,255,0.06);
-    display: flex; justify-content: space-around; align-items: center;
-    padding: 6px 12px 14px;
-    z-index: 10;
-  }
-  .nav-item {
-    flex: 1;
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    color: var(--gray-2);
-    font-size: 10px; font-weight: 700;
-    cursor: pointer;
-    transition: color .2s ease, transform .2s ease;
-    padding: 6px 4px; border-radius: 12px;
-  }
-  .nav-item:hover { color: var(--light-blue); transform: translateY(-2px); }
-  .nav-item .icon { width: 24px; height: 24px; }
-  .nav-item.active { color: var(--light-blue); }
-  .nav-item.active .icon { filter: drop-shadow(0 0 6px rgba(108,180,245,0.6)); }
-
-  .spacer-sm { height: 4px; }
-
-  /* ----- Watermark ----- */
-  .watermark {
-    position: fixed;
-    right: 12px;
-    bottom: 12px;
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.3);
-    background: rgba(0, 0, 0, 0.4);
-    padding: 6px 12px;
-    border-radius: 4px;
-    z-index: 9999;
-    pointer-events: none;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-  }
+  footer{text-align:center;padding:24px;font-size:12px;color:var(--text-muted);}
 </style>
 </head>
 <body>
+<header>
+  <div class="hd-top">
+    <div class="logo">Q</div>
+    <span class="wordmark">quanta</span>
+    <span class="tag">Mockup · Sample Only</span>
+  </div>
+  <h1>UI Mockup Index</h1>
+  <p class="sub">16 screens · by Shusei</p>
+  <div class="tab-row"><div class="tab active">All screens</div></div>
+</header>
 
-<!-- ═══════════════ INLINE SVG SPRITE ═══════════════ -->
-<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
-
-  <!-- bell -->
-  <symbol id="ico-bell" viewBox="0 0 24 24">
-    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-  </symbol>
-
-  <!-- flame -->
-  <symbol id="ico-flame" viewBox="0 0 24 24">
-    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
-  </symbol>
-
-  <!-- zap / flash -->
-  <symbol id="ico-zap" viewBox="0 0 24 24">
-    <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-  </symbol>
-
-  <!-- book-open -->
-  <symbol id="ico-book" viewBox="0 0 24 24">
-    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-  </symbol>
-
-  <!-- check-circle (completed quest) -->
-  <symbol id="ico-check" viewBox="0 0 24 24">
-    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-    <polyline points="22 4 12 14.01 9 11.01"/>
-  </symbol>
-
-  <!-- clock -->
-  <symbol id="ico-clock" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="10"/>
-    <polyline points="12 6 12 12 16 14"/>
-  </symbol>
-
-  <!-- calculator -->
-  <symbol id="ico-calc" viewBox="0 0 24 24">
-    <rect x="3" y="2" width="18" height="20" rx="2" fill="none"/>
-    <rect x="6" y="5" width="12" height="3.5" rx="0.5" fill="currentColor" stroke="none"/>
-    <circle cx="8"  cy="13" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="12" cy="13" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="16" cy="13" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="8"  cy="18" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="12" cy="18" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="16" cy="18" r="1.5" fill="currentColor" stroke="none"/>
-  </symbol>
-
-  <!-- globe / planet -->
-  <symbol id="ico-planet" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="10"/>
-    <line x1="2" y1="12" x2="22" y2="12"/>
-    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-  </symbol>
-
-  <!-- code-slash -->
-  <symbol id="ico-code" viewBox="0 0 24 24">
-    <polyline points="16 18 22 12 16 6"/>
-    <polyline points="8 6 2 12 8 18"/>
-    <line x1="15" y1="3" x2="9" y2="21"/>
-  </symbol>
-
-  <!-- trophy -->
-  <symbol id="ico-trophy" viewBox="0 0 24 24">
-    <polyline points="8 21 12 21 16 21"/>
-    <line x1="12" y1="17" x2="12" y2="21"/>
-    <path d="M7 4h10v6a5 5 0 0 1-10 0V4z"/>
-    <path d="M5 4H3c0 5 2 7 4 8"/>
-    <path d="M19 4h2c0 5-2 7-4 8"/>
-  </symbol>
-
-  <!-- home -->
-  <symbol id="ico-home" viewBox="0 0 24 24">
-    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-    <polyline points="9 22 9 12 15 12 15 22"/>
-  </symbol>
-
-  <!-- layers / lessons -->
-  <symbol id="ico-layers" viewBox="0 0 24 24">
-    <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-    <polyline points="2 17 12 22 22 17"/>
-    <polyline points="2 12 12 17 22 12"/>
-  </symbol>
-
-  <!-- sparkles / AI -->
-  <symbol id="ico-sparkles" viewBox="0 0 24 24">
-    <path d="m12 3-1.9 5.8a2 2 0 0 1-1.29 1.29L3 12l5.8 1.9a2 2 0 0 1 1.29 1.29L12 21l1.9-5.8a2 2 0 0 1 1.29-1.29L21 12l-5.8-1.9a2 2 0 0 1-1.29-1.29Z"/>
-    <path d="M5 3v4M3 5h4M19 17v4M17 19h4"/>
-  </symbol>
-
-  <!-- person -->
-  <symbol id="ico-person" viewBox="0 0 24 24">
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-    <circle cx="12" cy="7" r="4"/>
-  </symbol>
-
-</svg>
-<!-- ════════════════════════════════════════════════════ -->
-
-<div class="device">
-
-  <!-- HEADER -->
-  <header class="header">
-    <div class="greet">
-      <div class="avatar">A</div>
-      <div class="greet-text">
-        <div class="hello">Welcome back</div>
-        <div class="name">Hi, Alex!</div>
-      </div>
+<main>
+  <div class="group">
+    <div class="group-title">Core App</div>
+    <div class="grid">
+      <div class="card"><div class="thumb"><img src="screenshots/screenshot.png"/></div><div class="card-body"><div class="card-label">Signed In</div><div class="card-name">Dashboard</div><div class="btns"><a class="btn-open" href="screens/dashboard-mock.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screenshot.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-skills.png"/></div><div class="card-body"><div class="card-label">Signed In</div><div class="card-name">Skills &amp; Goals</div><div class="btns"><a class="btn-open" href="screens/screen-skills.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-skills.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-catalog.png"/></div><div class="card-body"><div class="card-label">Signed In</div><div class="card-name">Course Catalog</div><div class="btns"><a class="btn-open" href="screens/screen-catalog.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-catalog.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-profile.png"/></div><div class="card-body"><div class="card-label">Signed In</div><div class="card-name">User Profile</div><div class="btns"><a class="btn-open" href="screens/screen-profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-profile.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-notifications.png"/></div><div class="card-body"><div class="card-label">Signed In</div><div class="card-name">Notifications</div><div class="btns"><a class="btn-open" href="screens/screen-notifications.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-notifications.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-search.png"/></div><div class="card-body"><div class="card-label">Signed In</div><div class="card-name">Global Search</div><div class="btns"><a class="btn-open" href="screens/screen-search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-search.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-settings.png"/></div><div class="card-body"><div class="card-label">Signed In</div><div class="card-name">Settings</div><div class="btns"><a class="btn-open" href="screens/screen-settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-settings.png" target="_blank">PNG</a></div></div></div>
     </div>
-    <div class="header-right">
-      <div class="icon-btn" aria-label="Notifications">
-        <svg class="icon"><use href="#ico-bell"/></svg>
-        <span class="badge-dot"></span>
-      </div>
-      <div class="streak" aria-label="Streak 7 days">
-        <svg class="icon"><use href="#ico-flame"/></svg><span>7</span>
-      </div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">Compete</div>
+    <div class="grid">
+      <div class="card"><div class="thumb"><img src="screenshots/screen-competitions.png"/></div><div class="card-body"><div class="card-label">Signed In</div><div class="card-name">Competitions</div><div class="btns"><a class="btn-open" href="screens/screen-competitions.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-competitions.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-leaderboard.png"/></div><div class="card-body"><div class="card-label">Signed In</div><div class="card-name">Leaderboards</div><div class="btns"><a class="btn-open" href="screens/screen-leaderboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-leaderboard.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-live-contest.png"/></div><div class="card-body"><div class="card-label">Fullscreen</div><div class="card-name">Live Contest</div><div class="btns"><a class="btn-open" href="screens/screen-live-contest.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-live-contest.png" target="_blank">PNG</a></div></div></div>
     </div>
-  </header>
+  </div>
 
-  <!-- SCROLLABLE BODY -->
-  <main class="scroll">
-
-    <!-- PROGRESS CARD -->
-    <section class="progress-card">
-      <div class="ring">
-        <svg viewBox="0 0 100 100">
-          <circle class="track" cx="50" cy="50" r="40"></circle>
-          <circle class="bar"   cx="50" cy="50" r="40"></circle>
-        </svg>
-        <div class="ring-text">
-          <span class="pct">67%</span>
-          <span class="lbl">DONE</span>
-        </div>
-      </div>
-      <div class="progress-info">
-        <div class="title">Today's Goal</div>
-        <div class="stat">2 of 3 lessons</div>
-        <div class="msg">
-          <svg class="icon"><use href="#ico-zap"/></svg>
-          Keep going!
-        </div>
-      </div>
-    </section>
-
-    <!-- DAILY QUESTS -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">Daily Quests</h2>
-        <span class="section-link">View all</span>
-      </div>
-      <div class="quest-list">
-
-        <div class="quest">
-          <div class="quest-icon q1"><svg class="icon"><use href="#ico-book"/></svg></div>
-          <div class="quest-body">
-            <div class="quest-title">Learn 10 new words</div>
-            <div class="quest-bar"><span style="width:60%"></span></div>
-          </div>
-          <div class="quest-pts">+50 pt</div>
-        </div>
-
-        <div class="quest">
-          <div class="quest-icon q2"><svg class="icon"><use href="#ico-check"/></svg></div>
-          <div class="quest-body">
-            <div class="quest-title">Answer 3 quiz questions</div>
-            <div class="quest-bar"><span style="width:100%"></span></div>
-          </div>
-          <div class="quest-pts">+30 pt</div>
-        </div>
-
-        <div class="quest">
-          <div class="quest-icon q3"><svg class="icon"><use href="#ico-clock"/></svg></div>
-          <div class="quest-body">
-            <div class="quest-title">Study for 15 minutes</div>
-            <div class="quest-bar"><span style="width:35%"></span></div>
-          </div>
-          <div class="quest-pts">+20 pt</div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- CONTINUE LEARNING -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">Continue Learning</h2>
-        <span class="section-link">See all</span>
-      </div>
-      <div class="h-scroll">
-
-        <div class="lesson">
-          <div class="thumb l1">
-            <span class="tag">MATH</span>
-            <svg class="icon"><use href="#ico-calc"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">Fractions Basics</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:70%"></span></div>
-              <span>70%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="lesson">
-          <div class="thumb l2">
-            <span class="tag">SCIENCE</span>
-            <svg class="icon"><use href="#ico-planet"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">The Solar System</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:45%"></span></div>
-              <span>45%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="lesson">
-          <div class="thumb l3">
-            <span class="tag">ENGLISH</span>
-            <svg class="icon"><use href="#ico-book"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">Past Tense Verbs</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:20%"></span></div>
-              <span>20%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="lesson">
-          <div class="thumb l4">
-            <span class="tag">CODING</span>
-            <svg class="icon"><use href="#ico-code"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">Loops &amp; Logic</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:10%"></span></div>
-              <span>10%</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ACHIEVEMENTS -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">Recent Achievements</h2>
-        <span class="section-link">All badges</span>
-      </div>
-      <div class="achievements">
-        <div class="badge">
-          <div class="badge-icon b1"><svg class="icon"><use href="#ico-trophy"/></svg></div>
-          <div class="badge-name">Word<br/>Master</div>
-        </div>
-        <div class="badge">
-          <div class="badge-icon b2"><svg class="icon"><use href="#ico-zap"/></svg></div>
-          <div class="badge-name">Quick<br/>Thinker</div>
-        </div>
-        <div class="badge">
-          <div class="badge-icon b3"><svg class="icon"><use href="#ico-flame"/></svg></div>
-          <div class="badge-name">Streak<br/>Hero</div>
-        </div>
-      </div>
-    </section>
-
-    <div class="spacer-sm"></div>
-  </main>
-
-  <!-- BOTTOM NAV -->
-  <nav class="nav">
-    <div class="nav-item active">
-      <svg class="icon"><use href="#ico-home"/></svg>
-      <span>Home</span>
+  <div class="group">
+    <div class="group-title">Learn</div>
+    <div class="grid">
+      <div class="card"><div class="thumb"><img src="screenshots/screen-problem.png"/></div><div class="card-body"><div class="card-label">Fullscreen</div><div class="card-name">Problem Solver</div><div class="btns"><a class="btn-open" href="screens/screen-problem.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-problem.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-lesson.png"/></div><div class="card-body"><div class="card-label">Fullscreen</div><div class="card-name">Lesson Reader</div><div class="btns"><a class="btn-open" href="screens/screen-lesson.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-lesson.png" target="_blank">PNG</a></div></div></div>
     </div>
-    <div class="nav-item">
-      <svg class="icon"><use href="#ico-layers"/></svg>
-      <span>Lessons</span>
-    </div>
-    <div class="nav-item">
-      <svg class="icon"><use href="#ico-sparkles"/></svg>
-      <span>AI Tutor</span>
-    </div>
-    <div class="nav-item">
-      <svg class="icon"><use href="#ico-person"/></svg>
-      <span>Profile</span>
-    </div>
-  </nav>
+  </div>
 
-</div>
-
-<div class="watermark">by Shusei - Sample Only</div>
+  <div class="group">
+    <div class="group-title">Public / Auth</div>
+    <div class="grid">
+      <div class="card"><div class="thumb"><img src="screenshots/screen-landing.png"/></div><div class="card-body"><div class="card-label">Public</div><div class="card-name">Landing Page</div><div class="btns"><a class="btn-open" href="screens/screen-landing.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-landing.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-signup.png"/></div><div class="card-body"><div class="card-label">Public</div><div class="card-name">Sign Up</div><div class="btns"><a class="btn-open" href="screens/screen-signup.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-signup.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-onboarding.png"/></div><div class="card-body"><div class="card-label">Auth</div><div class="card-name">Onboarding</div><div class="btns"><a class="btn-open" href="screens/screen-onboarding.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-onboarding.png" target="_blank">PNG</a></div></div></div>
+      <div class="card"><div class="thumb"><img src="screenshots/screen-404.png"/></div><div class="card-body"><div class="card-label">Error</div><div class="card-name">404 Not Found</div><div class="btns"><a class="btn-open" href="screens/screen-404.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a><a class="btn-png" href="screenshots/screen-404.png" target="_blank">PNG</a></div></div></div>
+    </div>
+  </div>
+</main>
+<footer>quanta mockup · by Shusei · Sample Only</footer>
 </body>
 </html>
