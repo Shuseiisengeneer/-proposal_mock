@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <style>
   :root {
     --navy: #0f1f3d;
@@ -26,6 +28,8 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  ion-icon { display: inline-block; vertical-align: middle; }
 
   html, body {
     background: #060c1c;
@@ -92,7 +96,8 @@
     border-radius: 14px;
     background: rgba(255,255,255,0.08);
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
+    font-size: 22px;
+    color: white;
     position: relative;
     cursor: pointer;
     transition: transform .2s ease, background .2s ease;
@@ -107,7 +112,7 @@
   }
 
   .streak {
-    display: flex; align-items: center; gap: 4px;
+    display: flex; align-items: center; gap: 5px;
     background: linear-gradient(135deg, #f59e0b, #ef4444);
     padding: 8px 12px;
     border-radius: 14px;
@@ -118,6 +123,7 @@
     cursor: pointer;
     transition: transform .2s ease;
   }
+  .streak ion-icon { font-size: 16px; }
   .streak:hover { transform: translateY(-2px); }
 
   /* ----- Scroll body ----- */
@@ -188,13 +194,14 @@
   .progress-info .title { font-size: 13px; font-weight: 700; opacity: 0.9; margin-bottom: 4px; }
   .progress-info .stat { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
   .progress-info .msg {
-    display: inline-flex; align-items: center; gap: 4px;
+    display: inline-flex; align-items: center; gap: 5px;
     background: rgba(255,255,255,0.22);
     padding: 4px 10px;
     border-radius: 10px;
     font-size: 12px;
     font-weight: 700;
   }
+  .progress-info .msg ion-icon { font-size: 13px; }
 
   /* ----- Section ----- */
   .section { margin-top: 22px; }
@@ -229,6 +236,7 @@
     border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
     font-size: 22px;
+    color: white;
     flex-shrink: 0;
   }
   .quest-icon.q1 { background: linear-gradient(135deg, #4a90e2, #6cb4f5); }
@@ -291,8 +299,10 @@
     height: 96px;
     display: flex; align-items: center; justify-content: center;
     font-size: 44px;
+    color: white;
     position: relative;
   }
+  .thumb ion-icon { filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25)); }
   .thumb.l1 { background: linear-gradient(135deg, #4a90e2, #6cb4f5); }
   .thumb.l2 { background: linear-gradient(135deg, #10b981, #34d399); }
   .thumb.l3 { background: linear-gradient(135deg, #a78bfa, #f472b6); }
@@ -377,6 +387,7 @@
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 26px;
+    color: white;
     position: relative;
     z-index: 1;
   }
@@ -420,7 +431,7 @@
     border-radius: 12px;
   }
   .nav-item:hover { color: var(--light-blue); transform: translateY(-2px); }
-  .nav-item .ico { font-size: 22px; line-height: 1; }
+  .nav-item .ico { font-size: 24px; line-height: 1; }
   .nav-item.active { color: var(--light-blue); }
   .nav-item.active .ico {
     filter: drop-shadow(0 0 6px rgba(108,180,245,0.6));
@@ -439,16 +450,16 @@
         <div class="avatar">A</div>
         <div class="greet-text">
           <div class="hello">Welcome back</div>
-          <div class="name">Hi, Alex! 👋</div>
+          <div class="name">Hi, Alex!</div>
         </div>
       </div>
       <div class="header-right">
         <div class="icon-btn" aria-label="Notifications">
-          🔔
+          <ion-icon name="notifications-outline"></ion-icon>
           <span class="badge-dot"></span>
         </div>
         <div class="streak" aria-label="Streak 7 days">
-          <span>🔥</span><span>7</span>
+          <ion-icon name="flame"></ion-icon><span>7</span>
         </div>
       </div>
     </header>
@@ -471,7 +482,7 @@
         <div class="progress-info">
           <div class="title">Today's Goal</div>
           <div class="stat">2 of 3 lessons</div>
-          <div class="msg">⚡ Keep going!</div>
+          <div class="msg"><ion-icon name="flash"></ion-icon> Keep going!</div>
         </div>
       </section>
 
@@ -483,7 +494,7 @@
         </div>
         <div class="quest-list">
           <div class="quest">
-            <div class="quest-icon q1">📚</div>
+            <div class="quest-icon q1"><ion-icon name="book"></ion-icon></div>
             <div class="quest-body">
               <div class="quest-title">Learn 10 new words</div>
               <div class="quest-bar"><span style="width: 60%"></span></div>
@@ -491,7 +502,7 @@
             <div class="quest-pts">+50 pt</div>
           </div>
           <div class="quest">
-            <div class="quest-icon q2">✅</div>
+            <div class="quest-icon q2"><ion-icon name="checkmark-done"></ion-icon></div>
             <div class="quest-body">
               <div class="quest-title">Answer 3 quiz questions</div>
               <div class="quest-bar"><span style="width: 100%"></span></div>
@@ -499,7 +510,7 @@
             <div class="quest-pts">+30 pt</div>
           </div>
           <div class="quest">
-            <div class="quest-icon q3">⏱️</div>
+            <div class="quest-icon q3"><ion-icon name="time"></ion-icon></div>
             <div class="quest-body">
               <div class="quest-title">Study for 15 minutes</div>
               <div class="quest-bar"><span style="width: 35%"></span></div>
@@ -518,7 +529,8 @@
         <div class="h-scroll">
           <div class="lesson">
             <div class="thumb l1">
-              <span class="tag">MATH</span>🧮
+              <span class="tag">MATH</span>
+              <ion-icon name="calculator"></ion-icon>
             </div>
             <div class="lesson-body">
               <div class="lesson-title">Fractions Basics</div>
@@ -531,7 +543,8 @@
 
           <div class="lesson">
             <div class="thumb l2">
-              <span class="tag">SCIENCE</span>🔬
+              <span class="tag">SCIENCE</span>
+              <ion-icon name="planet"></ion-icon>
             </div>
             <div class="lesson-body">
               <div class="lesson-title">The Solar System</div>
@@ -544,7 +557,8 @@
 
           <div class="lesson">
             <div class="thumb l3">
-              <span class="tag">ENGLISH</span>📖
+              <span class="tag">ENGLISH</span>
+              <ion-icon name="book"></ion-icon>
             </div>
             <div class="lesson-body">
               <div class="lesson-title">Past Tense Verbs</div>
@@ -557,7 +571,8 @@
 
           <div class="lesson">
             <div class="thumb l4">
-              <span class="tag">CODING</span>💻
+              <span class="tag">CODING</span>
+              <ion-icon name="code-slash"></ion-icon>
             </div>
             <div class="lesson-body">
               <div class="lesson-title">Loops &amp; Logic</div>
@@ -578,15 +593,15 @@
         </div>
         <div class="achievements">
           <div class="badge">
-            <div class="badge-icon b1">🏆</div>
+            <div class="badge-icon b1"><ion-icon name="trophy"></ion-icon></div>
             <div class="badge-name">Word<br/>Master</div>
           </div>
           <div class="badge">
-            <div class="badge-icon b2">⚡</div>
+            <div class="badge-icon b2"><ion-icon name="flash"></ion-icon></div>
             <div class="badge-name">Quick<br/>Thinker</div>
           </div>
           <div class="badge">
-            <div class="badge-icon b3">🔥</div>
+            <div class="badge-icon b3"><ion-icon name="flame"></ion-icon></div>
             <div class="badge-name">Streak<br/>Hero</div>
           </div>
         </div>
@@ -598,19 +613,19 @@
     <!-- BOTTOM NAV -->
     <nav class="nav">
       <div class="nav-item active">
-        <span class="ico">🏠</span>
+        <ion-icon class="ico" name="home"></ion-icon>
         <span>Home</span>
       </div>
       <div class="nav-item">
-        <span class="ico">📚</span>
+        <ion-icon class="ico" name="library-outline"></ion-icon>
         <span>Lessons</span>
       </div>
       <div class="nav-item">
-        <span class="ico">🤖</span>
+        <ion-icon class="ico" name="sparkles-outline"></ion-icon>
         <span>AI Tutor</span>
       </div>
       <div class="nav-item">
-        <span class="ico">👤</span>
+        <ion-icon class="ico" name="person-outline"></ion-icon>
         <span>Profile</span>
       </div>
     </nav>
