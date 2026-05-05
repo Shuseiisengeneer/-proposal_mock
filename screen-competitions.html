@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>quanta — Competitions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy-900: #1B2845; --navy-800: #243454; --navy-700: #2D3E66;
+    --navy-100: #E8EDF7; --navy-50: #F4F6FB;
+    --gold: #F59E0B; --gold-tint: #FEF3C7;
+    --emerald: #059669; --emerald-tint: #ECFDF5;
+    --purple: #7C3AED; --purple-tint: #F3EEFF;
+    --rose: #F43F5E; --rose-tint: #FFE4E8;
+    --sky: #0EA5E9; --sky-tint: #E0F2FE;
+    --orange: #EA580C; --orange-tint: #FFF7ED;
+    --surface: #FAFAF9; --surface-card: #FFFFFF;
+    --surface-muted: #F4F4F2; --border: #E7E5E4; --border-strong: #D4D4D2;
+    --text-primary: #0F172A; --text-secondary: #475569; --text-muted: #94A3B8;
+    --shadow-xs: 0 1px 2px rgba(15,23,42,0.04);
+    --shadow-sm: 0 2px 8px rgba(15,23,42,0.06);
+    --shadow-md: 0 8px 24px rgba(15,23,42,0.08);
+    --ease: cubic-bezier(0.16,1,0.3,1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--surface); color: var(--text-primary); font-family: 'Inter', system-ui, sans-serif; font-feature-settings: 'cv11','ss01','ss03'; font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  .mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: 'tnum'; }
+
+  .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 240px; background: var(--surface-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 16px; z-index: 50; }
+  .brand { display: flex; align-items: center; gap: 12px; padding: 4px 8px 24px; }
+  .brand-logo { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--navy-900), var(--purple)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 22px; letter-spacing: -0.04em; box-shadow: var(--shadow-sm); }
+  .brand-name { font-weight: 700; font-size: 17px; letter-spacing: -0.02em; color: var(--navy-900); }
+  .brand-name small { display: block; font-size: 10px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+  .nav-section { display: flex; flex-direction: column; gap: 2px; }
+  .nav-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; padding: 12px 12px 8px; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; color: var(--text-secondary); font-size: 14px; font-weight: 500; transition: all 200ms var(--ease); position: relative; }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; stroke-width: 1.75; }
+  .nav-item:hover { background: var(--navy-50); color: var(--navy-900); }
+  .nav-item.active { background: var(--navy-100); color: var(--navy-900); font-weight: 600; }
+  .nav-item.active::before { content: ""; position: absolute; left: -16px; top: 50%; transform: translateY(-50%); width: 3px; height: 22px; background: var(--purple); border-radius: 0 3px 3px 0; }
+  .sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 2px; }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(12px); border-bottom: 1px solid var(--border); height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+  .search { display: flex; align-items: center; gap: 8px; background: var(--surface-muted); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; width: 360px; }
+  .search svg { width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; }
+  .search input { border: none; outline: none; background: transparent; font-family: inherit; font-size: 14px; color: var(--text-primary); width: 100%; }
+  .search input::placeholder { color: var(--text-muted); }
+  .search kbd { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); background: var(--surface-card); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .xp-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--gold-tint); color: #92400E; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; }
+  .xp-pill svg { width: 14px; height: 14px; color: var(--gold); }
+  .icon-btn { width: 36px; height: 36px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 200ms var(--ease); position: relative; }
+  .icon-btn:hover { background: var(--surface-muted); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn .dot { position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; background: var(--rose); border-radius: 50%; border: 2px solid white; }
+  .user-menu { display: flex; align-items: center; gap: 10px; padding: 4px 10px 4px 4px; border-radius: 999px; transition: all 200ms var(--ease); }
+  .user-menu:hover { background: var(--surface-muted); }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--navy-700), var(--purple)); color: white; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .user-menu-name { font-size: 14px; font-weight: 600; }
+  .user-menu svg { width: 14px; height: 14px; color: var(--text-muted); }
+
+  /* Main */
+  .main { grid-column: 2; min-width: 0; }
+  .content { padding: 40px 48px 96px; max-width: 1280px; }
+
+  /* Page header */
+  .page-header { margin-bottom: 32px; }
+  .page-header h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .page-header p { color: var(--text-secondary); }
+
+  /* Tab bar */
+  .tab-bar { display: flex; gap: 4px; background: var(--surface-muted); border-radius: 12px; padding: 4px; width: fit-content; margin-bottom: 32px; }
+  .tab { padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all 200ms var(--ease); display: flex; align-items: center; gap: 6px; }
+  .tab.active { background: var(--surface-card); color: var(--text-primary); font-weight: 600; box-shadow: var(--shadow-xs); }
+  .tab-badge { background: var(--rose); color: white; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 999px; }
+  .tab-badge.grey { background: var(--surface-muted); color: var(--text-secondary); border: 1px solid var(--border); }
+
+  /* Pulse */
+  .pulse-dot { width: 8px; height: 8px; background: var(--rose); border-radius: 50%; position: relative; animation: pulse-opacity 2s ease-in-out infinite; display: inline-block; }
+  .pulse-dot::after { content: ""; position: absolute; inset: -4px; border: 2px solid var(--rose); border-radius: 50%; animation: pulse-ring 2s ease-in-out infinite; }
+  @keyframes pulse-opacity { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @keyframes pulse-ring { 0%{transform:scale(0.9);opacity:0.7} 70%{transform:scale(1.6);opacity:0} 100%{transform:scale(0.9);opacity:0} }
+
+  /* Hero live card */
+  .live-hero {
+    background: linear-gradient(120deg, var(--navy-900) 0%, var(--navy-700) 60%, #3D5285 100%);
+    border-radius: 24px; padding: 36px 40px;
+    position: relative; overflow: hidden;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 32px; align-items: center;
+    margin-bottom: 16px; box-shadow: var(--shadow-md);
+  }
+  .live-hero::before { content: "Σ"; position: absolute; font-size: 380px; font-weight: 800; line-height: 1; color: rgba(255,255,255,0.04); right: 260px; top: -80px; }
+  .live-hero::after { content: "∫"; position: absolute; font-size: 240px; font-weight: 600; color: rgba(124,58,237,0.15); right: 70px; bottom: -60px; font-style: italic; }
+  .live-hero-content { position: relative; z-index: 2; }
+  .live-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .live-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(244,63,94,0.22); border: 1px solid rgba(244,63,94,0.4); color: #FCA5A5; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+  .ends-chip { color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+  .ends-chip .mono { color: white; font-weight: 700; font-size: 14px; }
+  .live-hero h2 { font-size: 34px; font-weight: 800; letter-spacing: -0.025em; color: white; margin-bottom: 10px; }
+  .live-hero-meta { display: flex; align-items: center; gap: 20px; }
+  .live-hero-stat { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.75); font-size: 14px; }
+  .live-hero-stat svg { width: 14px; height: 14px; }
+  .difficulty-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); }
+  .live-hero-right { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .participant-count { text-align: center; background: rgba(255,255,255,0.1); border-radius: 16px; padding: 18px 24px; }
+  .participant-num { font-family: 'JetBrains Mono', monospace; font-size: 40px; font-weight: 700; color: white; line-height: 1; }
+  .participant-label { font-size: 12px; color: rgba(255,255,255,0.65); font-weight: 500; margin-top: 4px; }
+  .enter-btn { background: white; color: var(--navy-900); font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; transition: all 200ms var(--ease); box-shadow: 0 4px 14px rgba(0,0,0,0.2); cursor: pointer; width: 100%; justify-content: center; }
+  .enter-btn:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.28); }
+  .enter-btn svg { width: 15px; height: 15px; }
+
+  /* Section */
+  section { margin-bottom: 40px; }
+  .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .section-head h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+  .view-all { color: var(--purple); font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; transition: gap 200ms var(--ease); }
+  .view-all:hover { gap: 8px; text-decoration: underline; }
+
+  /* Competition cards grid */
+  .comp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  .comp-card {
+    background: var(--surface-card); border: 1px solid var(--border);
+    border-radius: 18px; overflow: hidden;
+    transition: all 200ms var(--ease); cursor: pointer; box-shadow: var(--shadow-xs);
+  }
+  .comp-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+
+  .comp-card-banner {
+    height: 8px;
+  }
+
+  .comp-card-body { padding: 22px 24px; }
+  .comp-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; gap: 12px; }
+  .comp-title { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--text-primary); margin-bottom: 4px; }
+  .comp-subtitle { font-size: 13px; color: var(--text-secondary); }
+  .comp-status { flex-shrink: 0; }
+  .status-pill { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .status-pill.upcoming { background: var(--purple-tint); color: var(--purple); }
+  .status-pill.soon { background: var(--gold-tint); color: #92400E; }
+
+  .comp-meta-row { display: flex; align-items: center; gap: 20px; margin-bottom: 18px; }
+  .comp-meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); }
+  .comp-meta-item svg { width: 14px; height: 14px; color: var(--text-muted); }
+  .comp-meta-item strong { color: var(--text-primary); font-weight: 600; }
+
+  .comp-card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--border); }
+  .comp-countdown { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); }
+  .comp-countdown svg { width: 14px; height: 14px; }
+  .comp-countdown .mono { color: var(--text-primary); font-weight: 700; font-size: 14px; }
+  .remind-btn { background: transparent; border: 1px solid var(--border-strong); color: var(--navy-900); border-radius: 8px; padding: 7px 14px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; transition: all 200ms var(--ease); }
+  .remind-btn:hover { background: var(--navy-50); border-color: var(--navy-700); }
+  .remind-btn svg { width: 13px; height: 13px; }
+  .register-btn { background: var(--purple); color: white; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; transition: all 200ms var(--ease); cursor: pointer; }
+  .register-btn:hover { background: #6D28D9; transform: translateY(-1px); }
+  .register-btn svg { width: 13px; height: 13px; }
+
+  /* History */
+  .history-list { display: flex; flex-direction: column; gap: 12px; }
+  .history-row {
+    background: var(--surface-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px 22px;
+    display: grid; grid-template-columns: auto 1fr auto auto;
+    align-items: center; gap: 20px;
+    transition: all 200ms var(--ease);
+  }
+  .history-row:hover { box-shadow: var(--shadow-sm); }
+  .history-rank {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .history-rank.gold { background: var(--gold-tint); color: #92400E; }
+  .history-rank.silver { background: #F1F5F9; color: #475569; }
+  .history-rank.mid { background: var(--purple-tint); color: var(--purple); }
+  .history-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+  .history-meta { font-size: 13px; color: var(--text-muted); }
+  .history-xp { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .history-xp span { font-size: 12px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 500; margin-left: 2px; }
+  .history-score { text-align: right; }
+  .score-big { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+  .score-label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+
+  /* Stats strip */
+  .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
+  .stat-mini { background: var(--surface-card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; box-shadow: var(--shadow-xs); }
+  .stat-mini-num { font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 4px; }
+  .stat-mini-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+
+  .watermark { position: fixed; bottom: 16px; right: 16px; background: rgba(15,23,42,0.85); color: white; font-size: 12px; font-weight: 500; padding: 8px 14px; border-radius: 999px; box-shadow: var(--shadow-md); z-index: 100; backdrop-filter: blur(8px); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">Q</div>
+      <div class="brand-name">quanta<small>learn · solve · win</small></div>
+    </div>
+    <nav class="nav-section">
+      <div class="nav-label">Workspace</div>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        <span>Skills &amp; Goals</span>
+      </a>
+      <a class="nav-item active" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/></svg>
+        <span>Competitions</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        <span>Leaderboards</span>
+      </a>
+    </nav>
+    <nav class="nav-section" style="margin-top:24px;">
+      <div class="nav-label">Library</div>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+        <span>My Library</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+        <span>Saved</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        <span>Settings</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Sign out</span>
+      </a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search competitions…" />
+        <kbd>⌘K</kbd>
+      </div>
+      <div class="topbar-right">
+        <div class="xp-pill">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span class="mono">1,247 XP</span>
+        </div>
+        <button class="icon-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="dot"></span>
+        </button>
+        <div class="user-menu">
+          <div class="avatar">S</div>
+          <span class="user-menu-name">Shusei</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <div class="page-header">
+        <h1>Competitions</h1>
+        <p>Compete live, climb the standings, and earn XP for every problem solved.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <div class="tab active">
+          <span class="pulse-dot"></span>
+          Live <span class="tab-badge">1</span>
+        </div>
+        <div class="tab">Upcoming <span class="tab-badge grey">4</span></div>
+        <div class="tab">My results</div>
+        <div class="tab">All contests</div>
+      </div>
+
+      <!-- Personal stats strip -->
+      <div class="stats-strip">
+        <div class="stat-mini">
+          <div class="stat-mini-num">12</div>
+          <div class="stat-mini-label">Contests entered</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-num" style="color:var(--gold);">#42</div>
+          <div class="stat-mini-label">Best global rank</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-num" style="color:var(--emerald);">74%</div>
+          <div class="stat-mini-label">Problems solved</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-num" style="color:var(--purple);">+892</div>
+          <div class="stat-mini-label">XP from contests</div>
+        </div>
+      </div>
+
+      <!-- Live hero -->
+      <section>
+        <div class="section-head">
+          <h2 style="display:flex;align-items:center;gap:10px;">
+            Live now
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;background:var(--rose-tint);color:var(--rose);padding:4px 10px;border-radius:999px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">
+              <span class="pulse-dot"></span> 1 active
+            </span>
+          </h2>
+        </div>
+
+        <div class="live-hero">
+          <div class="live-hero-content">
+            <div class="live-top">
+              <span class="live-chip"><span class="pulse-dot"></span> Live</span>
+              <span class="ends-chip">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Ends in <span class="mono">2h 14m</span>
+              </span>
+            </div>
+            <h2>Spring Math Blitz</h2>
+            <div class="live-hero-meta">
+              <span class="live-hero-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                196 participants
+              </span>
+              <span class="live-hero-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ~30 min
+              </span>
+              <span class="live-hero-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                12 problems
+              </span>
+              <span class="difficulty-pill">Casual</span>
+            </div>
+          </div>
+          <div class="live-hero-right">
+            <div class="participant-count">
+              <div class="participant-num">196</div>
+              <div class="participant-label">competing now</div>
+            </div>
+            <button class="enter-btn">
+              Enter contest
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Upcoming -->
+      <section>
+        <div class="section-head">
+          <h2>Upcoming</h2>
+          <a class="view-all" href="#">See all <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+
+        <div class="comp-grid">
+
+          <div class="comp-card">
+            <div class="comp-card-banner" style="background:linear-gradient(90deg,var(--purple),#5B21B6);"></div>
+            <div class="comp-card-body">
+              <div class="comp-card-top">
+                <div>
+                  <div class="comp-title">Algorithms Sprint #14</div>
+                  <div class="comp-subtitle">Rated · Intermediate · Div. 2</div>
+                </div>
+                <div class="comp-status"><span class="status-pill soon">In 3 days</span></div>
+              </div>
+              <div class="comp-meta-row">
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>90 min</strong>
+                </div>
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  <strong>5 problems</strong>
+                </div>
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                  <strong>843 registered</strong>
+                </div>
+              </div>
+              <div class="comp-card-footer">
+                <div class="comp-countdown">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Starts <span class="mono">May 8 · 20:00 JST</span>
+                </div>
+                <button class="register-btn">Register <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-card-banner" style="background:linear-gradient(90deg,var(--sky),var(--emerald));"></div>
+            <div class="comp-card-body">
+              <div class="comp-card-top">
+                <div>
+                  <div class="comp-title">Number Theory Cup</div>
+                  <div class="comp-subtitle">Unrated · Open · All divisions</div>
+                </div>
+                <div class="comp-status"><span class="status-pill upcoming">In 1 week</span></div>
+              </div>
+              <div class="comp-meta-row">
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>120 min</strong>
+                </div>
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  <strong>8 problems</strong>
+                </div>
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                  <strong>312 registered</strong>
+                </div>
+              </div>
+              <div class="comp-card-footer">
+                <div class="comp-countdown">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Starts <span class="mono">May 12 · 19:00 JST</span>
+                </div>
+                <button class="register-btn">Register <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-card-banner" style="background:linear-gradient(90deg,var(--gold),var(--orange));"></div>
+            <div class="comp-card-body">
+              <div class="comp-card-top">
+                <div>
+                  <div class="comp-title">Graph Masters Invitational</div>
+                  <div class="comp-subtitle">Rated · Advanced · Div. 1</div>
+                </div>
+                <div class="comp-status"><span class="status-pill upcoming">In 2 weeks</span></div>
+              </div>
+              <div class="comp-meta-row">
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>180 min</strong>
+                </div>
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  <strong>6 problems</strong>
+                </div>
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                  <strong>201 registered</strong>
+                </div>
+              </div>
+              <div class="comp-card-footer">
+                <div class="comp-countdown">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Starts <span class="mono">May 19 · 21:00 JST</span>
+                </div>
+                <button class="remind-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  Remind me
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-card-banner" style="background:linear-gradient(90deg,var(--rose),var(--purple));"></div>
+            <div class="comp-card-body">
+              <div class="comp-card-top">
+                <div>
+                  <div class="comp-title">Weekly Blitz #31</div>
+                  <div class="comp-subtitle">Casual · Open · All levels</div>
+                </div>
+                <div class="comp-status"><span class="status-pill upcoming">In 5 days</span></div>
+              </div>
+              <div class="comp-meta-row">
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>45 min</strong>
+                </div>
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  <strong>10 problems</strong>
+                </div>
+                <div class="comp-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                  <strong>128 registered</strong>
+                </div>
+              </div>
+              <div class="comp-card-footer">
+                <div class="comp-countdown">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Starts <span class="mono">May 10 · 22:00 JST</span>
+                </div>
+                <button class="register-btn">Register <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Past results -->
+      <section>
+        <div class="section-head">
+          <h2>My recent results</h2>
+          <a class="view-all" href="#">Full history <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+        <div class="history-list">
+
+          <div class="history-row">
+            <div class="history-rank gold">#3</div>
+            <div>
+              <div class="history-title">Weekly Blitz #30</div>
+              <div class="history-meta">Apr 28 · Casual · 196 participants</div>
+            </div>
+            <div class="history-xp">+148 <span>XP</span></div>
+            <div class="history-score">
+              <div class="score-big">9<span style="font-size:13px;color:var(--text-muted);font-family:'Inter',sans-serif;">/10</span></div>
+              <div class="score-label">problems solved</div>
+            </div>
+          </div>
+
+          <div class="history-row">
+            <div class="history-rank mid">#19</div>
+            <div>
+              <div class="history-title">Algorithms Sprint #13</div>
+              <div class="history-meta">Apr 22 · Rated · 1,024 participants</div>
+            </div>
+            <div class="history-xp">+86 <span>XP</span></div>
+            <div class="history-score">
+              <div class="score-big">3<span style="font-size:13px;color:var(--text-muted);font-family:'Inter',sans-serif;">/5</span></div>
+              <div class="score-label">problems solved</div>
+            </div>
+          </div>
+
+          <div class="history-row">
+            <div class="history-rank silver">#7</div>
+            <div>
+              <div class="history-title">Spring Warmup Round</div>
+              <div class="history-meta">Apr 15 · Unrated · 432 participants</div>
+            </div>
+            <div class="history-xp">+112 <span>XP</span></div>
+            <div class="history-score">
+              <div class="score-big">6<span style="font-size:13px;color:var(--text-muted);font-family:'Inter',sans-serif;">/8</span></div>
+              <div class="score-label">problems solved</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+<div class="watermark">by Shusei — Sample Only</div>
+</body>
+</html>
