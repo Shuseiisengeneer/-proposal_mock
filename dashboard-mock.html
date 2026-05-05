@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>quanta — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* Primary navy */
+    --navy-900: #1B2845;
+    --navy-800: #243454;
+    --navy-700: #2D3E66;
+    --navy-100: #E8EDF7;
+    --navy-50:  #F4F6FB;
+
+    /* Accents */
+    --gold:    #F59E0B;
+    --gold-tint: #FEF3C7;
+    --silver:  #94A3B8;
+    --bronze:  #B87333;
+    --emerald: #059669;
+    --emerald-tint: #ECFDF5;
+    --purple:  #7C3AED;
+    --purple-tint: #F3EEFF;
+    --rose:    #F43F5E;
+    --rose-tint: #FFE4E8;
+    --sky:     #0EA5E9;
+    --sky-tint: #E0F2FE;
+    --orange-tint: #FFF7ED;
+
+    /* Neutrals */
+    --surface:       #FAFAF9;
+    --surface-card:  #FFFFFF;
+    --surface-muted: #F4F4F2;
+    --border:        #E7E5E4;
+    --border-strong: #D4D4D2;
+    --text-primary:   #0F172A;
+    --text-secondary: #475569;
+    --text-muted:     #94A3B8;
+
+    /* Effects */
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 20px 48px rgba(15, 23, 42, 0.10);
+
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--surface);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+  .mono { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace; font-feature-settings: 'tnum', 'zero'; }
+
+  /* ============ APP SHELL ============ */
+  .app {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ============ SIDEBAR ============ */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 240px;
+    background: var(--surface-card);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px;
+    z-index: 50;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 8px 24px 8px;
+  }
+  .brand-logo {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy-900) 0%, var(--purple) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.04em;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+  }
+  .brand-logo::after {
+    content: "";
+    position: absolute;
+    bottom: 6px; right: 6px;
+    width: 8px; height: 2px;
+    background: white;
+    border-radius: 2px;
+    transform: rotate(45deg);
+  }
+  .brand-name {
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.02em;
+    color: var(--navy-900);
+  }
+  .brand-name small {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .nav-section { display: flex; flex-direction: column; gap: 2px; }
+  .nav-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 12px 12px 8px 12px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 200ms var(--ease);
+    position: relative;
+  }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; stroke-width: 1.75; }
+  .nav-item:hover { background: var(--navy-50); color: var(--navy-900); }
+  .nav-item.active {
+    background: var(--navy-100);
+    color: var(--navy-900);
+    font-weight: 600;
+  }
+  .nav-item.active::before {
+    content: "";
+    position: absolute;
+    left: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 22px;
+    background: var(--purple);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* ============ MAIN ============ */
+  .main {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  /* ============ TOPBAR ============ */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+  }
+
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    width: 360px;
+    transition: all 200ms var(--ease);
+  }
+  .search:focus-within {
+    background: var(--surface-card);
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px var(--purple-tint);
+  }
+  .search svg { width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; }
+  .search input {
+    border: none; outline: none; background: transparent;
+    font-family: inherit; font-size: 14px; color: var(--text-primary);
+    width: 100%;
+  }
+  .search input::placeholder { color: var(--text-muted); }
+  .search kbd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .xp-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gold-tint);
+    color: #92400E;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+  .xp-pill svg { width: 14px; height: 14px; color: var(--gold); }
+
+  .icon-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all 200ms var(--ease);
+    position: relative;
+  }
+  .icon-btn:hover { background: var(--surface-muted); color: var(--text-primary); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn .dot {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 8px; height: 8px;
+    background: var(--rose);
+    border-radius: 50%;
+    border: 2px solid var(--surface-card);
+  }
+
+  .user-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 10px 4px 4px;
+    border-radius: 999px;
+    transition: all 200ms var(--ease);
+  }
+  .user-menu:hover { background: var(--surface-muted); }
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy-700), var(--purple));
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .user-menu-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .user-menu svg { width: 14px; height: 14px; color: var(--text-muted); }
+
+  /* ============ CONTENT ============ */
+  .content {
+    padding: 40px 48px 96px;
+    max-width: 1280px;
+  }
+
+  /* ============ HERO ============ */
+  .hero { margin-bottom: 40px; }
+  .hero h1 {
+    font-size: 40px;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .hero p {
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+  .streak-flame {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ============ STAT CARDS ============ */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .stat-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: var(--shadow-xs);
+    transition: all 200ms var(--ease);
+  }
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .stat-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .stat-icon svg { width: 18px; height: 18px; stroke-width: 2; }
+  .stat-icon.flame { background: var(--orange-tint); color: #EA580C; }
+  .stat-icon.bolt  { background: var(--gold-tint); color: var(--gold); }
+  .stat-icon.target { background: var(--purple-tint); color: var(--purple); }
+  .stat-icon.check { background: var(--emerald-tint); color: var(--emerald); }
+
+  .stat-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-number .unit {
+    font-size: 16px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-left: 4px;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .stat-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--emerald);
+    margin-left: 8px;
+  }
+
+  /* ============ SECTION ============ */
+  section { margin-top: 48px; }
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .section-head h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-head .subtle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .view-all {
+    color: var(--purple);
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: gap 200ms var(--ease);
+  }
+  .view-all:hover { gap: 8px; text-decoration: underline; }
+
+  /* ============ COURSE CARDS ============ */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .course-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 200ms var(--ease);
+    box-shadow: var(--shadow-xs);
+  }
+  .course-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+  .course-banner {
+    height: 120px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .course-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.18), transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(0,0,0,0.12), transparent 60%);
+  }
+  .course-banner svg.bg-glyph {
+    position: absolute;
+    width: 200px; height: 200px;
+    right: -50px; bottom: -60px;
+    opacity: 0.12;
+    color: white;
+  }
+  .course-banner .glyph {
+    position: relative;
+    z-index: 2;
+    color: white;
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+  .gradient-1 { background: linear-gradient(135deg, #1B2845 0%, #7C3AED 100%); }
+  .gradient-2 { background: linear-gradient(135deg, #059669 0%, #0EA5E9 100%); }
+  .gradient-3 { background: linear-gradient(135deg, #F59E0B 0%, #F43F5E 100%); }
+  .gradient-4 { background: linear-gradient(135deg, #7C3AED 0%, #F43F5E 100%); }
+
+  .course-body { padding: 18px 20px 20px; }
+  .course-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .tag-purple { color: var(--purple); }
+  .tag-emerald { color: var(--emerald); }
+  .tag-gold { color: var(--gold); }
+  .tag-rose { color: var(--rose); }
+
+  .course-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  .progress {
+    height: 6px;
+    background: var(--surface-muted);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--emerald);
+    border-radius: 999px;
+    transition: width 400ms var(--ease);
+  }
+  .course-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .course-meta .mono { color: var(--text-secondary); font-weight: 600; }
+
+  /* ============ LIVE BANNER ============ */
+  .live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--rose-tint);
+    color: var(--rose);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .pulse-dot {
+    width: 8px; height: 8px;
+    background: var(--rose);
+    border-radius: 50%;
+    position: relative;
+    animation: pulse-opacity 2s var(--ease) infinite;
+  }
+  .pulse-dot::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border: 2px solid var(--rose);
+    border-radius: 50%;
+    animation: pulse-ring 2s var(--ease) infinite;
+  }
+  @keyframes pulse-opacity {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    70% { transform: scale(1.6); opacity: 0; }
+    100% { transform: scale(0.9); opacity: 0; }
+  }
+
+  .live-banner {
+    background: linear-gradient(120deg, var(--navy-900) 0%, var(--navy-700) 65%, #3D5285 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: center;
+    box-shadow: var(--shadow-md);
+  }
+  .live-banner::before {
+    content: "Σ";
+    position: absolute;
+    font-size: 320px;
+    font-weight: 800;
+    line-height: 1;
+    color: rgba(255,255,255,0.05);
+    right: 220px;
+    top: -60px;
+    font-family: 'Inter', serif;
+  }
+  .live-banner::after {
+    content: "∫";
+    position: absolute;
+    font-size: 220px;
+    font-weight: 600;
+    line-height: 1;
+    color: rgba(124, 58, 237, 0.18);
+    right: 60px;
+    bottom: -50px;
+    font-style: italic;
+  }
+  .live-banner-content { position: relative; z-index: 2; }
+  .live-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 14px;
+  }
+  .live-banner h2 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+    color: white;
+  }
+  .live-banner p {
+    color: rgba(255,255,255,0.75);
+    font-size: 14px;
+  }
+  .enter-btn {
+    position: relative;
+    z-index: 2;
+    background: white;
+    color: var(--navy-900);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 26px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 200ms var(--ease);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  }
+  .enter-btn:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.24); }
+  .enter-btn svg { width: 16px; height: 16px; }
+
+  .secondary-comp {
+    margin-top: 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: var(--shadow-xs);
+  }
+  .secondary-comp-info { display: flex; align-items: center; gap: 14px; }
+  .secondary-comp-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--purple-tint);
+    color: var(--purple);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .secondary-comp-icon svg { width: 18px; height: 18px; }
+  .secondary-comp-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+  .secondary-comp-meta {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .outline-btn {
+    background: transparent;
+    color: var(--navy-900);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 200ms var(--ease);
+  }
+  .outline-btn:hover { background: var(--navy-50); border-color: var(--navy-700); }
+  .outline-btn svg { width: 14px; height: 14px; }
+
+  /* ============ LEADERBOARD ============ */
+  .leaderboard-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: var(--shadow-xs);
+  }
+  .podium {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr 1fr;
+    align-items: end;
+    gap: 16px;
+    margin-bottom: 24px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .podium-spot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .podium-crown {
+    font-size: 22px;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3));
+  }
+  .podium-avatar {
+    border-radius: 50%;
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+  .podium-avatar.first {
+    width: 72px; height: 72px;
+    font-size: 24px;
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    box-shadow: 0 0 0 4px white, 0 0 0 7px var(--gold), 0 8px 24px rgba(245,158,11,0.35);
+  }
+  .podium-avatar.second {
+    width: 56px; height: 56px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #94A3B8 0%, #64748B 100%);
+    box-shadow: 0 0 0 3px white, 0 0 0 5px var(--silver), 0 4px 12px rgba(148,163,184,0.3);
+  }
+  .podium-avatar.third {
+    width: 56px; height: 56px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #B87333 0%, #92562A 100%);
+    box-shadow: 0 0 0 3px white, 0 0 0 5px var(--bronze), 0 4px 12px rgba(184,115,51,0.3);
+  }
+  .podium-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .podium-rank {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .podium-rank .mono {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+  .pedestal {
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(180deg, var(--surface-muted) 0%, #ECECEA 100%);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .pedestal.first  { height: 84px; background: linear-gradient(180deg, #FEF3C7 0%, #FDE68A 100%); border-color: #FCD34D; color: #92400E; }
+  .pedestal.second { height: 60px; }
+  .pedestal.third  { height: 44px; }
+
+  .leaderboard-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+  .you-row {
+    background: linear-gradient(90deg, var(--navy-50) 0%, var(--purple-tint) 100%);
+    border: 1px solid var(--navy-100);
+    border-radius: 12px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .you-info { display: flex; align-items: center; gap: 14px; }
+  .you-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy-700), var(--purple));
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .you-text { font-size: 14px; color: var(--text-primary); }
+  .you-text strong { font-weight: 700; }
+  .you-text .mono { color: var(--purple); font-weight: 700; }
+  .you-delta {
+    font-size: 12px;
+    color: var(--emerald);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ============ RECOMMENDATIONS ============ */
+  .recs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .rec-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 200ms var(--ease);
+    box-shadow: var(--shadow-xs);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .rec-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+  }
+  .rec-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .rec-icon svg { width: 18px; height: 18px; }
+  .rec-icon.purple { background: var(--purple-tint); color: var(--purple); }
+  .rec-icon.sky    { background: var(--sky-tint); color: var(--sky); }
+  .rec-icon.emerald { background: var(--emerald-tint); color: var(--emerald); }
+
+  .rec-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .rec-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .rec-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 4px;
+  }
+  .rec-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .rec-level {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+  .level-beginner { background: var(--emerald); }
+  .level-intermediate { background: var(--gold); }
+  .start-link {
+    color: var(--purple);
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: gap 200ms var(--ease);
+  }
+  .rec-card:hover .start-link { gap: 8px; }
+
+  /* ============ FOOTER ============ */
+  .page-footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .page-footer a:hover { color: var(--text-secondary); }
+  .page-footer .dot-sep {
+    width: 3px; height: 3px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+
+  /* ============ WATERMARK ============ */
+  .watermark {
+    position: fixed;
+    bottom: 16px; right: 16px;
+    background: rgba(15, 23, 42, 0.85);
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 999px;
+    box-shadow: var(--shadow-md);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    letter-spacing: 0.01em;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 1100px) {
+    .courses-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .recs-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .app { grid-template-columns: 64px 1fr; }
+    .sidebar { width: 64px; padding: 16px 8px; }
+    .brand-name, .nav-item span, .nav-label { display: none; }
+    .nav-item { justify-content: center; padding: 12px; }
+    .nav-item.active::before { display: none; }
+    .content { padding: 24px 24px 96px; }
+    .topbar { padding: 0 20px; }
+    .search { width: 100%; max-width: 280px; }
+    .live-banner { grid-template-columns: 1fr; padding: 24px; }
+    .live-banner::before { font-size: 200px; right: -40px; }
+  }
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .courses-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 28px; }
+    .topbar-right .xp-pill { display: none; }
+    .user-menu-name { display: none; }
+    .search { width: 180px; }
+    .leaderboard-card { padding: 20px; }
+    .podium { gap: 8px; }
+    .podium-avatar.first { width: 56px; height: 56px; font-size: 18px; }
+    .podium-avatar.second, .podium-avatar.third { width: 44px; height: 44px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">Q</div>
+      <div class="brand-name">
+        quanta
+        <small>learn · solve · win</small>
+      </div>
+    </div>
+
+    <nav class="nav-section">
+      <div class="nav-label">Workspace</div>
+
+      <a class="nav-item active" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+        <span>Dashboard</span>
+      </a>
+
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        <span>Skills &amp; Goals</span>
+      </a>
+
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/></svg>
+        <span>Competitions</span>
+      </a>
+
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        <span>Leaderboards</span>
+      </a>
+    </nav>
+
+    <nav class="nav-section" style="margin-top: 24px;">
+      <div class="nav-label">Library</div>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+        <span>My Library</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+        <span>Saved</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        <span>Settings</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Sign out</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <!-- ============ TOPBAR ============ -->
+    <header class="topbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search skills, courses, problems…" />
+        <kbd>⌘K</kbd>
+      </div>
+
+      <div class="topbar-right">
+        <div class="xp-pill">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span class="mono">1,247 XP</span>
+        </div>
+
+        <button class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="dot"></span>
+        </button>
+
+        <div class="user-menu">
+          <div class="avatar">S</div>
+          <span class="user-menu-name">Shusei</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ CONTENT ============ -->
+    <div class="content">
+
+      <!-- HERO -->
+      <section class="hero" style="margin-top: 0;">
+        <h1>Welcome back, Shusei <span style="display:inline-block; transform: translateY(-2px);">👋</span></h1>
+        <p>You're on a <span class="streak-flame">7-day streak</span> — let's keep it going.</p>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon flame">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+            </div>
+            <div class="stat-number"><span>7</span><span class="unit">days</span></div>
+            <div class="stat-label">Current streak <span class="stat-trend">↑ +1</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon bolt">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <div class="stat-number">1,247</div>
+            <div class="stat-label">Total XP <span class="stat-trend">↑ 132 this wk</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon target">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            </div>
+            <div class="stat-number">#42</div>
+            <div class="stat-label">Global rank <span class="stat-trend">↑ 6 places</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="stat-number">38</div>
+            <div class="stat-label">Problems solved</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTINUE LEARNING -->
+      <section>
+        <div class="section-head">
+          <h2>Continue learning</h2>
+          <a class="view-all" href="#">View all <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+
+        <div class="courses-grid">
+
+          <article class="course-card">
+            <div class="course-banner gradient-1">
+              <svg class="bg-glyph" viewBox="0 0 100 100" fill="currentColor"><path d="M10 80 L50 20 L90 80 Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <span class="glyph">∀x∈ℕ</span>
+            </div>
+            <div class="course-body">
+              <span class="course-tag tag-purple">Mathematics</span>
+              <h3 class="course-title">Discrete Mathematics</h3>
+              <div class="progress"><div class="progress-fill" style="width:67%;"></div></div>
+              <div class="course-meta"><span class="mono">12 of 18</span> lessons · 67%</div>
+            </div>
+          </article>
+
+          <article class="course-card">
+            <div class="course-banner gradient-2">
+              <svg class="bg-glyph" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20 L80 20 L80 50 L20 50 Z M20 60 L60 60 L60 80 L20 80"/></svg>
+              <span class="glyph">O(n log n)</span>
+            </div>
+            <div class="course-body">
+              <span class="course-tag tag-emerald">Algorithms</span>
+              <h3 class="course-title">Algorithms 101</h3>
+              <div class="progress"><div class="progress-fill" style="width:33%;"></div></div>
+              <div class="course-meta"><span class="mono">8 of 24</span> lessons · 33%</div>
+            </div>
+          </article>
+
+          <article class="course-card">
+            <div class="course-banner gradient-3">
+              <svg class="bg-glyph" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2"><circle cx="50" cy="50" r="35"/><path d="M30 50 L70 50 M50 30 L50 70"/></svg>
+              <span class="glyph">a ≡ b (mod n)</span>
+            </div>
+            <div class="course-body">
+              <span class="course-tag tag-gold">Number Theory</span>
+              <h3 class="course-title">Modular Arithmetic</h3>
+              <div class="progress"><div class="progress-fill" style="width:42%;"></div></div>
+              <div class="course-meta"><span class="mono">5 of 12</span> lessons · 42%</div>
+            </div>
+          </article>
+
+          <article class="course-card">
+            <div class="course-banner gradient-4">
+              <svg class="bg-glyph" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2"><rect x="30" y="45" width="40" height="35" rx="4"/><path d="M40 45 V35 a10 10 0 0 1 20 0 V45"/></svg>
+              <span class="glyph">RSA</span>
+            </div>
+            <div class="course-body">
+              <span class="course-tag tag-rose">Cryptography</span>
+              <h3 class="course-title">Public-Key Foundations</h3>
+              <div class="progress"><div class="progress-fill" style="width:13%;"></div></div>
+              <div class="course-meta"><span class="mono">2 of 16</span> lessons · 13%</div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- LIVE COMPETITIONS -->
+      <section>
+        <div class="section-head">
+          <h2>
+            Live competitions
+            <span class="live-pill">
+              <span class="pulse-dot"></span>
+              Live now
+            </span>
+          </h2>
+          <a class="view-all" href="#">All competitions <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+
+        <div class="live-banner">
+          <div class="live-banner-content">
+            <div class="live-meta">
+              <span class="pulse-dot"></span>
+              Live now · Ends in <span class="mono" style="color:white;">2h 14m</span>
+            </div>
+            <h2>Spring Math Blitz</h2>
+            <p>196 participants · Casual · ~30 min · 12 problems</p>
+          </div>
+          <button class="enter-btn">
+            Enter
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+
+        <div class="secondary-comp">
+          <div class="secondary-comp-info">
+            <div class="secondary-comp-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div>
+              <div class="secondary-comp-title">Algorithms Sprint #14</div>
+              <div class="secondary-comp-meta">Starts in <span class="mono" style="color: var(--text-primary); font-weight: 600;">3 days</span> · Rated · 90 min · 5 problems</div>
+            </div>
+          </div>
+          <button class="outline-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Remind me
+          </button>
+        </div>
+      </section>
+
+      <!-- LEADERBOARD -->
+      <section>
+        <div class="section-head">
+          <h2>Top performers this week</h2>
+          <a class="view-all" href="#">View full leaderboard <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+
+        <div class="leaderboard-card">
+          <div class="podium">
+            <!-- 2nd place -->
+            <div class="podium-spot">
+              <div class="podium-avatar second">P</div>
+              <div class="podium-name">pradeep_8922</div>
+              <div class="podium-rank">2nd · <span class="mono">77 XP</span></div>
+              <div class="pedestal second">2</div>
+            </div>
+            <!-- 1st place -->
+            <div class="podium-spot">
+              <div class="podium-crown">👑</div>
+              <div class="podium-avatar first">D</div>
+              <div class="podium-name">dubon</div>
+              <div class="podium-rank">1st · <span class="mono">133 XP</span></div>
+              <div class="pedestal first">1</div>
+            </div>
+            <!-- 3rd place -->
+            <div class="podium-spot">
+              <div class="podium-avatar third">A</div>
+              <div class="podium-name">arsenii</div>
+              <div class="podium-rank">3rd · <span class="mono">62 XP</span></div>
+              <div class="pedestal third">3</div>
+            </div>
+          </div>
+
+          <div class="leaderboard-divider"></div>
+
+          <div class="you-row">
+            <div class="you-info">
+              <div class="you-avatar">S</div>
+              <div class="you-text">You're <strong>#42</strong> this week · <span class="mono">1,247 XP</span></div>
+            </div>
+            <div class="you-delta">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+              Up 6 places
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RECOMMENDATIONS -->
+      <section>
+        <div class="section-head">
+          <div>
+            <h2>Recommended for you</h2>
+            <div class="subtle">Based on your skill profile and recent activity</div>
+          </div>
+        </div>
+
+        <div class="recs-grid">
+          <article class="rec-card">
+            <div class="rec-icon purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><line x1="8.5" y1="7.5" x2="10.5" y2="16"/><line x1="15.5" y1="7.5" x2="13.5" y2="16"/><line x1="9" y1="6" x2="15" y2="6"/></svg>
+            </div>
+            <div>
+              <div class="rec-title">Graph Theory Basics</div>
+              <div class="rec-desc">Master adjacency, traversal, and shortest paths through guided problems.</div>
+            </div>
+            <div class="rec-footer">
+              <div class="rec-meta"><span class="rec-level level-beginner"></span> Beginner · ~4 hours</div>
+              <a class="start-link" href="#">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+            </div>
+          </article>
+
+          <article class="rec-card">
+            <div class="rec-icon sky">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M3 9h18"/><circle cx="6" cy="6" r="0.5" fill="currentColor"/><circle cx="15" cy="15" r="0.5" fill="currentColor"/><circle cx="18" cy="6" r="0.5" fill="currentColor"/></svg>
+            </div>
+            <div>
+              <div class="rec-title">Probability Mastery</div>
+              <div class="rec-desc">From conditional probability to Bayesian reasoning, applied to real problems.</div>
+            </div>
+            <div class="rec-footer">
+              <div class="rec-meta"><span class="rec-level level-intermediate"></span> Intermediate · ~6 hours</div>
+              <a class="start-link" href="#">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+            </div>
+          </article>
+
+          <article class="rec-card">
+            <div class="rec-icon emerald">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+            </div>
+            <div>
+              <div class="rec-title">Big-O &amp; Complexity</div>
+              <div class="rec-desc">Build the intuition for analyzing time and space — the language of efficient code.</div>
+            </div>
+            <div class="rec-footer">
+              <div class="rec-meta"><span class="rec-level level-beginner"></span> Beginner · ~3 hours</div>
+              <a class="start-link" href="#">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="page-footer">
+        <a href="#">quanta.world</a>
+        <span class="dot-sep"></span>
+        <a href="#">Help</a>
+        <span class="dot-sep"></span>
+        <a href="#">Discord</a>
+        <span class="dot-sep"></span>
+        <a href="#">Changelog</a>
+      </footer>
+
+    </div>
+  </main>
+</div>
+
+<!-- WATERMARK -->
+<div class="watermark">by Shusei — Sample Only</div>
+
+</body>
+</html>
