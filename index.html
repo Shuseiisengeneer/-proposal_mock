@@ -2,393 +2,892 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Student Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MAKAVA — Crafted in Vienna. Honored Worldwide.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #0f1f3d;
-    --navy-2: #162a52;
-    --navy-3: #1d3567;
-    --blue: #4a90e2;
-    --light-blue: #6cb4f5;
-    --white: #ffffff;
-    --gray: #b8c2d6;
-    --gray-2: #8593ad;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.25);
-    --shadow-glow: 0 8px 32px rgba(74, 144, 226, 0.35);
+    --forest-900: #0a1810;
+    --forest-800: #0f2419;
+    --forest-700: #15301f;
+    --forest-600: #1d3f2c;
+    --forest-500: #2a5239;
+    --forest-400: #3b6a4d;
+    --gold-600: #a88848;
+    --gold-500: #c9a961;
+    --gold-400: #d8bc7d;
+    --gold-300: #e6d2a4;
+    --cream-50: #fdfbf5;
+    --cream-100: #f8f3e6;
+    --cream-200: #efe7d2;
+    --ink-900: #0c1410;
+    --ink-700: #2a342d;
+    --ink-500: #5b6760;
+    --ink-300: #9aa39c;
+    --line: rgba(201, 169, 97, 0.18);
+    --line-dark: rgba(255, 255, 255, 0.08);
+    --shadow-md: 0 12px 32px rgba(10, 24, 16, 0.12);
+    --shadow-lg: 0 24px 64px rgba(10, 24, 16, 0.18);
+    --radius: 4px;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .icon {
-    display: block;
-    width: 1em; height: 1em;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    flex-shrink: 0;
-  }
-
-  html, body {
-    background: #060c1c;
-    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    color: var(--white);
-    height: 100%;
-  }
+  html { scroll-behavior: smooth; }
 
   body {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink-900);
+    background: var(--cream-50);
+    line-height: 1.6;
+    font-weight: 400;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
-  .device {
-    width: 375px;
-    height: 812px;
-    background: var(--navy);
-    background-image:
-      radial-gradient(circle at 20% 0%, rgba(74, 144, 226, 0.18), transparent 40%),
-      radial-gradient(circle at 100% 30%, rgba(108, 180, 245, 0.12), transparent 50%);
+  .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; letter-spacing: -0.01em; }
+
+  .icon { width: 1em; height: 1em; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+
+  .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold-600);
+  }
+  .eyebrow::before {
+    content: ''; width: 28px; height: 1px;
+    background: var(--gold-500);
+  }
+  .eyebrow.on-dark { color: var(--gold-400); }
+  .eyebrow.on-dark::before { background: var(--gold-400); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 28px;
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer;
+    border: 1px solid transparent; border-radius: var(--radius);
+    transition: all .35s var(--ease);
+    white-space: nowrap;
+  }
+  .btn .icon { width: 14px; height: 14px; transition: transform .35s var(--ease); }
+  .btn:hover .icon { transform: translateX(4px); }
+
+  .btn-primary { background: var(--gold-500); color: var(--forest-900); }
+  .btn-primary:hover { background: var(--gold-400); transform: translateY(-2px); box-shadow: 0 12px 28px rgba(201,169,97,0.35); }
+
+  .btn-ghost { background: transparent; color: var(--cream-50); border-color: rgba(255,255,255,0.25); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: var(--gold-400); color: var(--gold-300); }
+
+  .btn-outline { background: transparent; color: var(--forest-800); border-color: var(--forest-800); }
+  .btn-outline:hover { background: var(--forest-800); color: var(--cream-50); }
+
+  /* ════════════════════ NAV (Section 1, top) ════════════════════ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 22px 0;
+    background: rgba(10, 24, 16, 0.65);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: padding .3s var(--ease);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 32px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 600; letter-spacing: 0.18em;
+    color: var(--cream-50); text-decoration: none;
+  }
+  .brand-mark {
+    width: 28px; height: 28px;
+    border: 1px solid var(--gold-500);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold-500);
+  }
+  .brand-mark .icon { width: 14px; height: 14px; }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 13px; font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(253, 251, 245, 0.78);
+    text-decoration: none;
     position: relative;
+    transition: color .25s var(--ease);
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; left: 0; bottom: -6px;
+    width: 0; height: 1px; background: var(--gold-400);
+    transition: width .35s var(--ease);
+  }
+  .nav-links a:hover { color: var(--gold-300); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    padding: 12px 22px;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--cream-50);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: all .3s var(--ease);
+  }
+  .nav-cta:hover { background: var(--gold-500); border-color: var(--gold-500); color: var(--forest-900); }
+
+  /* ════════════════════ SECTION 1 — HERO ════════════════════ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(59, 106, 77, 0.35), transparent 55%),
+      radial-gradient(ellipse at 85% 70%, rgba(201, 169, 97, 0.18), transparent 50%),
+      linear-gradient(180deg, var(--forest-900) 0%, var(--forest-800) 100%);
+    color: var(--cream-50);
+    display: flex; align-items: center;
+    padding: 140px 0 80px;
     overflow: hidden;
-    border-radius: 32px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   }
-
-  /* ----- Header ----- */
-  .header {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 72px;
-    padding: 14px 20px 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 10;
-    background: linear-gradient(180deg, rgba(15, 31, 61, 0.95) 60%, rgba(15, 31, 61, 0));
-    backdrop-filter: blur(8px);
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(201,169,97,0.08) 1px, transparent 0);
+    background-size: 32px 32px;
+    opacity: 0.5;
+    pointer-events: none;
   }
-
-  .greet { display: flex; align-items: center; gap: 10px; }
-
-  .avatar {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6cb4f5, #4a90e2);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 18px; color: white;
-    border: 2px solid rgba(255,255,255,0.15);
-    box-shadow: 0 4px 12px rgba(74,144,226,0.4);
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 80px; align-items: center;
+    position: relative;
   }
-
-  .greet-text .hello { font-size: 12px; color: var(--gray); font-weight: 600; }
-  .greet-text .name  { font-size: 16px; font-weight: 800; color: white; line-height: 1.1; }
-
-  .header-right { display: flex; align-items: center; gap: 10px; }
-
-  .icon-btn {
-    width: 40px; height: 40px;
-    border-radius: 14px;
-    background: rgba(255,255,255,0.08);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; color: white;
-    position: relative; cursor: pointer;
-    transition: transform .2s ease, background .2s ease;
+  .hero-headline {
+    font-size: clamp(48px, 6.5vw, 88px);
+    line-height: 1.05;
+    margin: 24px 0 28px;
+    color: var(--cream-50);
   }
-  .icon-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.14); }
-
-  .badge-dot {
-    position: absolute; top: 6px; right: 6px;
-    width: 8px; height: 8px;
-    background: var(--warning);
-    border-radius: 50%;
-    border: 2px solid var(--navy);
+  .hero-headline em {
+    font-style: italic;
+    color: var(--gold-400);
+    font-weight: 400;
   }
-
-  .streak {
-    display: flex; align-items: center; gap: 5px;
-    background: linear-gradient(135deg, #f59e0b, #ef4444);
-    padding: 8px 12px;
-    border-radius: 14px;
-    font-size: 14px; font-weight: 800; color: white;
-    box-shadow: 0 4px 12px rgba(245,158,11,0.35);
-    cursor: pointer;
-    transition: transform .2s ease;
+  .hero-sub {
+    font-size: 17px; line-height: 1.7;
+    color: rgba(253, 251, 245, 0.72);
+    max-width: 480px;
+    margin-bottom: 40px;
   }
-  .streak .icon { width: 18px; height: 18px; }
-  .streak:hover { transform: translateY(-2px); }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
 
-  /* ----- Scroll body ----- */
-  .scroll {
-    position: absolute;
-    top: 72px; bottom: 76px;
-    left: 0; right: 0;
-    overflow-y: auto; overflow-x: hidden;
-    padding: 8px 20px 24px;
-    scrollbar-width: none;
+  .hero-visual {
+    position: relative; aspect-ratio: 4/5;
+    border-radius: 2px;
+    background:
+      linear-gradient(180deg, rgba(10,24,16,0) 60%, rgba(10,24,16,0.65) 100%),
+      radial-gradient(circle at 50% 30%, var(--forest-500) 0%, var(--forest-700) 60%, var(--forest-900) 100%);
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.45);
+    border: 1px solid var(--line);
   }
-  .scroll::-webkit-scrollbar { display: none; }
+  .hero-visual::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(201,169,97,0.22), transparent 55%);
+  }
+  .hero-leaf {
+    position: absolute; left: 50%; top: 48%;
+    transform: translate(-50%, -50%);
+    width: 70%; height: auto;
+    color: var(--gold-400);
+    opacity: 0.85;
+    filter: drop-shadow(0 20px 40px rgba(201,169,97,0.3));
+  }
+  .hero-tag {
+    position: absolute; bottom: 32px; left: 32px; right: 32px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    color: var(--cream-50);
+  }
+  .hero-tag .lbl { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold-400); margin-bottom: 6px; }
+  .hero-tag .val { font-family: 'Cormorant Garamond', serif; font-size: 28px; }
 
-  /* ----- Progress card ----- */
-  .progress-card {
-    margin-top: 8px;
-    background: linear-gradient(135deg, #4a90e2 0%, #6cb4f5 100%);
-    border-radius: 20px;
-    padding: 18px;
-    display: flex; align-items: center; gap: 16px;
-    box-shadow: var(--shadow-glow);
+  .hero-meta {
+    position: absolute; bottom: 40px; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px;
+    padding: 0 32px;
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(253, 251, 245, 0.5);
+  }
+  .scroll-indicator { display: flex; align-items: center; gap: 12px; }
+  .scroll-line {
+    width: 48px; height: 1px; background: var(--gold-500);
     position: relative; overflow: hidden;
-    cursor: pointer;
-    transition: transform .25s ease;
   }
-  .progress-card:hover { transform: translateY(-3px); }
-  .progress-card::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 120px; height: 120px;
-    background: rgba(255,255,255,0.12);
-    border-radius: 50%;
+  .scroll-line::after {
+    content: ''; position: absolute; left: -50%; top: 0;
+    width: 50%; height: 100%; background: var(--cream-50);
+    animation: scrollLine 2.4s var(--ease) infinite;
+  }
+  @keyframes scrollLine {
+    0% { left: -50%; }
+    100% { left: 100%; }
   }
 
-  .ring {
-    width: 88px; height: 88px;
-    flex-shrink: 0; position: relative; z-index: 1;
+  /* ════════════════════ SECTION 2 — TRUST / FEATURED IN ════════════════════ */
+  .section-trust {
+    padding: 64px 0;
+    background: var(--forest-900);
+    color: var(--cream-50);
+    border-top: 1px solid rgba(255,255,255,0.05);
   }
-  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .ring .track { fill: none; stroke: rgba(255,255,255,0.25); stroke-width: 8; }
-  .ring .bar {
-    fill: none; stroke: white; stroke-width: 8; stroke-linecap: round;
-    stroke-dasharray: 251.2;
-    stroke-dashoffset: 82.9;
-    filter: drop-shadow(0 0 6px rgba(255,255,255,0.6));
+  .trust-inner {
+    display: flex; align-items: center; gap: 64px;
   }
-  .ring-text {
+  .trust-label {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold-400);
+    flex-shrink: 0;
+    max-width: 200px;
+    line-height: 1.6;
+  }
+  .trust-logos {
+    flex: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 40px; flex-wrap: wrap;
+  }
+  .trust-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 500;
+    letter-spacing: 0.06em;
+    color: rgba(253, 251, 245, 0.55);
+    transition: color .3s var(--ease);
+    cursor: default;
+  }
+  .trust-logo.italic { font-style: italic; }
+  .trust-logo.bold { font-weight: 700; letter-spacing: 0.02em; }
+  .trust-logo.spaced { letter-spacing: 0.4em; font-size: 16px; }
+  .trust-logo:hover { color: var(--gold-300); }
+
+  /* ════════════════════ SHARED — section ════════════════════ */
+  section.block { padding: 120px 0; }
+  .block-head { max-width: 720px; margin-bottom: 64px; }
+  .block-head.center { margin: 0 auto 64px; text-align: center; }
+  .block-title {
+    font-size: clamp(36px, 4.6vw, 60px);
+    line-height: 1.1;
+    margin-top: 18px;
+    color: var(--forest-800);
+  }
+  .block-title em { font-style: italic; color: var(--gold-600); font-weight: 400; }
+  .block-lede {
+    font-size: 17px; line-height: 1.7;
+    color: var(--ink-500);
+    margin-top: 22px;
+    max-width: 580px;
+  }
+  .block-head.center .block-lede { margin-left: auto; margin-right: auto; }
+
+  /* ════════════════════ SECTION 3 — STORY ════════════════════ */
+  .story-grid {
+    display: grid; grid-template-columns: 1fr 1.05fr; gap: 96px;
+    align-items: center;
+  }
+  .story-img {
+    aspect-ratio: 4/5;
+    background:
+      linear-gradient(135deg, rgba(15,36,25,0.9), rgba(42,82,57,0.6)),
+      radial-gradient(circle at 50% 50%, var(--forest-500), var(--forest-800));
+    border-radius: 2px;
+    position: relative; overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .story-img::before {
+    content: ''; position: absolute; inset: 12px;
+    border: 1px solid rgba(201,169,97,0.4);
+    pointer-events: none;
+  }
+  .story-img-emblem {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
-    flex-direction: column; font-weight: 900;
+    color: var(--gold-400); opacity: 0.6;
   }
-  .ring-text .pct { font-size: 20px; line-height: 1; }
-  .ring-text .lbl { font-size: 9px; opacity: 0.85; letter-spacing: 0.5px; margin-top: 2px; }
-
-  .progress-info { z-index: 1; }
-  .progress-info .title { font-size: 13px; font-weight: 700; opacity: 0.9; margin-bottom: 4px; }
-  .progress-info .stat  { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
-  .progress-info .msg {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: rgba(255,255,255,0.22);
-    padding: 4px 10px; border-radius: 10px;
-    font-size: 12px; font-weight: 700;
+  .story-img-emblem .icon { width: 120px; height: 120px; stroke-width: 0.8; }
+  .story-cap {
+    position: absolute; bottom: 28px; left: 28px; right: 28px;
+    color: var(--cream-50);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-style: italic;
+    line-height: 1.4;
   }
-  .msg .icon { width: 14px; height: 14px; }
+  .story-cap::before {
+    content: '"'; font-size: 64px; color: var(--gold-400);
+    line-height: 0; vertical-align: -22px;
+  }
 
-  /* ----- Section ----- */
-  .section { margin-top: 22px; }
-  .section-head {
-    display: flex; align-items: center; justify-content: space-between;
+  .story-body p {
+    font-size: 16px; color: var(--ink-700); line-height: 1.8;
+    margin-bottom: 22px;
+  }
+  .story-body p.lead {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; line-height: 1.4; color: var(--forest-800);
+    font-weight: 500; font-style: italic;
+    margin-bottom: 32px;
+  }
+  .story-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+    margin-top: 48px; padding-top: 36px;
+    border-top: 1px solid var(--line);
+  }
+  .story-stat .num { font-family: 'Cormorant Garamond', serif; font-size: 44px; color: var(--gold-600); line-height: 1; }
+  .story-stat .lbl { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-500); margin-top: 10px; }
+
+  /* ════════════════════ SECTION 4 — SIGNATURE PRODUCT ════════════════════ */
+  .section-product {
+    background: var(--cream-100);
+  }
+  .product-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    margin-bottom: 48px;
+  }
+  .product-card {
+    background: var(--cream-50);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+    cursor: pointer;
+  }
+  .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+  .product-thumb {
+    aspect-ratio: 4/3;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .product-thumb.t1 { background: linear-gradient(160deg, #2a5239 0%, #15301f 100%); }
+  .product-thumb.t2 { background: linear-gradient(160deg, #3b6a4d 0%, #1d3f2c 100%); }
+  .product-thumb.t3 { background: linear-gradient(160deg, #1a3a2a 0%, #0a1810 100%); }
+  .product-thumb::after {
+    content: ''; position: absolute; inset: 16px;
+    border: 1px solid rgba(201,169,97,0.3);
+  }
+  .product-thumb .icon {
+    width: 80px; height: 80px;
+    color: var(--gold-400);
+    stroke-width: 1;
+    transition: transform .6s var(--ease);
+  }
+  .product-card:hover .product-thumb .icon { transform: scale(1.08) rotate(-4deg); }
+  .product-tag {
+    position: absolute; top: 18px; left: 18px;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold-300);
+  }
+  .product-tag::before {
+    content: ''; display: inline-block; width: 18px; height: 1px;
+    background: var(--gold-400); vertical-align: middle; margin-right: 8px;
+  }
+  .product-info { padding: 28px 26px; }
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 500;
+    color: var(--forest-800);
+    margin-bottom: 8px;
+  }
+  .product-desc { font-size: 14px; color: var(--ink-500); margin-bottom: 20px; line-height: 1.6; }
+  .product-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 18px; border-top: 1px solid var(--line);
+  }
+  .product-price { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--forest-800); }
+  .product-arrow {
+    width: 36px; height: 36px;
+    border: 1px solid var(--forest-800);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--forest-800);
+    transition: all .3s var(--ease);
+  }
+  .product-card:hover .product-arrow {
+    background: var(--forest-800); color: var(--gold-400);
+    transform: rotate(-45deg);
+  }
+  .product-arrow .icon { width: 14px; height: 14px; }
+
+  /* ════════════════════ SECTION 5 — VERTICALS ════════════════════ */
+  .section-verticals {
+    background: var(--forest-900);
+    color: var(--cream-50);
+  }
+  .section-verticals .block-title { color: var(--cream-50); }
+  .section-verticals .block-title em { color: var(--gold-400); }
+  .section-verticals .block-lede { color: rgba(253,251,245,0.65); }
+
+  .verticals-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .vertical {
+    background: var(--forest-900);
+    padding: 48px 40px;
+    display: grid; grid-template-columns: 56px 1fr auto;
+    gap: 28px; align-items: start;
+    transition: background .4s var(--ease);
+    cursor: pointer;
+    position: relative;
+  }
+  .vertical:hover { background: var(--forest-800); }
+  .vertical-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic;
+    color: var(--gold-400);
+    padding-top: 4px;
+  }
+  .vertical-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 500;
+    color: var(--cream-50);
+    margin-bottom: 12px;
+    line-height: 1.15;
+  }
+  .vertical-desc {
+    font-size: 15px; line-height: 1.65;
+    color: rgba(253,251,245,0.6);
+    max-width: 440px;
+  }
+  .vertical-arrow {
+    color: var(--gold-400);
+    font-size: 20px;
+    align-self: center;
+    transition: transform .35s var(--ease);
+  }
+  .vertical:hover .vertical-arrow { transform: translateX(8px); }
+
+  /* ════════════════════ SECTION 6 — USPs ════════════════════ */
+  .usp-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .usp {
+    padding: 56px 32px 56px 0;
+    border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .usp:last-child { border-right: none; padding-right: 0; }
+  .usp:not(:first-child) { padding-left: 32px; }
+  .usp-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px; font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--gold-600);
+  }
+  .usp-icon {
+    color: var(--forest-700);
+    margin-bottom: 4px;
+  }
+  .usp-icon .icon { width: 36px; height: 36px; stroke-width: 1.2; }
+  .usp-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 500;
+    color: var(--forest-800);
+    line-height: 1.2;
+  }
+  .usp-desc { font-size: 14px; color: var(--ink-500); line-height: 1.7; }
+
+  /* ════════════════════ SECTION 7 — PROCESS ════════════════════ */
+  .section-process {
+    background: var(--cream-100);
+  }
+  .process-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+    position: relative;
+  }
+  .process-grid::before {
+    content: ''; position: absolute;
+    top: 28px; left: 28px; right: 28px;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--gold-500) 0, var(--gold-500) 6px, transparent 6px, transparent 14px);
+    opacity: 0.5;
+    z-index: 0;
+  }
+  .process-step { position: relative; z-index: 1; }
+  .process-dot {
+    width: 56px; height: 56px;
+    background: var(--cream-100);
+    border: 1px solid var(--gold-500);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--gold-600);
+    margin-bottom: 28px;
+    transition: all .35s var(--ease);
+  }
+  .process-step:hover .process-dot {
+    background: var(--forest-800); color: var(--gold-400);
+    border-color: var(--forest-800);
+    transform: scale(1.05);
+  }
+  .process-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 500;
+    color: var(--forest-800);
     margin-bottom: 12px;
   }
-  .section-title { font-size: 16px; font-weight: 800; color: white; }
-  .section-link { font-size: 12px; color: var(--light-blue); font-weight: 700; cursor: pointer; }
-  .section-link:hover { text-decoration: underline; }
+  .process-desc { font-size: 14px; color: var(--ink-500); line-height: 1.7; }
 
-  /* ----- Daily quests ----- */
-  .quest-list { display: flex; flex-direction: column; gap: 10px; }
-  .quest {
-    background: var(--navy-2);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    padding: 12px 14px;
-    display: flex; align-items: center; gap: 12px;
-    cursor: pointer;
-    transition: transform .2s ease, background .2s ease, border-color .2s ease;
-  }
-  .quest:hover  { transform: translateY(-2px); background: var(--navy-3); }
-  .quest:active { background: var(--navy-3); border-color: var(--blue); }
-
-  .quest-icon {
-    width: 42px; height: 42px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; color: white;
-    flex-shrink: 0;
-  }
-  .quest-icon.q1 { background: linear-gradient(135deg, #4a90e2, #6cb4f5); }
-  .quest-icon.q2 { background: linear-gradient(135deg, #10b981, #34d399); }
-  .quest-icon.q3 { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
-
-  .quest-body { flex: 1; min-width: 0; }
-  .quest-title { font-size: 14px; font-weight: 700; color: white; margin-bottom: 4px; }
-  .quest-bar {
-    height: 4px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 4px; overflow: hidden;
-  }
-  .quest-bar > span {
-    display: block; height: 100%;
-    background: linear-gradient(90deg, var(--blue), var(--light-blue));
-    border-radius: 4px;
-  }
-
-  .quest-pts {
-    background: rgba(16,185,129,0.15);
-    color: var(--success);
-    font-size: 12px; font-weight: 800;
-    padding: 6px 10px; border-radius: 10px;
-    flex-shrink: 0;
-  }
-
-  /* ----- Continue learning ----- */
-  .h-scroll {
-    display: flex; gap: 12px;
-    overflow-x: auto; overflow-y: hidden;
-    margin: 0 -20px;
-    padding: 4px 20px 8px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-  .h-scroll::-webkit-scrollbar { display: none; }
-
-  .lesson {
-    flex: 0 0 168px;
-    background: var(--navy-2);
-    border-radius: 18px; overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.06);
-    cursor: pointer;
-    transition: transform .25s ease, box-shadow .25s ease;
-    scroll-snap-align: start;
-  }
-  .lesson:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
-
-  .thumb {
-    height: 96px;
-    display: flex; align-items: center; justify-content: center;
-    color: white; position: relative;
-  }
-  .thumb .icon {
-    width: 48px; height: 48px;
-    stroke-width: 1.5;
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
-  }
-  .thumb.l1 { background: linear-gradient(135deg, #4a90e2, #6cb4f5); }
-  .thumb.l2 { background: linear-gradient(135deg, #10b981, #34d399); }
-  .thumb.l3 { background: linear-gradient(135deg, #a78bfa, #f472b6); }
-  .thumb.l4 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
-
-  .thumb .tag {
-    position: absolute; top: 8px; left: 8px;
-    background: rgba(0,0,0,0.35); color: white;
-    font-size: 10px; font-weight: 700;
-    padding: 3px 8px; border-radius: 8px;
-    backdrop-filter: blur(4px);
-  }
-
-  .lesson-body { padding: 10px 12px 12px; }
-  .lesson-title {
-    font-size: 13px; font-weight: 800; color: white;
-    line-height: 1.25; margin-bottom: 8px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .lesson-progress {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 11px; color: var(--gray); font-weight: 700;
-  }
-  .lesson-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
-  .lesson-bar > span { display: block; height: 100%; background: var(--light-blue); border-radius: 4px; }
-
-  /* ----- Achievements ----- */
-  .achievements { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .badge {
-    background: var(--navy-2);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    padding: 14px 8px;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    cursor: pointer;
-    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  /* ════════════════════ SECTION 8 — TESTIMONIAL ════════════════════ */
+  .section-testimonial {
+    padding: 140px 0;
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(201,169,97,0.1), transparent 60%),
+      var(--forest-800);
+    color: var(--cream-50);
     position: relative; overflow: hidden;
   }
-  .badge::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 50% 30%, rgba(108,180,245,0.25), transparent 60%);
-    opacity: 0;
-    transition: opacity .3s ease;
+  .section-testimonial::before {
+    content: '“';
+    position: absolute; top: -60px; left: 6%;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 380px; color: var(--gold-400);
+    opacity: 0.08; line-height: 1;
+    pointer-events: none;
   }
-  .badge:hover {
-    transform: translateY(-3px);
-    border-color: rgba(108,180,245,0.5);
-    box-shadow: 0 8px 20px rgba(74,144,226,0.25);
+  .testimonial {
+    max-width: 920px; margin: 0 auto;
+    text-align: center;
+    position: relative;
   }
-  .badge:hover::before { opacity: 1; }
+  .testimonial-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3.6vw, 42px);
+    line-height: 1.45;
+    color: var(--cream-50);
+    margin-bottom: 48px;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .testimonial-quote em { color: var(--gold-300); }
+  .testimonial-author {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .author-divider {
+    width: 32px; height: 1px;
+    background: var(--gold-500);
+    margin-bottom: 18px;
+  }
+  .author-name {
+    font-size: 14px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--cream-50);
+  }
+  .author-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; font-style: italic;
+    color: var(--gold-300);
+  }
+  .testimonial-pager {
+    display: flex; justify-content: center; gap: 12px;
+    margin-top: 56px;
+  }
+  .pager-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    cursor: pointer;
+    transition: all .25s var(--ease);
+  }
+  .pager-dot.active { background: var(--gold-400); width: 28px; border-radius: 4px; }
 
-  .badge-icon {
-    width: 52px; height: 52px;
+  /* ════════════════════ SECTION 9 — STATS ════════════════════ */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  }
+  .stat {
+    padding: 24px 32px;
+    border-right: 1px solid var(--line);
+    text-align: left;
+  }
+  .stat:first-child { padding-left: 0; }
+  .stat:last-child { border-right: none; padding-right: 0; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(54px, 6vw, 80px);
+    line-height: 1;
+    color: var(--forest-800);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .stat-num em {
+    font-style: italic; color: var(--gold-600);
+    font-size: 0.7em;
+  }
+  .stat-lbl {
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-500);
+  }
+  .stat-desc {
+    font-size: 14px; color: var(--ink-700); margin-top: 14px;
+    max-width: 220px; line-height: 1.6;
+  }
+
+  /* ════════════════════ SECTION 10 — AWARDS ════════════════════ */
+  .section-awards {
+    background: var(--cream-100);
+  }
+  .awards-list {
+    border-top: 1px solid var(--line);
+  }
+  .award-row {
+    display: grid; grid-template-columns: 100px 1fr 1.2fr auto;
+    gap: 32px; align-items: center;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+    transition: padding .3s var(--ease);
+    cursor: default;
+  }
+  .award-row:hover { padding-left: 16px; }
+  .award-year {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-style: italic;
+    color: var(--gold-600);
+  }
+  .award-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 500;
+    color: var(--forest-800);
+  }
+  .award-org {
+    font-size: 13px; color: var(--ink-500);
+    letter-spacing: 0.04em;
+  }
+  .award-cat {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold-600);
+    padding: 6px 14px;
+    border: 1px solid var(--gold-500);
+    border-radius: 999px;
+  }
+
+  /* ════════════════════ SECTION 11 — FAQ ════════════════════ */
+  .faq-list {
+    max-width: 880px; margin: 0 auto;
+    border-top: 1px solid var(--line);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--line);
+  }
+  .faq-q {
+    width: 100%;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px;
+    padding: 28px 0;
+    background: transparent; border: none; cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 500;
+    color: var(--forest-800);
+    text-align: left;
+    transition: color .25s var(--ease);
+  }
+  .faq-q:hover { color: var(--gold-600); }
+  .faq-toggle {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border: 1px solid var(--line);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 26px; color: white;
-    position: relative; z-index: 1;
+    color: var(--forest-800);
+    font-size: 14px;
+    transition: all .35s var(--ease);
   }
-  .badge-icon .icon { width: 28px; height: 28px; }
-  .badge-icon.b1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
-  .badge-icon.b2 { background: linear-gradient(135deg, #6cb4f5, #4a90e2); box-shadow: 0 4px 12px rgba(74,144,226,0.4); }
-  .badge-icon.b3 { background: linear-gradient(135deg, #f472b6, #a78bfa); box-shadow: 0 4px 12px rgba(167,139,250,0.4); }
-
-  .badge-name {
-    font-size: 11px; font-weight: 800; color: white;
-    text-align: center; z-index: 1; line-height: 1.2;
+  .faq-item.open .faq-toggle {
+    background: var(--forest-800); color: var(--gold-400);
+    border-color: var(--forest-800);
+    transform: rotate(45deg);
+  }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height .4s var(--ease), padding .4s var(--ease);
+  }
+  .faq-item.open .faq-a {
+    max-height: 220px;
+    padding-bottom: 28px;
+  }
+  .faq-a p {
+    font-size: 15px; color: var(--ink-700);
+    line-height: 1.75;
+    max-width: 720px;
   }
 
-  /* ----- Bottom Nav ----- */
-  .nav {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 76px;
-    background: rgba(15,31,61,0.92);
-    backdrop-filter: blur(12px);
+  /* ════════════════════ SECTION 12 — CTA + FOOTER ════════════════════ */
+  .cta-section {
+    background: var(--forest-900);
+    color: var(--cream-50);
+    padding: 140px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: ''; position: absolute;
+    top: 0; right: -10%; width: 60%; height: 100%;
+    background: radial-gradient(ellipse at 80% 30%, rgba(201,169,97,0.15), transparent 60%);
+    pointer-events: none;
+  }
+  .cta-inner {
+    text-align: center;
+    max-width: 820px; margin: 0 auto;
+    position: relative;
+    padding-bottom: 120px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .cta-headline {
+    font-size: clamp(40px, 5.4vw, 72px);
+    line-height: 1.1; margin: 24px 0 28px;
+    color: var(--cream-50);
+  }
+  .cta-headline em { font-style: italic; color: var(--gold-400); }
+  .cta-sub {
+    font-size: 17px; line-height: 1.7;
+    color: rgba(253, 251, 245, 0.7);
+    margin-bottom: 40px;
+    max-width: 560px; margin-left: auto; margin-right: auto;
+  }
+  .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  .footer { padding: 80px 0 40px; position: relative; }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr 1.2fr;
+    gap: 56px;
+    margin-bottom: 64px;
+  }
+  .footer-brand .brand { color: var(--cream-50); margin-bottom: 24px; }
+  .footer-brand p {
+    font-size: 14px;
+    color: rgba(253, 251, 245, 0.55);
+    line-height: 1.7;
+    max-width: 280px;
+  }
+  .footer-col h4 {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold-400);
+    margin-bottom: 22px; font-weight: 600;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-col a {
+    font-size: 14px;
+    color: rgba(253, 251, 245, 0.65);
+    text-decoration: none;
+    transition: color .25s var(--ease);
+  }
+  .footer-col a:hover { color: var(--gold-300); }
+  .newsletter p { font-size: 13px; color: rgba(253,251,245,0.55); margin-bottom: 16px; line-height: 1.65; }
+  .newsletter-form {
+    display: flex; gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.18);
+    padding-bottom: 6px;
+    transition: border-color .3s var(--ease);
+  }
+  .newsletter-form:focus-within { border-color: var(--gold-400); }
+  .newsletter-form input {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: var(--cream-50); font-family: inherit; font-size: 14px;
+    padding: 8px 0;
+  }
+  .newsletter-form input::placeholder { color: rgba(253,251,245,0.4); }
+  .newsletter-form button {
+    background: transparent; border: none; cursor: pointer;
+    color: var(--gold-400); padding: 0 6px;
+    transition: transform .3s var(--ease);
+  }
+  .newsletter-form button:hover { transform: translateX(4px); }
+
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 32px;
     border-top: 1px solid rgba(255,255,255,0.06);
-    display: flex; justify-content: space-around; align-items: center;
-    padding: 6px 12px 14px;
-    z-index: 10;
+    font-size: 12px;
+    color: rgba(253,251,245,0.4);
+    letter-spacing: 0.05em;
   }
-  .nav-item {
-    flex: 1;
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    color: var(--gray-2);
-    font-size: 10px; font-weight: 700;
-    cursor: pointer;
-    transition: color .2s ease, transform .2s ease;
-    padding: 6px 4px; border-radius: 12px;
+  .footer-bottom a { color: rgba(253,251,245,0.55); text-decoration: none; margin-left: 24px; }
+  .footer-bottom a:hover { color: var(--gold-300); }
+  .footer-socials { display: flex; gap: 14px; }
+  .social {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(253,251,245,0.65);
+    transition: all .3s var(--ease);
   }
-  .nav-item:hover { color: var(--light-blue); transform: translateY(-2px); }
-  .nav-item .icon { width: 24px; height: 24px; }
-  .nav-item.active { color: var(--light-blue); }
-  .nav-item.active .icon { filter: drop-shadow(0 0 6px rgba(108,180,245,0.6)); }
+  .social:hover { background: var(--gold-500); color: var(--forest-900); border-color: var(--gold-500); }
+  .social .icon { width: 14px; height: 14px; }
 
-  .spacer-sm { height: 4px; }
-
-  /* ----- Watermark ----- */
+  /* ════════════════════ Watermark ════════════════════ */
   .watermark {
     position: fixed;
-    right: 12px;
-    bottom: 12px;
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.3);
-    background: rgba(0, 0, 0, 0.4);
-    padding: 6px 12px;
+    right: 14px; bottom: 14px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+    background: rgba(10, 24, 16, 0.85);
+    padding: 7px 14px;
     border-radius: 4px;
     z-index: 9999;
     pointer-events: none;
     font-weight: 600;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.08em;
+    border: 1px solid rgba(201,169,97,0.3);
+  }
+
+  /* ════════════════════ Responsive ════════════════════ */
+  @media (max-width: 980px) {
+    .container { padding: 0 24px; }
+    .nav-links { display: none; }
+    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+    .hero-visual { aspect-ratio: 4/3; max-width: 480px; }
+    .trust-inner { flex-direction: column; align-items: flex-start; gap: 32px; }
+    .trust-logos { gap: 28px; }
+    .story-grid { grid-template-columns: 1fr; gap: 56px; }
+    .product-grid { grid-template-columns: 1fr; }
+    .verticals-grid { grid-template-columns: 1fr; }
+    .usp-grid { grid-template-columns: repeat(2, 1fr); }
+    .usp { border-right: none; padding-left: 0 !important; padding-right: 0 !important; border-bottom: 1px solid var(--line); }
+    .process-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .process-grid::before { display: none; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .stat { padding: 24px 0 !important; border-right: none; border-bottom: 1px solid var(--line); }
+    .award-row { grid-template-columns: 80px 1fr; gap: 16px; }
+    .award-org, .award-cat { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .footer-bottom { flex-direction: column; gap: 18px; text-align: center; }
+    section.block { padding: 80px 0; }
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 120px 0 60px; }
+    .usp-grid { grid-template-columns: 1fr; }
+    .process-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .trust-logos { gap: 20px; }
+    .trust-logo { font-size: 18px; }
   }
 </style>
 </head>
@@ -396,303 +895,722 @@
 
 <!-- ═══════════════ INLINE SVG SPRITE ═══════════════ -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
-
-  <!-- bell -->
-  <symbol id="ico-bell" viewBox="0 0 24 24">
-    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+  <symbol id="ico-leaf" viewBox="0 0 24 24">
+    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2c1 1.5 1 3 .5 4.5-.7 2.5-2 4.5-4.5 6.5-1.5 1.2-3.5 2.5-5 3.5-1 .67-2 1.5-2 2.5"/>
+    <path d="M2 21c0-3 1.85-5.36 5.08-6"/>
   </symbol>
-
-  <!-- flame -->
-  <symbol id="ico-flame" viewBox="0 0 24 24">
-    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+  <symbol id="ico-arrow-right" viewBox="0 0 24 24">
+    <line x1="5" y1="12" x2="19" y2="12"/>
+    <polyline points="12 5 19 12 12 19"/>
   </symbol>
-
-  <!-- zap / flash -->
-  <symbol id="ico-zap" viewBox="0 0 24 24">
-    <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+  <symbol id="ico-arrow-up-right" viewBox="0 0 24 24">
+    <line x1="7" y1="17" x2="17" y2="7"/>
+    <polyline points="7 7 17 7 17 17"/>
   </symbol>
-
-  <!-- book-open -->
-  <symbol id="ico-book" viewBox="0 0 24 24">
-    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+  <symbol id="ico-tea" viewBox="0 0 24 24">
+    <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+    <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/>
+    <line x1="6" y1="2" x2="6" y2="4"/>
+    <line x1="10" y1="2" x2="10" y2="4"/>
+    <line x1="14" y1="2" x2="14" y2="4"/>
   </symbol>
-
-  <!-- check-circle (completed quest) -->
-  <symbol id="ico-check" viewBox="0 0 24 24">
-    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-    <polyline points="22 4 12 14.01 9 11.01"/>
+  <symbol id="ico-house" viewBox="0 0 24 24">
+    <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1Z"/>
   </symbol>
-
-  <!-- clock -->
-  <symbol id="ico-clock" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="10"/>
-    <polyline points="12 6 12 12 16 14"/>
+  <symbol id="ico-bank" viewBox="0 0 24 24">
+    <path d="M3 21h18"/>
+    <path d="M3 10h18"/>
+    <path d="M5 6l7-3 7 3"/>
+    <path d="M4 10v11"/>
+    <path d="M20 10v11"/>
+    <path d="M8 14v4"/>
+    <path d="M12 14v4"/>
+    <path d="M16 14v4"/>
   </symbol>
-
-  <!-- calculator -->
-  <symbol id="ico-calc" viewBox="0 0 24 24">
-    <rect x="3" y="2" width="18" height="20" rx="2" fill="none"/>
-    <rect x="6" y="5" width="12" height="3.5" rx="0.5" fill="currentColor" stroke="none"/>
-    <circle cx="8"  cy="13" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="12" cy="13" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="16" cy="13" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="8"  cy="18" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="12" cy="18" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="16" cy="18" r="1.5" fill="currentColor" stroke="none"/>
-  </symbol>
-
-  <!-- globe / planet -->
-  <symbol id="ico-planet" viewBox="0 0 24 24">
+  <symbol id="ico-globe" viewBox="0 0 24 24">
     <circle cx="12" cy="12" r="10"/>
     <line x1="2" y1="12" x2="22" y2="12"/>
     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
   </symbol>
-
-  <!-- code-slash -->
-  <symbol id="ico-code" viewBox="0 0 24 24">
-    <polyline points="16 18 22 12 16 6"/>
-    <polyline points="8 6 2 12 8 18"/>
-    <line x1="15" y1="3" x2="9" y2="21"/>
+  <symbol id="ico-shield" viewBox="0 0 24 24">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>
   </symbol>
-
-  <!-- trophy -->
-  <symbol id="ico-trophy" viewBox="0 0 24 24">
-    <polyline points="8 21 12 21 16 21"/>
-    <line x1="12" y1="17" x2="12" y2="21"/>
-    <path d="M7 4h10v6a5 5 0 0 1-10 0V4z"/>
-    <path d="M5 4H3c0 5 2 7 4 8"/>
-    <path d="M19 4h2c0 5-2 7-4 8"/>
-  </symbol>
-
-  <!-- home -->
-  <symbol id="ico-home" viewBox="0 0 24 24">
-    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-    <polyline points="9 22 9 12 15 12 15 22"/>
-  </symbol>
-
-  <!-- layers / lessons -->
-  <symbol id="ico-layers" viewBox="0 0 24 24">
-    <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-    <polyline points="2 17 12 22 22 17"/>
-    <polyline points="2 12 12 17 22 12"/>
-  </symbol>
-
-  <!-- sparkles / AI -->
-  <symbol id="ico-sparkles" viewBox="0 0 24 24">
+  <symbol id="ico-sparkle" viewBox="0 0 24 24">
     <path d="m12 3-1.9 5.8a2 2 0 0 1-1.29 1.29L3 12l5.8 1.9a2 2 0 0 1 1.29 1.29L12 21l1.9-5.8a2 2 0 0 1 1.29-1.29L21 12l-5.8-1.9a2 2 0 0 1-1.29-1.29Z"/>
-    <path d="M5 3v4M3 5h4M19 17v4M17 19h4"/>
   </symbol>
-
-  <!-- person -->
-  <symbol id="ico-person" viewBox="0 0 24 24">
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-    <circle cx="12" cy="7" r="4"/>
+  <symbol id="ico-medal" viewBox="0 0 24 24">
+    <path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/>
+    <circle cx="12" cy="17" r="5"/>
+    <path d="M12 14v6"/>
   </symbol>
-
+  <symbol id="ico-mountain" viewBox="0 0 24 24">
+    <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+  </symbol>
+  <symbol id="ico-handshake" viewBox="0 0 24 24">
+    <path d="M11 17 9 19a2.83 2.83 0 1 1-4-4l3.5-3.5"/>
+    <path d="m14 14 2.5 2.5a2.83 2.83 0 1 0 4-4L18 10"/>
+    <path d="m17 7 3 3"/>
+    <path d="M21 11 11 1l-7 7 4 4"/>
+  </symbol>
+  <symbol id="ico-feather" viewBox="0 0 24 24">
+    <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/>
+    <line x1="16" y1="8" x2="2" y2="22"/>
+    <line x1="17.5" y1="15" x2="9" y2="15"/>
+  </symbol>
+  <symbol id="ico-plus" viewBox="0 0 24 24">
+    <line x1="12" y1="5" x2="12" y2="19"/>
+    <line x1="5" y1="12" x2="19" y2="12"/>
+  </symbol>
+  <symbol id="ico-instagram" viewBox="0 0 24 24">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+  </symbol>
+  <symbol id="ico-linkedin" viewBox="0 0 24 24">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/>
+    <rect x="2" y="9" width="4" height="12"/>
+    <circle cx="4" cy="4" r="2"/>
+  </symbol>
+  <symbol id="ico-facebook" viewBox="0 0 24 24">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+  </symbol>
 </svg>
-<!-- ════════════════════════════════════════════════════ -->
 
-<div class="device">
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark"><svg class="icon"><use href="#ico-leaf"/></svg></span>
+      MAKAVA
+    </a>
+    <ul class="nav-links">
+      <li><a href="#story">Heritage</a></li>
+      <li><a href="#tea">Mate Tea</a></li>
+      <li><a href="#verticals">Verticals</a></li>
+      <li><a href="#press">Press</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Begin Conversation</a>
+  </div>
+</nav>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="greet">
-      <div class="avatar">A</div>
-      <div class="greet-text">
-        <div class="hello">Welcome back</div>
-        <div class="name">Hi, Alex!</div>
+<!-- ═══════════════ SECTION 1 — HERO ═══════════════ -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <span class="eyebrow on-dark">Est. Vienna · 2008</span>
+      <h1 class="display hero-headline">
+        Crafted in Vienna.<br/>
+        <em>Honored</em> Worldwide.
+      </h1>
+      <p class="hero-sub">
+        For nearly two decades, MAKAVA has cultivated a quiet excellence — from
+        the leaf of a single estate to the stewardship of generational wealth.
+        A house defined by patience, provenance, and discretion.
+      </p>
+      <div class="hero-actions">
+        <a href="#tea" class="btn btn-primary">
+          Discover the Collection
+          <svg class="icon"><use href="#ico-arrow-right"/></svg>
+        </a>
+        <a href="#story" class="btn btn-ghost">Our Story</a>
       </div>
     </div>
-    <div class="header-right">
-      <div class="icon-btn" aria-label="Notifications">
-        <svg class="icon"><use href="#ico-bell"/></svg>
-        <span class="badge-dot"></span>
-      </div>
-      <div class="streak" aria-label="Streak 7 days">
-        <svg class="icon"><use href="#ico-flame"/></svg><span>7</span>
+
+    <div class="hero-visual">
+      <svg class="hero-leaf" viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="0.8">
+        <path d="M100 220 Q100 140 100 60 Q100 20 100 10" />
+        <path d="M100 60 Q60 60 30 80 Q70 90 100 90" />
+        <path d="M100 90 Q60 90 30 110 Q70 120 100 120" />
+        <path d="M100 120 Q60 120 30 140 Q70 150 100 150" />
+        <path d="M100 150 Q60 150 30 170 Q70 180 100 180" />
+        <path d="M100 60 Q140 60 170 80 Q130 90 100 90" />
+        <path d="M100 90 Q140 90 170 110 Q130 120 100 120" />
+        <path d="M100 120 Q140 120 170 140 Q130 150 100 150" />
+        <path d="M100 150 Q140 150 170 170 Q130 180 100 180" />
+        <path d="M50 70 Q90 30 100 10 Q110 30 150 70 Q120 65 100 60 Q80 65 50 70 Z" fill="currentColor" fill-opacity="0.18"/>
+      </svg>
+      <div class="hero-tag">
+        <div>
+          <div class="lbl">Signature</div>
+          <div class="val display">Yerba Reserve N°1</div>
+        </div>
+        <div style="text-align:right">
+          <div class="lbl">Estate</div>
+          <div class="val display">Misiones, AR</div>
+        </div>
       </div>
     </div>
-  </header>
+  </div>
 
-  <!-- SCROLLABLE BODY -->
-  <main class="scroll">
-
-    <!-- PROGRESS CARD -->
-    <section class="progress-card">
-      <div class="ring">
-        <svg viewBox="0 0 100 100">
-          <circle class="track" cx="50" cy="50" r="40"></circle>
-          <circle class="bar"   cx="50" cy="50" r="40"></circle>
-        </svg>
-        <div class="ring-text">
-          <span class="pct">67%</span>
-          <span class="lbl">DONE</span>
-        </div>
-      </div>
-      <div class="progress-info">
-        <div class="title">Today's Goal</div>
-        <div class="stat">2 of 3 lessons</div>
-        <div class="msg">
-          <svg class="icon"><use href="#ico-zap"/></svg>
-          Keep going!
-        </div>
-      </div>
-    </section>
-
-    <!-- DAILY QUESTS -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">Daily Quests</h2>
-        <span class="section-link">View all</span>
-      </div>
-      <div class="quest-list">
-
-        <div class="quest">
-          <div class="quest-icon q1"><svg class="icon"><use href="#ico-book"/></svg></div>
-          <div class="quest-body">
-            <div class="quest-title">Learn 10 new words</div>
-            <div class="quest-bar"><span style="width:60%"></span></div>
-          </div>
-          <div class="quest-pts">+50 pt</div>
-        </div>
-
-        <div class="quest">
-          <div class="quest-icon q2"><svg class="icon"><use href="#ico-check"/></svg></div>
-          <div class="quest-body">
-            <div class="quest-title">Answer 3 quiz questions</div>
-            <div class="quest-bar"><span style="width:100%"></span></div>
-          </div>
-          <div class="quest-pts">+30 pt</div>
-        </div>
-
-        <div class="quest">
-          <div class="quest-icon q3"><svg class="icon"><use href="#ico-clock"/></svg></div>
-          <div class="quest-body">
-            <div class="quest-title">Study for 15 minutes</div>
-            <div class="quest-bar"><span style="width:35%"></span></div>
-          </div>
-          <div class="quest-pts">+20 pt</div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- CONTINUE LEARNING -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">Continue Learning</h2>
-        <span class="section-link">See all</span>
-      </div>
-      <div class="h-scroll">
-
-        <div class="lesson">
-          <div class="thumb l1">
-            <span class="tag">MATH</span>
-            <svg class="icon"><use href="#ico-calc"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">Fractions Basics</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:70%"></span></div>
-              <span>70%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="lesson">
-          <div class="thumb l2">
-            <span class="tag">SCIENCE</span>
-            <svg class="icon"><use href="#ico-planet"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">The Solar System</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:45%"></span></div>
-              <span>45%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="lesson">
-          <div class="thumb l3">
-            <span class="tag">ENGLISH</span>
-            <svg class="icon"><use href="#ico-book"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">Past Tense Verbs</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:20%"></span></div>
-              <span>20%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="lesson">
-          <div class="thumb l4">
-            <span class="tag">CODING</span>
-            <svg class="icon"><use href="#ico-code"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">Loops &amp; Logic</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:10%"></span></div>
-              <span>10%</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ACHIEVEMENTS -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">Recent Achievements</h2>
-        <span class="section-link">All badges</span>
-      </div>
-      <div class="achievements">
-        <div class="badge">
-          <div class="badge-icon b1"><svg class="icon"><use href="#ico-trophy"/></svg></div>
-          <div class="badge-name">Word<br/>Master</div>
-        </div>
-        <div class="badge">
-          <div class="badge-icon b2"><svg class="icon"><use href="#ico-zap"/></svg></div>
-          <div class="badge-name">Quick<br/>Thinker</div>
-        </div>
-        <div class="badge">
-          <div class="badge-icon b3"><svg class="icon"><use href="#ico-flame"/></svg></div>
-          <div class="badge-name">Streak<br/>Hero</div>
-        </div>
-      </div>
-    </section>
-
-    <div class="spacer-sm"></div>
-  </main>
-
-  <!-- BOTTOM NAV -->
-  <nav class="nav">
-    <div class="nav-item active">
-      <svg class="icon"><use href="#ico-home"/></svg>
-      <span>Home</span>
+  <div class="container hero-meta">
+    <span>Scroll to explore</span>
+    <div class="scroll-indicator">
+      <span>01 / 12</span>
+      <div class="scroll-line"></div>
     </div>
-    <div class="nav-item">
-      <svg class="icon"><use href="#ico-layers"/></svg>
-      <span>Lessons</span>
-    </div>
-    <div class="nav-item">
-      <svg class="icon"><use href="#ico-sparkles"/></svg>
-      <span>AI Tutor</span>
-    </div>
-    <div class="nav-item">
-      <svg class="icon"><use href="#ico-person"/></svg>
-      <span>Profile</span>
-    </div>
-  </nav>
+    <span>EN · DE</span>
+  </div>
+</section>
 
-</div>
+<!-- ═══════════════ SECTION 2 — TRUST / FEATURED IN ═══════════════ -->
+<section class="section-trust">
+  <div class="container trust-inner">
+    <div class="trust-label">
+      Featured & recognized<br/>by leading publications<br/>worldwide
+    </div>
+    <div class="trust-logos">
+      <span class="trust-logo bold">FORBES</span>
+      <span class="trust-logo italic">Bloomberg</span>
+      <span class="trust-logo">FINANCIAL TIMES</span>
+      <span class="trust-logo italic">Monocle</span>
+      <span class="trust-logo spaced">DIE ZEIT</span>
+      <span class="trust-logo">WALLPAPER*</span>
+    </div>
+  </div>
+</section>
 
-<div class="watermark">by Shusei - Sample Only</div>
+<!-- ═══════════════ SECTION 3 — STORY ═══════════════ -->
+<section class="block" id="story">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-img">
+        <div class="story-img-emblem">
+          <svg class="icon"><use href="#ico-mountain"/></svg>
+        </div>
+        <div class="story-cap">
+          A house built on what cannot<br/>
+          be hurried — soil, time, trust.
+        </div>
+      </div>
+
+      <div class="story-body">
+        <span class="eyebrow">The MAKAVA Heritage</span>
+        <h2 class="display block-title">A house defined by <em>patience</em>.</h2>
+        <p class="lead">
+          From a single estate in Misiones to a quiet portfolio of legacy
+          assets across Europe — MAKAVA has remained one thing throughout:
+          deliberate.
+        </p>
+        <p>
+          Founded in 2008 by a family with three generations of ties to South
+          American agriculture and Central European banking, MAKAVA was born
+          from a singular conviction — that the finest things, whether a leaf
+          or a legacy, are never produced at scale, but at depth.
+        </p>
+        <p>
+          Today the house cultivates a small, considered set of pursuits:
+          single-origin yerba mate, generational real estate, and discreet
+          private banking — each held to the same standard.
+        </p>
+
+        <div class="story-stats">
+          <div class="story-stat">
+            <div class="num display">18</div>
+            <div class="lbl">Years of practice</div>
+          </div>
+          <div class="story-stat">
+            <div class="num display">3</div>
+            <div class="lbl">Generations</div>
+          </div>
+          <div class="story-stat">
+            <div class="num display">47</div>
+            <div class="lbl">Countries served</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 4 — SIGNATURE PRODUCT (MATE TEA) ═══════════════ -->
+<section class="block section-product" id="tea">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Signature Mate Tea</span>
+      <h2 class="display block-title">From a single <em>estate</em>.<br/>Aged with intention.</h2>
+      <p class="block-lede">
+        Three expressions of the leaf — each shade-grown in Misiones, slow-cured
+        for twenty-four months, and bottled by hand in Vienna.
+      </p>
+    </div>
+
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-thumb t1">
+          <span class="product-tag">N° 01</span>
+          <svg class="icon"><use href="#ico-leaf"/></svg>
+        </div>
+        <div class="product-info">
+          <div class="product-name display">Reserve Verde</div>
+          <p class="product-desc">A bright, herbaceous expression — the unaged leaf, vivid and immediate.</p>
+          <div class="product-meta">
+            <span class="product-price">€48</span>
+            <div class="product-arrow"><svg class="icon"><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-thumb t2">
+          <span class="product-tag">N° 02 · House Signature</span>
+          <svg class="icon"><use href="#ico-tea"/></svg>
+        </div>
+        <div class="product-info">
+          <div class="product-name display">Cuvée Oro</div>
+          <p class="product-desc">Twenty-four months in oak. Honey, woodsmoke, and a long, mineral finish.</p>
+          <div class="product-meta">
+            <span class="product-price">€86</span>
+            <div class="product-arrow"><svg class="icon"><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-thumb t3">
+          <span class="product-tag">N° 03 · Limited</span>
+          <svg class="icon"><use href="#ico-feather"/></svg>
+        </div>
+        <div class="product-info">
+          <div class="product-name display">Édition Noir</div>
+          <p class="product-desc">Single-harvest. Numbered. Released once each autumn — never again.</p>
+          <div class="product-meta">
+            <span class="product-price">€164</span>
+            <div class="product-arrow"><svg class="icon"><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center">
+      <a href="#" class="btn btn-outline">
+        View the Full Collection
+        <svg class="icon"><use href="#ico-arrow-right"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 5 — VERTICALS ═══════════════ -->
+<section class="block section-verticals" id="verticals">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow on-dark">The MAKAVA Group</span>
+      <h2 class="display block-title">A measured set of <em>pursuits</em>.</h2>
+      <p class="block-lede">
+        Three disciplines, one philosophy. Each vertical stands alone — and
+        each is held to the same standard of quietness, quality, and care.
+      </p>
+    </div>
+
+    <div class="verticals-grid">
+      <div class="vertical">
+        <div class="vertical-num display">01</div>
+        <div>
+          <div class="vertical-name display">Mate &amp; Tea</div>
+          <p class="vertical-desc">
+            Single-estate yerba, aged in oak, bottled in Vienna. The house's
+            founding craft and quiet philosophy made tangible.
+          </p>
+        </div>
+        <div class="vertical-arrow"><svg class="icon"><use href="#ico-arrow-up-right"/></svg></div>
+      </div>
+
+      <div class="vertical">
+        <div class="vertical-num display">02</div>
+        <div>
+          <div class="vertical-name display">Real Estate</div>
+          <p class="vertical-desc">
+            Generational holdings in Vienna's first district, the Salzkammergut,
+            and select Mediterranean coasts. Curated, never traded.
+          </p>
+        </div>
+        <div class="vertical-arrow"><svg class="icon"><use href="#ico-arrow-up-right"/></svg></div>
+      </div>
+
+      <div class="vertical">
+        <div class="vertical-num display">03</div>
+        <div>
+          <div class="vertical-name display">Private Banking</div>
+          <p class="vertical-desc">
+            By appointment only. Multi-generational wealth structuring, family
+            office services, and discretionary mandates from Zürich and Vienna.
+          </p>
+        </div>
+        <div class="vertical-arrow"><svg class="icon"><use href="#ico-arrow-up-right"/></svg></div>
+      </div>
+
+      <div class="vertical">
+        <div class="vertical-num display">04</div>
+        <div>
+          <div class="vertical-name display">Holdings</div>
+          <p class="vertical-desc">
+            Long-horizon equity in family-owned European craft houses —
+            watchmaking, leather, distillation. Capital with a long memory.
+          </p>
+        </div>
+        <div class="vertical-arrow"><svg class="icon"><use href="#ico-arrow-up-right"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 6 — USP ═══════════════ -->
+<section class="block">
+  <div class="container">
+    <div class="block-head center">
+      <span class="eyebrow">Why MAKAVA</span>
+      <h2 class="display block-title">Four convictions.<br/>One <em>standard</em>.</h2>
+    </div>
+
+    <div class="usp-grid">
+      <div class="usp">
+        <div class="usp-num">N° 01</div>
+        <div class="usp-icon"><svg class="icon"><use href="#ico-mountain"/></svg></div>
+        <div class="usp-name display">Single Provenance</div>
+        <p class="usp-desc">Every leaf, every asset, every mandate — traceable to one source. We invest in what we know intimately.</p>
+      </div>
+      <div class="usp">
+        <div class="usp-num">N° 02</div>
+        <div class="usp-icon"><svg class="icon"><use href="#ico-feather"/></svg></div>
+        <div class="usp-name display">Quiet Craft</div>
+        <p class="usp-desc">No marketing committees, no quarterly noise. Decisions made by hand, generation after generation.</p>
+      </div>
+      <div class="usp">
+        <div class="usp-num">N° 03</div>
+        <div class="usp-icon"><svg class="icon"><use href="#ico-shield"/></svg></div>
+        <div class="usp-name display">Absolute Discretion</div>
+        <p class="usp-desc">Names not mentioned. Holdings not disclosed. Confidentiality is the foundation, not a feature.</p>
+      </div>
+      <div class="usp">
+        <div class="usp-num">N° 04</div>
+        <div class="usp-icon"><svg class="icon"><use href="#ico-handshake"/></svg></div>
+        <div class="usp-name display">A Long Horizon</div>
+        <p class="usp-desc">We measure success in decades, not quarters. Our partnerships outlast cycles, advisors, and trends.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 7 — PROCESS ═══════════════ -->
+<section class="block section-process">
+  <div class="container">
+    <div class="block-head center">
+      <span class="eyebrow">The Approach</span>
+      <h2 class="display block-title">A <em>considered</em> process.</h2>
+      <p class="block-lede">
+        We work slowly, deliberately, and only with those who share our
+        appetite for the long view.
+      </p>
+    </div>
+
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="process-dot display">I</div>
+        <h3 class="process-name display">Introduction</h3>
+        <p class="process-desc">A private conversation, in Vienna or by appointment. We listen first; we propose nothing.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-dot display">II</div>
+        <h3 class="process-name display">Discernment</h3>
+        <p class="process-desc">Six to twelve weeks of mutual study. We rarely accept new partnerships, and never quickly.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-dot display">III</div>
+        <h3 class="process-name display">Stewardship</h3>
+        <p class="process-desc">A bespoke mandate is drawn — for the leaf, the property, or the portfolio. Always written by hand.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-dot display">IV</div>
+        <h3 class="process-name display">Continuity</h3>
+        <p class="process-desc">A relationship intended to outlast its origin — passed across generations, undisturbed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 8 — TESTIMONIAL ═══════════════ -->
+<section class="section-testimonial">
+  <div class="container testimonial">
+    <p class="testimonial-quote display">
+      In a marketplace that mistakes loudness for quality, MAKAVA remains
+      <em>quiet, exact, and unshakeable</em> — the rarest combination one can
+      find in any house, of any kind.
+    </p>
+    <div class="testimonial-author">
+      <div class="author-divider"></div>
+      <div class="author-name">Friederike Hartmann von Stein</div>
+      <div class="author-title">Family Principal, Hartmann-Stein Holdings · Zürich</div>
+    </div>
+    <div class="testimonial-pager">
+      <div class="pager-dot active"></div>
+      <div class="pager-dot"></div>
+      <div class="pager-dot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 9 — STATS ═══════════════ -->
+<section class="block">
+  <div class="container">
+    <div class="block-head center">
+      <span class="eyebrow">By the Numbers</span>
+      <h2 class="display block-title">Quietly, <em>consistently</em>.</h2>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-num display">€2.4<em>B</em></div>
+        <div class="stat-lbl">Assets stewarded</div>
+        <p class="stat-desc">Across mandates, holdings, and family office partnerships.</p>
+      </div>
+      <div class="stat">
+        <div class="stat-num display">99.<em>8%</em></div>
+        <div class="stat-lbl">Client retention</div>
+        <p class="stat-desc">Measured over the past decade. Several relationships exceed 15 years.</p>
+      </div>
+      <div class="stat">
+        <div class="stat-num display">47</div>
+        <div class="stat-lbl">Countries served</div>
+        <p class="stat-desc">From Zürich and Vienna, with discretion across four continents.</p>
+      </div>
+      <div class="stat">
+        <div class="stat-num display">24<em>mo</em></div>
+        <div class="stat-lbl">Avg. tea curing</div>
+        <p class="stat-desc">No leaf bottled before it has rested two full European winters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 10 — AWARDS ═══════════════ -->
+<section class="block section-awards" id="press">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Recognition</span>
+      <h2 class="display block-title">Honored, when noticed.</h2>
+    </div>
+
+    <div class="awards-list">
+      <div class="award-row">
+        <div class="award-year display">2025</div>
+        <div class="award-name display">House of the Year — Beverages</div>
+        <div class="award-org">Monocle Quality of Life Index</div>
+        <div class="award-cat">Editorial</div>
+      </div>
+      <div class="award-row">
+        <div class="award-year display">2024</div>
+        <div class="award-name display">Best European Family Office</div>
+        <div class="award-org">Citywealth Magic Circle Awards · London</div>
+        <div class="award-cat">Industry</div>
+      </div>
+      <div class="award-row">
+        <div class="award-year display">2023</div>
+        <div class="award-name display">Gold — Single Origin Mate</div>
+        <div class="award-org">Great Taste Awards · Guild of Fine Food</div>
+        <div class="award-cat">Product</div>
+      </div>
+      <div class="award-row">
+        <div class="award-year display">2022</div>
+        <div class="award-name display">Steward of European Heritage</div>
+        <div class="award-org">Wallpaper* Design Awards</div>
+        <div class="award-cat">Editorial</div>
+      </div>
+      <div class="award-row">
+        <div class="award-year display">2021</div>
+        <div class="award-name display">Family Office of the Decade</div>
+        <div class="award-org">PAM Awards · Zürich</div>
+        <div class="award-cat">Industry</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 11 — FAQ ═══════════════ -->
+<section class="block" id="faq">
+  <div class="container">
+    <div class="block-head center">
+      <span class="eyebrow">Frequently Asked</span>
+      <h2 class="display block-title">A few honest <em>questions</em>.</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item open">
+        <button class="faq-q display">
+          <span>Is MAKAVA accepting new private banking clients?</span>
+          <span class="faq-toggle"><svg class="icon"><use href="#ico-plus"/></svg></span>
+        </button>
+        <div class="faq-a">
+          <p>
+            Selectively. We typically accept three to five new partnerships per
+            year, by introduction. Inquiries are met with a private
+            conversation, not a sales process.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q display">
+          <span>Where can I purchase the Mate Tea collection?</span>
+          <span class="faq-toggle"><svg class="icon"><use href="#ico-plus"/></svg></span>
+        </button>
+        <div class="faq-a">
+          <p>
+            Direct from the house, and at a small number of selected partners
+            in Vienna, Zürich, Berlin, Paris, London, and Tokyo. The Édition
+            Noir is sold only to registered patrons.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q display">
+          <span>How is your real estate portfolio structured?</span>
+          <span class="faq-toggle"><svg class="icon"><use href="#ico-plus"/></svg></span>
+        </button>
+        <div class="faq-a">
+          <p>
+            As long-held generational assets — never as investment vehicles.
+            We do not flip, syndicate, or fractionalize. Properties enter the
+            portfolio to be cared for, often for the lifetime of the house.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q display">
+          <span>Do you publish performance figures?</span>
+          <span class="faq-toggle"><svg class="icon"><use href="#ico-plus"/></svg></span>
+        </button>
+        <div class="faq-a">
+          <p>
+            Not publicly. Detailed reports are produced privately, twice yearly,
+            for our partners and patrons. Discretion is the working condition,
+            not a marketing position.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q display">
+          <span>Where is the house based, and how do we meet?</span>
+          <span class="faq-toggle"><svg class="icon"><use href="#ico-plus"/></svg></span>
+        </button>
+        <div class="faq-a">
+          <p>
+            Our principal offices are in Vienna and Zürich. Conversations are
+            held by appointment, in person where possible. Written
+            introductions are welcomed at the address below.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 12 — CTA + FOOTER ═══════════════ -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <div class="cta-inner">
+      <span class="eyebrow on-dark">By Appointment</span>
+      <h2 class="display cta-headline">
+        Begin a <em>quiet</em> conversation.
+      </h2>
+      <p class="cta-sub">
+        Whether your interest lies in a single bottle, a family office
+        introduction, or a generational mandate — we are reachable, by writing.
+      </p>
+      <div class="cta-actions">
+        <a href="mailto:office@makava.at" class="btn btn-primary">
+          Write to the House
+          <svg class="icon"><use href="#ico-arrow-right"/></svg>
+        </a>
+        <a href="#" class="btn btn-ghost">Request the Brochure</a>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="brand">
+            <span class="brand-mark"><svg class="icon"><use href="#ico-leaf"/></svg></span>
+            MAKAVA
+          </a>
+          <p>
+            A house defined by patience, provenance, and discretion.
+            Cultivated from Vienna and Zürich since 2008.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>The House</h4>
+          <ul>
+            <li><a href="#story">Heritage</a></li>
+            <li><a href="#verticals">Verticals</a></li>
+            <li><a href="#press">Press &amp; Awards</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Pursuits</h4>
+          <ul>
+            <li><a href="#tea">Mate &amp; Tea</a></li>
+            <li><a href="#">Real Estate</a></li>
+            <li><a href="#">Private Banking</a></li>
+            <li><a href="#">Holdings</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Reach</h4>
+          <ul>
+            <li><a href="#">Vienna · 1010</a></li>
+            <li><a href="#">Zürich · 8001</a></li>
+            <li><a href="mailto:office@makava.at">office@makava.at</a></li>
+            <li><a href="#">+43 1 533 00 00</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col newsletter">
+          <h4>Quiet Letters</h4>
+          <p>Four issues a year. Long form. Never urgent.</p>
+          <form class="newsletter-form" onsubmit="event.preventDefault()">
+            <input type="email" placeholder="your@address.com" />
+            <button type="submit"><svg class="icon"><use href="#ico-arrow-right"/></svg></button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 MAKAVA Group. All rights reserved.</div>
+        <div class="footer-socials">
+          <a href="#" class="social"><svg class="icon"><use href="#ico-instagram"/></svg></a>
+          <a href="#" class="social"><svg class="icon"><use href="#ico-linkedin"/></svg></a>
+          <a href="#" class="social"><svg class="icon"><use href="#ico-facebook"/></svg></a>
+        </div>
+        <div>
+          <a href="#">Imprint</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</section>
+
+<div class="watermark">by Shusei — Sample Only</div>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+</script>
+
 </body>
 </html>
