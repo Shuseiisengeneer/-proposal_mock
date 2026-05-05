@@ -1,5 +1,50 @@
 ---
 import ProjectCard from './ProjectCard.astro';
+
+const moreWork = [
+  {
+    tag: 'HOSPITALITY · SAAS',
+    title: 'Hotel Reservation Management',
+    description: 'End-to-end booking and room management system for a hospitality client. Real-time availability, multi-property support, and automated confirmation flows.',
+    stack: 'Bubble.io · Workflow automation · Email integration',
+    gradient: 'from-slate-800 to-slate-700',
+  },
+  {
+    tag: 'MARKETPLACE · MATCHING',
+    title: 'MA Matching Platform',
+    description: 'Two-sided marketplace connecting buyers and sellers for M&A deals. Custom matching logic, due diligence checklists, and secure document exchange.',
+    stack: 'Bubble.io · Custom algorithms · Multi-role auth',
+    gradient: 'from-violet-900 to-slate-800',
+  },
+  {
+    tag: 'COMMUNITY · SNS',
+    title: 'Auto Mechanic SNS',
+    description: 'Vertical social network for automotive professionals. Job postings, skill verification, shop discovery, and a feed tuned for the trade.',
+    stack: 'Bubble.io · Real-time feeds · Geolocation',
+    gradient: 'from-zinc-800 to-zinc-700',
+  },
+  {
+    tag: 'FINANCE · SAAS',
+    title: 'Sales Management SaaS',
+    description: 'Revenue tracking dashboard with team-level reporting, quota management, and automated weekly summaries. Reduced manual reporting from hours to zero.',
+    stack: 'Bubble.io · Data visualization · Role-based access',
+    gradient: 'from-emerald-900 to-slate-800',
+  },
+  {
+    tag: 'INFRASTRUCTURE · COMPLIANCE',
+    title: 'Elevator Inspection System',
+    description: 'Digital inspection log for certified elevator maintenance — replacing paper checklists with a mobile-first system that passes regulatory audit trails.',
+    stack: 'Bubble.io · Mobile-responsive · PDF export',
+    gradient: 'from-stone-800 to-stone-700',
+  },
+  {
+    tag: 'WEB · BRANDING',
+    title: 'Beauty Salon Group Site',
+    description: 'Multi-location website for a salon group. Clean design, location finder, online booking integration, and a CMS the staff can actually use.',
+    stack: 'Figma · Astro · Tailwind · Booking API',
+    gradient: 'from-rose-900 to-slate-800',
+  },
+];
 ---
 
 <section id="work" class="py-24 lg:py-24 py-16">
@@ -16,12 +61,12 @@ import ProjectCard from './ProjectCard.astro';
         Featured Projects
       </h2>
       <p class="text-base text-ink-muted dark:text-night-muted">
-        Two recent things I'm proud of.
+        Selected work. Details withheld where NDA applies.
       </p>
     </div>
 
-    <!-- Project cards -->
-    <div class="flex flex-col gap-6">
+    <!-- Featured project cards -->
+    <div class="flex flex-col gap-6 mb-16">
       <!-- Project 1: Quanta Redesign -->
       <ProjectCard
         gradient="linear-gradient(135deg, #1B2845 0%, #7C3AED 60%, #DC2626 100%)"
@@ -54,5 +99,47 @@ import ProjectCard from './ProjectCard.astro';
         liveLabel="View live →"
       />
     </div>
+
+    <!-- More work grid -->
+    <div class="mb-4">
+      <h3
+        class="font-sans font-semibold text-ink dark:text-night-text tracking-[-0.01em] mb-6"
+        style="font-size: 18px;"
+      >
+        More work
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {moreWork.map((project) => (
+          <div class="bg-bg-card dark:bg-night-card rounded-2xl border border-border dark:border-night-border p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col gap-4">
+            <!-- Color bar -->
+            <div class={`w-full h-1.5 rounded-full bg-gradient-to-r ${project.gradient} opacity-60`}></div>
+
+            <!-- Tag -->
+            <span class="font-mono text-[11px] text-vibe dark:text-night-glow bg-vibe-bg dark:bg-vibe/10 rounded-full px-3 py-1 uppercase tracking-widest self-start">
+              {project.tag}
+            </span>
+
+            <!-- Title -->
+            <h4 class="font-sans font-semibold text-ink dark:text-night-text leading-snug" style="font-size: 15px;">
+              {project.title}
+            </h4>
+
+            <!-- Description -->
+            <p class="text-sm text-ink-muted dark:text-night-muted leading-relaxed flex-1">
+              {project.description}
+            </p>
+
+            <!-- Stack -->
+            <p class="font-mono text-[12px] text-ink-soft dark:text-night-muted border-t border-border dark:border-night-border pt-4">
+              {project.stack}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <p class="text-sm text-ink-muted dark:text-night-muted mt-4">
+      NDA applies to client names and project details on all entries above.
+    </p>
   </div>
 </section>
