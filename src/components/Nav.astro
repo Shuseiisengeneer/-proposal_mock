@@ -1,0 +1,49 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<nav
+  class="sticky top-0 z-50 w-full h-16 backdrop-blur-md bg-bg/80 dark:bg-night-bg/80 border-b border-border dark:border-night-border"
+>
+  <div class="max-w-5xl mx-auto px-6 h-full flex items-center justify-between">
+    <!-- Logo / Monogram -->
+    <a href="#" class="flex items-center gap-3" aria-label="Shusei — home">
+      <div
+        class="w-8 h-8 rounded-lg bg-vibe flex items-center justify-center flex-shrink-0"
+        aria-hidden="true"
+      >
+        <span class="font-mono text-white font-bold text-sm leading-none">S</span>
+      </div>
+      <span class="font-sans font-semibold text-ink dark:text-night-text text-sm tracking-tight">
+        shusei
+      </span>
+    </a>
+
+    <!-- Nav links -->
+    <div class="flex items-center gap-1">
+      <a
+        href="#work"
+        class="nav-link px-3 py-1.5 text-sm font-medium text-ink-muted dark:text-night-muted hover:text-ink dark:hover:text-night-text transition-colors duration-200"
+      >
+        Work
+      </a>
+      <a
+        href="#process"
+        class="nav-link px-3 py-1.5 text-sm font-medium text-ink-muted dark:text-night-muted hover:text-ink dark:hover:text-night-text transition-colors duration-200"
+      >
+        Process
+      </a>
+      <a
+        href="#contact"
+        class="nav-link px-3 py-1.5 text-sm font-medium text-ink-muted dark:text-night-muted hover:text-ink dark:hover:text-night-text transition-colors duration-200"
+      >
+        Contact
+      </a>
+
+      <!-- Divider -->
+      <div class="w-px h-4 bg-border dark:bg-night-border mx-2" aria-hidden="true"></div>
+
+      <ThemeToggle />
+    </div>
+  </div>
+</nav>
