@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>quanta — Skills & Goals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy-900: #1B2845;
+    --navy-800: #243454;
+    --navy-700: #2D3E66;
+    --navy-100: #E8EDF7;
+    --navy-50:  #F4F6FB;
+    --gold:    #F59E0B;
+    --gold-tint: #FEF3C7;
+    --silver:  #94A3B8;
+    --bronze:  #B87333;
+    --emerald: #059669;
+    --emerald-tint: #ECFDF5;
+    --purple:  #7C3AED;
+    --purple-tint: #F3EEFF;
+    --rose:    #F43F5E;
+    --rose-tint: #FFE4E8;
+    --sky:     #0EA5E9;
+    --sky-tint: #E0F2FE;
+    --orange-tint: #FFF7ED;
+    --surface:       #FAFAF9;
+    --surface-card:  #FFFFFF;
+    --surface-muted: #F4F4F2;
+    --border:        #E7E5E4;
+    --border-strong: #D4D4D2;
+    --text-primary:   #0F172A;
+    --text-secondary: #475569;
+    --text-muted:     #94A3B8;
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 20px 48px rgba(15, 23, 42, 0.10);
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--surface);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-feature-settings: 'tnum'; }
+
+  /* ── Layout ── */
+  .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
+    background: var(--surface-card); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 20px 16px; z-index: 50;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; padding: 4px 8px 24px; }
+  .brand-logo {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy-900), var(--purple));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 22px; letter-spacing: -0.04em;
+    box-shadow: var(--shadow-sm);
+  }
+  .brand-name { font-weight: 700; font-size: 17px; letter-spacing: -0.02em; color: var(--navy-900); }
+  .brand-name small { display: block; font-size: 10px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+  .nav-section { display: flex; flex-direction: column; gap: 2px; }
+  .nav-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; padding: 12px 12px 8px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+    border-radius: 8px; color: var(--text-secondary); font-size: 14px; font-weight: 500;
+    transition: all 200ms var(--ease); position: relative;
+  }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; stroke-width: 1.75; }
+  .nav-item:hover { background: var(--navy-50); color: var(--navy-900); }
+  .nav-item.active { background: var(--navy-100); color: var(--navy-900); font-weight: 600; }
+  .nav-item.active::before {
+    content: ""; position: absolute; left: -16px; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 22px; background: var(--purple); border-radius: 0 3px 3px 0;
+  }
+  .sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 2px; }
+
+  /* ── Topbar ── */
+  .topbar {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+    height: 64px; display: flex; align-items: center;
+    justify-content: space-between; padding: 0 32px;
+  }
+  .search {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface-muted); border: 1px solid var(--border);
+    border-radius: 10px; padding: 8px 14px; width: 360px;
+  }
+  .search svg { width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; }
+  .search input { border: none; outline: none; background: transparent; font-family: inherit; font-size: 14px; color: var(--text-primary); width: 100%; }
+  .search input::placeholder { color: var(--text-muted); }
+  .search kbd { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); background: var(--surface-card); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .xp-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--gold-tint); color: #92400E; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; }
+  .xp-pill svg { width: 14px; height: 14px; color: var(--gold); }
+  .icon-btn { width: 36px; height: 36px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 200ms var(--ease); position: relative; }
+  .icon-btn:hover { background: var(--surface-muted); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn .dot { position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; background: var(--rose); border-radius: 50%; border: 2px solid white; }
+  .user-menu { display: flex; align-items: center; gap: 10px; padding: 4px 10px 4px 4px; border-radius: 999px; transition: all 200ms var(--ease); }
+  .user-menu:hover { background: var(--surface-muted); }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--navy-700), var(--purple)); color: white; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .user-menu-name { font-size: 14px; font-weight: 600; }
+  .user-menu svg { width: 14px; height: 14px; color: var(--text-muted); }
+
+  /* ── Main ── */
+  .main { grid-column: 2; min-width: 0; }
+  .content { padding: 40px 48px 96px; max-width: 1280px; }
+
+  /* ── Page Header ── */
+  .page-header { margin-bottom: 36px; }
+  .page-header h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .page-header p { color: var(--text-secondary); font-size: 15px; }
+
+  /* ── Tab Bar ── */
+  .tab-bar {
+    display: flex; gap: 4px;
+    background: var(--surface-muted); border-radius: 12px; padding: 4px;
+    width: fit-content; margin-bottom: 32px;
+  }
+  .tab {
+    padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;
+    color: var(--text-secondary); transition: all 200ms var(--ease); cursor: pointer;
+  }
+  .tab.active { background: var(--surface-card); color: var(--text-primary); font-weight: 600; box-shadow: var(--shadow-xs); }
+
+  /* ── Weekly Goal Banner ── */
+  .goal-banner {
+    background: linear-gradient(120deg, var(--purple) 0%, #5B21B6 100%);
+    border-radius: 20px; padding: 28px 32px;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 24px; align-items: center;
+    margin-bottom: 32px; position: relative; overflow: hidden;
+  }
+  .goal-banner::before {
+    content: "∞"; position: absolute; font-size: 280px; font-weight: 800;
+    color: rgba(255,255,255,0.06); right: 180px; top: -60px; line-height: 1;
+  }
+  .goal-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15); color: white;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 999px; margin-bottom: 12px;
+  }
+  .goal-label svg { width: 12px; height: 12px; }
+  .goal-banner h2 { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: white; margin-bottom: 16px; }
+  .goal-progress-row { display: flex; align-items: center; gap: 16px; }
+  .goal-progress-bar { flex: 1; height: 8px; background: rgba(255,255,255,0.2); border-radius: 999px; overflow: hidden; }
+  .goal-progress-fill { height: 100%; background: white; border-radius: 999px; width: 57%; }
+  .goal-progress-text { color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .goal-stat {
+    text-align: center; position: relative; z-index: 2;
+    background: rgba(255,255,255,0.12); border-radius: 16px; padding: 20px 28px;
+  }
+  .goal-stat-num { font-family: 'JetBrains Mono', monospace; font-size: 42px; font-weight: 700; color: white; line-height: 1; }
+  .goal-stat-label { font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 500; margin-top: 4px; }
+
+  /* ── Section ── */
+  section { margin-bottom: 40px; }
+  .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .section-head h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+  .view-all { color: var(--purple); font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; transition: gap 200ms var(--ease); }
+  .view-all:hover { gap: 8px; text-decoration: underline; }
+
+  /* ── Active Courses ── */
+  .courses-list { display: flex; flex-direction: column; gap: 12px; }
+  .course-row {
+    background: var(--surface-card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px 24px;
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center; gap: 20px;
+    transition: all 200ms var(--ease); cursor: pointer; box-shadow: var(--shadow-xs);
+  }
+  .course-row:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+  .course-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; letter-spacing: -0.02em; color: white;
+    flex-shrink: 0;
+  }
+  .course-info { min-width: 0; }
+  .course-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .course-title { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--text-primary); margin-bottom: 10px; }
+  .course-progress-row { display: flex; align-items: center; gap: 12px; }
+  .progress-bar { flex: 1; max-width: 280px; height: 6px; background: var(--surface-muted); border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--emerald); border-radius: 999px; }
+  .progress-text { font-size: 12px; color: var(--text-muted); font-weight: 500; white-space: nowrap; }
+  .course-action { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .continue-btn {
+    background: var(--navy-900); color: white; border-radius: 10px;
+    padding: 9px 18px; font-size: 13px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all 200ms var(--ease);
+  }
+  .continue-btn:hover { background: var(--navy-700); transform: translateY(-1px); }
+  .continue-btn svg { width: 13px; height: 13px; }
+  .lesson-chip { font-size: 12px; color: var(--text-muted); font-weight: 500; white-space: nowrap; }
+  .badge-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--emerald-tint); color: var(--emerald);
+    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+  }
+  .badge-chip svg { width: 12px; height: 12px; }
+
+  /* ── Skill Tree ── */
+  .skill-tree-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .skill-node {
+    background: var(--surface-card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px;
+    transition: all 200ms var(--ease); cursor: pointer; box-shadow: var(--shadow-xs);
+    position: relative; overflow: hidden;
+  }
+  .skill-node:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .skill-node.locked { opacity: 0.5; cursor: default; }
+  .skill-node.locked:hover { transform: none; box-shadow: var(--shadow-xs); }
+  .skill-node.complete { border-color: #A7F3D0; background: linear-gradient(135deg, #ECFDF5, #F0FDF4); }
+  .skill-node-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+  .skill-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .skill-icon svg { width: 18px; height: 18px; }
+  .skill-icon.purple { background: var(--purple-tint); color: var(--purple); }
+  .skill-icon.sky    { background: var(--sky-tint); color: var(--sky); }
+  .skill-icon.emerald { background: var(--emerald-tint); color: var(--emerald); }
+  .skill-icon.gold   { background: var(--gold-tint); color: var(--gold); }
+  .skill-icon.rose   { background: var(--rose-tint); color: var(--rose); }
+  .skill-icon.muted  { background: var(--surface-muted); color: var(--text-muted); }
+  .skill-status {
+    font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px;
+  }
+  .skill-status.complete { background: var(--emerald-tint); color: var(--emerald); }
+  .skill-status.in-progress { background: var(--purple-tint); color: var(--purple); }
+  .skill-status.locked { background: var(--surface-muted); color: var(--text-muted); }
+  .skill-status.available { background: var(--gold-tint); color: #92400E; }
+  .skill-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .skill-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px; }
+  .skill-footer { display: flex; align-items: center; justify-content: space-between; }
+  .skill-meta { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .xp-reward { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--gold); }
+  .xp-reward svg { width: 12px; height: 12px; }
+  .lock-overlay {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(250,250,249,0.6); border-radius: 16px;
+  }
+  .lock-overlay svg { width: 24px; height: 24px; color: var(--text-muted); }
+
+  /* ── Achievements ── */
+  .achievements-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .achievement-card {
+    background: var(--surface-card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px; text-align: center;
+    transition: all 200ms var(--ease); cursor: pointer; box-shadow: var(--shadow-xs);
+  }
+  .achievement-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .achievement-card.locked { opacity: 0.45; }
+  .achievement-badge {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 24px;
+  }
+  .achievement-badge.gold { background: var(--gold-tint); box-shadow: 0 0 0 4px rgba(245,158,11,0.15); }
+  .achievement-badge.purple { background: var(--purple-tint); box-shadow: 0 0 0 4px rgba(124,58,237,0.12); }
+  .achievement-badge.emerald { background: var(--emerald-tint); box-shadow: 0 0 0 4px rgba(5,150,105,0.12); }
+  .achievement-badge.muted { background: var(--surface-muted); }
+  .achievement-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .achievement-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+  /* ── Watermark ── */
+  .watermark {
+    position: fixed; bottom: 16px; right: 16px;
+    background: rgba(15,23,42,0.85); color: white;
+    font-size: 12px; font-weight: 500; padding: 8px 14px;
+    border-radius: 999px; box-shadow: var(--shadow-md); z-index: 100;
+    backdrop-filter: blur(8px); letter-spacing: 0.01em;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">Q</div>
+      <div class="brand-name">quanta<small>learn · solve · win</small></div>
+    </div>
+    <nav class="nav-section">
+      <div class="nav-label">Workspace</div>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item active" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        <span>Skills &amp; Goals</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/></svg>
+        <span>Competitions</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        <span>Leaderboards</span>
+      </a>
+    </nav>
+    <nav class="nav-section" style="margin-top:24px;">
+      <div class="nav-label">Library</div>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+        <span>My Library</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+        <span>Saved</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        <span>Settings</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Sign out</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search skills, courses, problems…" />
+        <kbd>⌘K</kbd>
+      </div>
+      <div class="topbar-right">
+        <div class="xp-pill">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span class="mono">1,247 XP</span>
+        </div>
+        <button class="icon-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="dot"></span>
+        </button>
+        <div class="user-menu">
+          <div class="avatar">S</div>
+          <span class="user-menu-name">Shusei</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1>Skills &amp; Goals</h1>
+        <p>Track your learning path, unlock new skills, and hit your weekly targets.</p>
+      </div>
+
+      <!-- Tab Bar -->
+      <div class="tab-bar">
+        <div class="tab active">Courses</div>
+        <div class="tab">Skill Tree</div>
+        <div class="tab">Achievements</div>
+        <div class="tab">Goals</div>
+      </div>
+
+      <!-- Weekly Goal Banner -->
+      <div class="goal-banner">
+        <div>
+          <div class="goal-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            Weekly goal
+          </div>
+          <h2>Complete 7 lessons this week</h2>
+          <div class="goal-progress-row">
+            <div class="goal-progress-bar"><div class="goal-progress-fill"></div></div>
+            <span class="goal-progress-text">4 of 7 done · 3 days left</span>
+          </div>
+        </div>
+        <div class="goal-stat">
+          <div class="goal-stat-num mono">57<span style="font-size:22px; font-weight:500; color:rgba(255,255,255,0.6);">%</span></div>
+          <div class="goal-stat-label">this week</div>
+        </div>
+      </div>
+
+      <!-- Active Courses -->
+      <section>
+        <div class="section-head">
+          <h2>Active courses</h2>
+          <a class="view-all" href="#">Browse catalog <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+
+        <div class="courses-list">
+
+          <!-- Course 1 -->
+          <div class="course-row">
+            <div class="course-icon" style="background:linear-gradient(135deg,#1B2845,#7C3AED);">
+              <span style="font-size:11px;">∀x∈ℕ</span>
+            </div>
+            <div class="course-info">
+              <div class="course-tag" style="color:var(--purple);">Mathematics</div>
+              <div class="course-title">Discrete Mathematics</div>
+              <div class="course-progress-row">
+                <div class="progress-bar"><div class="progress-fill" style="width:67%;"></div></div>
+                <span class="progress-text">12 of 18 lessons · 67%</span>
+              </div>
+            </div>
+            <div class="course-action">
+              <span class="lesson-chip">Lesson 13: Graph Coloring</span>
+              <button class="continue-btn">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+            </div>
+          </div>
+
+          <!-- Course 2 -->
+          <div class="course-row">
+            <div class="course-icon" style="background:linear-gradient(135deg,#059669,#0EA5E9);">
+              <span style="font-size:10px; letter-spacing:-0.03em;">O(n log n)</span>
+            </div>
+            <div class="course-info">
+              <div class="course-tag" style="color:var(--emerald);">Algorithms</div>
+              <div class="course-title">Algorithms 101</div>
+              <div class="course-progress-row">
+                <div class="progress-bar"><div class="progress-fill" style="width:33%;"></div></div>
+                <span class="progress-text">8 of 24 lessons · 33%</span>
+              </div>
+            </div>
+            <div class="course-action">
+              <span class="lesson-chip">Lesson 9: Merge Sort</span>
+              <button class="continue-btn">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+            </div>
+          </div>
+
+          <!-- Course 3 -->
+          <div class="course-row">
+            <div class="course-icon" style="background:linear-gradient(135deg,#F59E0B,#F43F5E);">
+              <span style="font-size:10px;">a≡b(mod n)</span>
+            </div>
+            <div class="course-info">
+              <div class="course-tag" style="color:var(--gold);">Number Theory</div>
+              <div class="course-title">Modular Arithmetic</div>
+              <div class="course-progress-row">
+                <div class="progress-bar"><div class="progress-fill" style="width:42%;"></div></div>
+                <span class="progress-text">5 of 12 lessons · 42%</span>
+              </div>
+            </div>
+            <div class="course-action">
+              <span class="lesson-chip">Lesson 6: Fermat's Little Theorem</span>
+              <button class="continue-btn">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+            </div>
+          </div>
+
+          <!-- Course 4 -->
+          <div class="course-row">
+            <div class="course-icon" style="background:linear-gradient(135deg,#7C3AED,#F43F5E);">
+              <span style="font-size:14px; font-weight:800;">RSA</span>
+            </div>
+            <div class="course-info">
+              <div class="course-tag" style="color:var(--rose);">Cryptography</div>
+              <div class="course-title">Public-Key Foundations</div>
+              <div class="course-progress-row">
+                <div class="progress-bar"><div class="progress-fill" style="width:13%;"></div></div>
+                <span class="progress-text">2 of 16 lessons · 13%</span>
+              </div>
+            </div>
+            <div class="course-action">
+              <span class="lesson-chip">Lesson 3: Prime Factorization</span>
+              <button class="continue-btn">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Skill Tree preview -->
+      <section>
+        <div class="section-head">
+          <h2>Skill tree</h2>
+          <a class="view-all" href="#">View full tree <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+
+        <div class="skill-tree-grid">
+          <!-- Complete -->
+          <div class="skill-node complete">
+            <div class="skill-node-head">
+              <div class="skill-icon emerald">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <span class="skill-status complete">Complete</span>
+            </div>
+            <div class="skill-title">Number Sets &amp; Logic</div>
+            <div class="skill-desc">Foundations of mathematical reasoning and set theory.</div>
+            <div class="skill-footer">
+              <span class="skill-meta">8 problems</span>
+              <span class="xp-reward"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> +120 XP earned</span>
+            </div>
+          </div>
+
+          <!-- In progress -->
+          <div class="skill-node">
+            <div class="skill-node-head">
+              <div class="skill-icon purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><line x1="8.5" y1="7.5" x2="10.5" y2="16"/><line x1="15.5" y1="7.5" x2="13.5" y2="16"/><line x1="9" y1="6" x2="15" y2="6"/></svg>
+              </div>
+              <span class="skill-status in-progress">In progress</span>
+            </div>
+            <div class="skill-title">Graph Theory</div>
+            <div class="skill-desc">Vertices, edges, paths, and fundamental graph algorithms.</div>
+            <div class="skill-footer">
+              <span class="skill-meta">12 problems · 5 done</span>
+              <span class="xp-reward"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> +200 XP</span>
+            </div>
+          </div>
+
+          <!-- Available -->
+          <div class="skill-node">
+            <div class="skill-node-head">
+              <div class="skill-icon gold">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M3 9h18"/></svg>
+              </div>
+              <span class="skill-status available">Unlocked</span>
+            </div>
+            <div class="skill-title">Combinatorics</div>
+            <div class="skill-desc">Counting, permutations, combinations, and pigeonhole principle.</div>
+            <div class="skill-footer">
+              <span class="skill-meta">10 problems</span>
+              <span class="xp-reward"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> +180 XP</span>
+            </div>
+          </div>
+
+          <!-- Locked -->
+          <div class="skill-node locked">
+            <div class="skill-node-head">
+              <div class="skill-icon muted">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+              </div>
+              <span class="skill-status locked">Locked</span>
+            </div>
+            <div class="skill-title">Probability Theory</div>
+            <div class="skill-desc">Random variables, distributions, and stochastic processes.</div>
+            <div class="skill-footer">
+              <span class="skill-meta">14 problems</span>
+              <span class="xp-reward" style="color:var(--text-muted);"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> +220 XP</span>
+            </div>
+            <div class="lock-overlay">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+          </div>
+
+          <!-- Locked -->
+          <div class="skill-node locked">
+            <div class="skill-node-head">
+              <div class="skill-icon muted">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </div>
+              <span class="skill-status locked">Locked</span>
+            </div>
+            <div class="skill-title">Number Theory</div>
+            <div class="skill-desc">Primes, modular arithmetic, GCD, and Diophantine equations.</div>
+            <div class="skill-footer">
+              <span class="skill-meta">16 problems</span>
+              <span class="xp-reward" style="color:var(--text-muted);"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> +250 XP</span>
+            </div>
+            <div class="lock-overlay">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+          </div>
+
+          <!-- Locked -->
+          <div class="skill-node locked">
+            <div class="skill-node-head">
+              <div class="skill-icon muted">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+              </div>
+              <span class="skill-status locked">Locked</span>
+            </div>
+            <div class="skill-title">Linear Algebra</div>
+            <div class="skill-desc">Vectors, matrices, eigenvalues, and transformations.</div>
+            <div class="skill-footer">
+              <span class="skill-meta">18 problems</span>
+              <span class="xp-reward" style="color:var(--text-muted);"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> +300 XP</span>
+            </div>
+            <div class="lock-overlay">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Achievements -->
+      <section>
+        <div class="section-head">
+          <h2>Recent achievements</h2>
+          <a class="view-all" href="#">All achievements <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+        <div class="achievements-grid">
+          <div class="achievement-card">
+            <div class="achievement-badge gold">🔥</div>
+            <div class="achievement-title">On Fire</div>
+            <div class="achievement-desc">7-day login streak</div>
+          </div>
+          <div class="achievement-card">
+            <div class="achievement-badge purple">⚡</div>
+            <div class="achievement-title">1K Club</div>
+            <div class="achievement-desc">Crossed 1,000 XP</div>
+          </div>
+          <div class="achievement-card">
+            <div class="achievement-badge emerald">✓</div>
+            <div class="achievement-title">Problem Solver</div>
+            <div class="achievement-desc">Solved 25 problems</div>
+          </div>
+          <div class="achievement-card locked">
+            <div class="achievement-badge muted">🏆</div>
+            <div class="achievement-title">Top 10</div>
+            <div class="achievement-desc">Reach global rank #10</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div class="watermark">by Shusei — Sample Only</div>
+</body>
+</html>
