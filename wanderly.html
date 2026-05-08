@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>Wanderly — Discover the world right outside your door</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
 
@@ -477,6 +478,59 @@ body {
 }
 
 /* ─────────────────────────────────────────
+   SECTION 4-1.5 · MAP
+───────────────────────────────────────── */
+.map-section {
+  max-width: 900px;
+  margin: 0 auto 64px;
+}
+.map-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #E07856;
+  margin-bottom: 12px;
+}
+#map {
+  height: 500px;
+  border-radius: 24px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  overflow: hidden;
+  border: 1px solid #E8E4DD;
+}
+.map-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+/* Custom Leaflet pin */
+.map-pin {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #E07856;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 3px 10px rgba(224,120,86,0.5);
+  transition: transform 0.15s ease;
+  cursor: pointer;
+}
+/* Leaflet popup customisation */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.leaflet-popup-tip { display: none; }
+
+/* ─────────────────────────────────────────
    FOOTER
 ───────────────────────────────────────── */
 footer {
@@ -606,6 +660,18 @@ footer {
       <span class="badge">🚶 Walking</span>
       <span class="badge">💰 Moderate</span>
       <span class="badge">🌤 22°C Sunny</span>
+    </div>
+  </div>
+
+  <!-- 4-1.5: MAP -->
+  <div class="map-section">
+    <p class="map-label">YOUR ROUTE</p>
+    <div id="map"></div>
+    <div class="map-stats">
+      <span class="badge">📍 5 stops</span>
+      <span class="badge">🚶 8.2 km total</span>
+      <span class="badge">⏱ 6 hours</span>
+      <span class="badge">⛰ 45m elevation</span>
     </div>
   </div>
 
@@ -799,6 +865,7 @@ footer {
       var results = document.getElementById('section-results');
       results.classList.remove('hidden');
       results.scrollIntoView({ behavior: 'smooth' });
+      initMap();
     }, 3000);
   });
 
@@ -815,7 +882,75 @@ footer {
     box.classList.toggle('hidden');
     btn.textContent = box.classList.contains('hidden') ? 'Why this? ↓' : 'Why this? ↑';
   }
+
+  // ── Leaflet map (initialised when results section appears) ────────
+  var mapInitialised = false;
+
+  function initMap() {
+    if (mapInitialised) return;
+    mapInitialised = true;
+
+    var map = L.map('map', { zoomControl: true, scrollWheelZoom: false })
+               .setView([35.0100, 135.7700], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    var spots = [
+      { num: 1, lat: 35.0116, lng: 135.7681, name: 'Café Delluna',        time: '9:00 AM',   cat: '☕ Café'        },
+      { num: 2, lat: 35.0050, lng: 135.7650, name: 'Nishiki Market',      time: '10:30 AM',  cat: '🍜 Food Market' },
+      { num: 3, lat: 35.0084, lng: 135.7707, name: 'Pontocho Alley',      time: '12:00 PM',  cat: '🏯 Cultural'    },
+      { num: 4, lat: 35.0150, lng: 135.7750, name: 'Kamogawa Riverside',  time: '2:00 PM',   cat: '🌳 Nature'      },
+      { num: 5, lat: 35.0200, lng: 135.7700, name: 'Kichi Kichi Omurice', time: '3:30 PM',   cat: '🍳 Restaurant'  }
+    ];
+
+    // Dashed route polyline
+    L.polyline(
+      spots.map(function (s) { return [s.lat, s.lng]; }),
+      { color: '#E07856', weight: 3, dashArray: '8 10', opacity: 0.85 }
+    ).addTo(map);
+
+    // Custom numbered pins
+    spots.forEach(function (spot) {
+      var icon = L.divIcon({
+        className: '',
+        html: '<div class="map-pin" id="pin-' + spot.num + '">' + spot.num + '</div>',
+        iconSize:   [36, 36],
+        iconAnchor: [18, 18],
+        popupAnchor:[0, -22]
+      });
+
+      var marker = L.marker([spot.lat, spot.lng], { icon: icon }).addTo(map);
+
+      marker.bindPopup(
+        '<div style="font-family:\'Inter\',sans-serif;padding:2px 4px;min-width:140px">' +
+          '<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:4px">' + spot.name + '</div>' +
+          '<div style="font-size:11px;color:#E07856;font-weight:600">' + spot.cat + '</div>' +
+          '<div style="font-size:11px;color:#6B6B6B;margin-top:3px">⏰ ' + spot.time + '</div>' +
+        '</div>',
+        { maxWidth: 180, closeButton: false }
+      );
+
+      marker.on('mouseover', function () {
+        var el = document.getElementById('pin-' + spot.num);
+        if (el) el.style.transform = 'scale(1.3)';
+        this.openPopup();
+      });
+      marker.on('mouseout', function () {
+        var el = document.getElementById('pin-' + spot.num);
+        if (el) el.style.transform = 'scale(1)';
+        this.closePopup();
+      });
+      marker.on('click', function () { this.openPopup(); });
+    });
+
+    // Fix tile rendering after container becomes visible
+    setTimeout(function () { map.invalidateSize(); }, 100);
+  }
 </script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 </body>
 </html>
