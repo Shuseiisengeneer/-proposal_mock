@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Form — Inline</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-white">
+  <!-- Variant 1: Newsletter -->
+  <section class="bg-amber-50">
+    <div class="max-w-3xl mx-auto px-6 py-20 text-center">
+      <span class="inline-block rounded-full bg-amber-200/70 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-900">Newsletter</span>
+      <h2 class="mt-4 text-4xl font-extrabold tracking-tight text-amber-950">Field notes, every Friday</h2>
+      <p class="mt-3 text-amber-900/80 text-lg max-w-xl mx-auto">A short, thoughtful email about design systems, type, and the messy parts of shipping. No spam — unsubscribe anytime.</p>
+
+      <form class="mt-8 max-w-lg mx-auto flex flex-col sm:flex-row gap-3">
+        <label for="newsletter" class="sr-only">Email address</label>
+        <div class="relative flex-1">
+          <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-700/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <input id="newsletter" type="email" placeholder="you@goodemail.com" class="block w-full rounded-lg border-0 ring-1 ring-amber-200 bg-white pl-10 pr-3 py-3 text-amber-950 placeholder:text-amber-700/40 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+        </div>
+        <button type="submit" class="rounded-lg bg-amber-950 px-6 py-3 text-sm font-semibold text-amber-50 hover:bg-amber-900 transition shadow-sm whitespace-nowrap">
+          Subscribe
+        </button>
+      </form>
+
+      <p class="mt-5 text-sm text-amber-900/70">Joined by <span class="font-semibold text-amber-950">12,400+</span> designers, engineers, and curious folks.</p>
+    </div>
+  </section>
+
+  <!-- Variant 2: Search bar with category dropdown -->
+  <section class="bg-white">
+    <div class="max-w-4xl mx-auto px-6 py-24 text-center">
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">Find anything in our help center</h2>
+      <p class="mt-3 text-slate-600 max-w-xl mx-auto">Search across guides, API references, and community threads. Narrow results by topic.</p>
+
+      <form class="mt-8 max-w-2xl mx-auto">
+        <div class="flex rounded-xl ring-1 ring-slate-200 bg-white shadow-sm overflow-hidden focus-within:ring-2 focus-within:ring-fuchsia-500 transition">
+          <!-- Category dropdown attached -->
+          <label for="category" class="sr-only">Category</label>
+          <select id="category" class="border-0 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 focus:outline-none border-r border-slate-200">
+            <option>All topics</option>
+            <option>Getting started</option>
+            <option>Billing</option>
+            <option>API</option>
+            <option>Integrations</option>
+            <option>Security</option>
+          </select>
+
+          <!-- Search input -->
+          <div class="relative flex-1">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M11 19a8 8 0 100-16 8 8 0 000 16z"/></svg>
+            <input type="search" placeholder="Try “invite a teammate” or “webhook signing”" class="block w-full border-0 bg-white pl-11 pr-4 py-3.5 text-slate-900 placeholder:text-slate-400 focus:outline-none">
+          </div>
+
+          <button type="submit" class="bg-fuchsia-600 hover:bg-fuchsia-700 transition px-6 py-3.5 text-sm font-semibold text-white">
+            Search
+          </button>
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
+          <span class="text-slate-400">Popular:</span>
+          <a href="#" class="rounded-full bg-slate-100 hover:bg-slate-200 px-3 py-1 text-slate-700 font-medium transition">Reset password</a>
+          <a href="#" class="rounded-full bg-slate-100 hover:bg-slate-200 px-3 py-1 text-slate-700 font-medium transition">Change plan</a>
+          <a href="#" class="rounded-full bg-slate-100 hover:bg-slate-200 px-3 py-1 text-slate-700 font-medium transition">Webhook setup</a>
+          <a href="#" class="rounded-full bg-slate-100 hover:bg-slate-200 px-3 py-1 text-slate-700 font-medium transition">Export data</a>
+        </div>
+      </form>
+    </div>
+  </section>
+</body>
+</html>

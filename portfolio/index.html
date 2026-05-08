@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shusei Kusano — Indie SaaS Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* ---------- Tokens ---------- */
+    :root {
+      --cream: #FAF7F2;
+      --forest: #2D5F4E;
+      --forest-deep: #244C3F;
+      --coral: #E07856;
+      --coral-deep: #C8623F;
+      --ink: #1A1A1A;
+      --muted: #6B6B6B;
+      --border: #E8E4DD;
+      --white: #FFFFFF;
+      --radius-sm: 10px;
+      --radius-md: 18px;
+      --radius-lg: 28px;
+      --radius-xl: 36px;
+      --shadow-sm: 0 1px 2px rgba(26, 26, 26, 0.04);
+      --shadow-md: 0 8px 24px rgba(26, 26, 26, 0.06);
+    }
+
+    /* ---------- Reset ---------- */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--ink);
+      background-color: var(--cream);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    /* ---------- Typography ---------- */
+    .display {
+      font-family: "Playfair Display", Georgia, serif;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--forest);
+    }
+
+    /* ---------- Layout ---------- */
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    section {
+      padding: 96px 0;
+    }
+
+    .section-head {
+      max-width: 720px;
+      margin-bottom: 56px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(36px, 5vw, 52px);
+      margin-bottom: 16px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 560px;
+    }
+
+    /* ---------- Nav ---------- */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(250, 247, 242, 0.85);
+      backdrop-filter: saturate(140%) blur(10px);
+      -webkit-backdrop-filter: saturate(140%) blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .wordmark {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--coral);
+    }
+
+    .nav-links .btn {
+      margin-left: 8px;
+    }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--forest);
+      color: var(--cream);
+    }
+
+    .btn-primary:hover {
+      background: var(--forest-deep);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      border-color: var(--ink);
+      color: var(--ink);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--coral);
+      color: var(--coral);
+    }
+
+    .btn-coral {
+      background: var(--coral);
+      color: var(--white);
+    }
+
+    .btn-coral:hover {
+      background: var(--coral-deep);
+      transform: translateY(-1px);
+    }
+
+    .btn-lg {
+      padding: 16px 30px;
+      font-size: 15px;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      padding: 120px 0;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 72px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-family: "Inter", sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin: 18px 0 12px;
+    }
+
+    .hero .headline {
+      font-size: clamp(44px, 6vw, 68px);
+      margin-bottom: 24px;
+      max-width: 580px;
+    }
+
+    .hero .lede {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 36px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* Hero visual */
+    .hero-visual {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(224, 120, 86, 0.25), transparent 55%),
+        radial-gradient(circle at 75% 80%, rgba(45, 95, 78, 0.35), transparent 60%),
+        linear-gradient(135deg, #F4EDE0 0%, #EDE2CD 100%);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-visual svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-visual .badge {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--forest);
+    }
+
+    /* ---------- Work ---------- */
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .project-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .project-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .project-visual {
+      aspect-ratio: 4 / 3;
+      border-radius: var(--radius-md);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .project-visual.indigo {
+      background:
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.25), transparent 50%),
+        linear-gradient(135deg, #4F46E5 0%, #7C3AED 60%, #A855F7 100%);
+    }
+
+    .project-visual.wanderly {
+      background:
+        radial-gradient(circle at 75% 25%, rgba(224, 120, 86, 0.45), transparent 55%),
+        radial-gradient(circle at 20% 80%, rgba(45, 95, 78, 0.55), transparent 55%),
+        linear-gradient(135deg, #F4EDE0 0%, #E8DDC7 100%);
+    }
+
+    .project-visual::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border-radius: 14px;
+      border: 1px dashed rgba(255, 255, 255, 0.35);
+    }
+
+    .project-visual .glyph {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Playfair Display", serif;
+      font-size: 64px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 0.02em;
+    }
+
+    .project-visual.wanderly .glyph {
+      color: var(--forest);
+    }
+
+    .project-content h3 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .project-tagline {
+      font-size: 14px;
+      color: var(--coral);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .project-content p {
+      color: var(--muted);
+      font-size: 16px;
+      margin-bottom: 22px;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .badge-tech {
+      padding: 6px 12px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .project-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .project-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--forest);
+      border-bottom: 1px solid var(--forest);
+      padding-bottom: 2px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .project-link:hover {
+      color: var(--coral);
+      border-color: var(--coral);
+    }
+
+    /* ---------- Skills ---------- */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+
+    .skill {
+      padding: 28px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .skill:hover {
+      border-color: var(--coral);
+      transform: translateY(-2px);
+    }
+
+    .skill-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .skill h4 {
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .skill p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ---------- Process ---------- */
+    .process {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .step-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--coral);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .step h4 {
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .step .step-label {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--forest);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* ---------- Contact ---------- */
+    .contact {
+      text-align: center;
+    }
+
+    .contact-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .contact h2 {
+      font-size: clamp(40px, 6vw, 60px);
+      margin-bottom: 18px;
+    }
+
+    .contact .sub {
+      color: var(--muted);
+      font-size: 17px;
+      margin-bottom: 36px;
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .socials a {
+      transition: color 0.2s ease;
+    }
+
+    .socials a:hover {
+      color: var(--coral);
+    }
+
+    /* ---------- Footer ---------- */
+    .footer {
+      padding: 32px 0 48px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 900px) {
+      section {
+        padding: 72px 0;
+      }
+
+      .hero {
+        padding: 80px 0;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .hero-visual {
+        aspect-ratio: 5 / 4;
+        max-width: 460px;
+      }
+
+      .project-card {
+        grid-template-columns: 1fr;
+        padding: 28px;
+        gap: 28px;
+      }
+
+      .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .process-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 22px;
+      }
+
+      .nav-links {
+        gap: 18px;
+      }
+
+      .nav-links a:not(.btn) {
+        display: none;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-visual .glyph {
+        font-size: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="wordmark">Shusei Kusano</a>
+      <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+        <a href="https://www.upwork.com" target="_blank" rel="noopener" class="btn btn-primary">
+          Hire on Upwork &#8599;
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">&#10022; Indie SaaS builder</span>
+        <h1>Shusei Kusano</h1>
+        <h2 class="display headline">
+          I build SaaS MVPs in days, not months.
+        </h2>
+        <p class="lede">
+          I combine Bubble's no-code speed with modern AI APIs to ship real,
+          revenue-ready products fast. Clean design, working auth, real data —
+          live in a week. No fluff, no agency overhead.
+        </p>
+        <div class="hero-actions">
+          <a href="#work" class="btn btn-primary btn-lg">See my work</a>
+          <a href="#contact" class="btn btn-outline btn-lg">Get in touch</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+          <!-- decorative lines -->
+          <g stroke="rgba(45, 95, 78, 0.18)" stroke-width="1" fill="none">
+            <circle cx="200" cy="250" r="80" />
+            <circle cx="200" cy="250" r="130" />
+            <circle cx="200" cy="250" r="180" />
+          </g>
+          <!-- coral disk -->
+          <circle cx="280" cy="160" r="42" fill="rgba(224, 120, 86, 0.85)" />
+          <!-- forest disk -->
+          <circle cx="130" cy="340" r="58" fill="rgba(45, 95, 78, 0.85)" />
+          <!-- accent star -->
+          <g transform="translate(90 110)" fill="#2D5F4E">
+            <path d="M0 -14 L4 -4 L14 0 L4 4 L0 14 L-4 4 L-14 0 L-4 -4 Z" />
+          </g>
+          <g transform="translate(310 380)" fill="#E07856">
+            <path d="M0 -10 L3 -3 L10 0 L3 3 L0 10 L-3 3 L-10 0 L-3 -3 Z" />
+          </g>
+        </svg>
+        <span class="badge">&#10022; shipping since 2023</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ WORK ============ -->
+  <section id="work">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Selected Work</span>
+        <h2 class="display">Things I've built recently.</h2>
+        <p>
+          Two recent SaaS MVPs — both designed, built, and shipped solo using
+          Bubble plus AI APIs. Click through for the full live experience.
+        </p>
+      </div>
+
+      <div class="work-grid">
+
+        <!-- Card 1: LaunchCopy -->
+        <article class="project-card">
+          <div class="project-visual indigo">
+            <div class="glyph">Lc</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tagline">AI Copywriting SaaS</div>
+            <h3 class="display">LaunchCopy</h3>
+            <p>
+              An AI tool for indie founders to generate landing-page copy and
+              cold emails in under 60 seconds. 6 screens, full auth flow,
+              dashboard, and a pricing page that actually converts.
+            </p>
+            <div class="badges">
+              <span class="badge-tech">Bubble</span>
+              <span class="badge-tech">Anthropic API</span>
+              <span class="badge-tech">Tailwind</span>
+              <span class="badge-tech">Stripe</span>
+            </div>
+            <div class="project-links">
+              <a href="../index.html" class="project-link">View landing page &rarr;</a>
+              <a href="../generate.html" class="project-link">View app &rarr;</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Wanderly -->
+        <article class="project-card">
+          <div class="project-visual wanderly">
+            <div class="glyph">W</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tagline">AI Travel Planner</div>
+            <h3 class="display">Wanderly</h3>
+            <p>
+              Tell us how you feel — Wanderly crafts a perfect day around you
+              using your real location. 4 states, interactive map with custom
+              pins, and full route generation from a single mood prompt.
+            </p>
+            <div class="badges">
+              <span class="badge-tech">Bubble</span>
+              <span class="badge-tech">Anthropic API</span>
+              <span class="badge-tech">Leaflet</span>
+              <span class="badge-tech">Geolocation API</span>
+            </div>
+            <div class="project-links">
+              <a href="../wanderly.html" class="project-link">View live &rarr;</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Capabilities</span>
+        <h2 class="display">What I bring.</h2>
+        <p>
+          A small, focused toolkit chosen for one job: turning ideas into
+          shippable SaaS without the usual overhead.
+        </p>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill">
+          <span class="skill-icon">&#9881;</span>
+          <h4>Bubble</h4>
+          <p>
+            No-code platform mastery. I ship pixel-perfect Bubble apps with
+            custom CSS, complex workflows, and clean data models.
+          </p>
+        </div>
+        <div class="skill">
+          <span class="skill-icon">&#10022;</span>
+          <h4>AI APIs</h4>
+          <p>
+            Anthropic Claude, OpenAI, Replicate. Production prompts, structured
+            outputs, cost-aware architecture, RAG when it earns its keep.
+          </p>
+        </div>
+        <div class="skill">
+          <span class="skill-icon">&#9636;</span>
+          <h4>Figma</h4>
+          <p>
+            From wireframes to dev-ready specs. Design tokens, components,
+            prototype flows that actually map to build.
+          </p>
+        </div>
+        <div class="skill">
+          <span class="skill-icon">&#9678;</span>
+          <h4>Product Mgmt</h4>
+          <p>
+            Scoping the smallest valuable launch. Cutting until it's shippable
+            in days, not quarters.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section class="process">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Process</span>
+        <h2 class="display">How I work.</h2>
+        <p>
+          A tight one-week loop. Scope, build, ship — then iterate with real
+          users instead of guessing in a doc.
+        </p>
+      </div>
+
+      <div class="process-grid">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-label">Day 1</div>
+            <h4 class="display">Scope &amp; wireframes</h4>
+            <p>
+              Cut the idea down to the smallest version that earns its keep.
+              Wireframes, data model, and a sharp launch list.
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-label">Day 2&ndash;4</div>
+            <h4 class="display">Build &amp; integrate</h4>
+            <p>
+              Full Bubble build with custom styling, workflows, and AI API
+              integration. Real data, real auth, real polish.
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-label">Day 5&ndash;7</div>
+            <h4 class="display">Polish, test, ship</h4>
+            <p>
+              QA, edge cases, copy pass, custom domain, payments live. You walk
+              away with a working product, not a prototype.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="contact">
+    <div class="container contact-inner">
+      <span class="eyebrow">&#10022; Get in touch</span>
+      <h2 class="display" style="margin-top: 14px;">Let's build something.</h2>
+      <p class="sub">
+        Available for SaaS MVPs and AI integrations starting May 2026.
+      </p>
+      <div class="contact-actions">
+        <a href="https://www.upwork.com" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+          Hire on Upwork &#8599;
+        </a>
+        <a href="mailto:shusei@example.com" class="btn btn-outline btn-lg">
+          shusei@example.com
+        </a>
+      </div>
+      <div class="socials">
+        <a href="https://x.com" target="_blank" rel="noopener">X / Twitter</a>
+        <span aria-hidden="true">&middot;</span>
+        <a href="#" target="_blank" rel="noopener">GitHub</a>
+        <span aria-hidden="true">&middot;</span>
+        <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      &copy; 2026 Shusei Kusano &middot; Made with &#10022;
+    </div>
+  </footer>
+
+</body>
+</html>

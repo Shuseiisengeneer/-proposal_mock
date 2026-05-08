@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Pricing — Annual / Monthly toggle</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-slate-50">
+  <section class="max-w-7xl mx-auto px-6 py-24">
+    <div class="text-center max-w-2xl mx-auto">
+      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">Pricing that scales with your design team</h1>
+      <p class="mt-4 text-lg text-slate-600">Switch to annual and save 20% — or stay flexible with monthly billing.</p>
+
+      <!-- Toggle -->
+      <div class="mt-8 inline-flex items-center gap-2 p-1 rounded-full bg-white ring-1 ring-slate-200 shadow-sm">
+        <button id="toggleMonthly" class="px-5 py-2 rounded-full text-sm font-semibold text-slate-600 hover:text-slate-900 transition">Monthly</button>
+        <button id="toggleAnnual" class="px-5 py-2 rounded-full text-sm font-semibold bg-slate-900 text-white shadow-sm flex items-center gap-2">
+          Annual
+          <span class="rounded-full bg-emerald-400/90 px-2 py-0.5 text-[10px] font-bold text-emerald-950">Save 20%</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-14 grid lg:grid-cols-3 gap-6">
+      <!-- Solo -->
+      <div class="rounded-2xl bg-white p-8 ring-1 ring-slate-200">
+        <h3 class="text-lg font-semibold text-slate-900">Solo</h3>
+        <p class="mt-2 text-sm text-slate-500">For individual designers and freelancers.</p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-5xl font-extrabold tracking-tight text-slate-900">$<span data-price data-monthly="12" data-annual="9">9</span></span>
+          <span class="text-sm font-medium text-slate-500">/mo</span>
+        </div>
+        <p class="mt-1 text-xs text-slate-400" data-billed-monthly hidden>Billed monthly</p>
+        <p class="mt-1 text-xs text-emerald-600 font-medium" data-billed-annual>Billed yearly • $108/yr</p>
+        <a href="#" class="mt-6 inline-flex w-full justify-center rounded-lg border border-slate-300 bg-white py-2.5 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">Choose Solo</a>
+        <ul class="mt-8 space-y-3 text-sm text-slate-600">
+          <li class="flex gap-3"><svg class="h-5 w-5 flex-none text-sky-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.3 6.3-6.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Unlimited canvases</li>
+          <li class="flex gap-3"><svg class="h-5 w-5 flex-none text-sky-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.3 6.3-6.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Local-first sync</li>
+          <li class="flex gap-3"><svg class="h-5 w-5 flex-none text-sky-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.3 6.3-6.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Export to Figma & SVG</li>
+        </ul>
+      </div>
+
+      <!-- Studio (highlighted) -->
+      <div class="relative rounded-2xl bg-slate-900 text-white p-8 shadow-xl">
+        <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-400 text-emerald-950 px-3 py-1 text-xs font-bold">MOST POPULAR</span>
+        <h3 class="text-lg font-semibold">Studio</h3>
+        <p class="mt-2 text-sm text-slate-300">For small design teams shipping product daily.</p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-5xl font-extrabold tracking-tight">$<span data-price data-monthly="19" data-annual="15">15</span></span>
+          <span class="text-sm font-medium text-slate-300">/user/mo</span>
+        </div>
+        <p class="mt-1 text-xs text-slate-400" data-billed-monthly hidden>Billed monthly per user</p>
+        <p class="mt-1 text-xs text-emerald-400 font-medium" data-billed-annual>Billed yearly • $180/user/yr</p>
+        <a href="#" class="mt-6 inline-flex w-full justify-center rounded-lg bg-white py-2.5 px-4 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition">Start trial</a>
+        <ul class="mt-8 space-y-3 text-sm text-slate-300">
+          <li class="flex gap-3"><svg class="h-5 w-5 flex-none text-emerald-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.3 6.3-6.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Everything in Solo</li>
+          <li class="flex gap-3"><svg class="h-5 w-5 flex-none text-emerald-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.3 6.3-6.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Live multiplayer cursors</li>
+          <li class="flex gap-3"><svg class="h-5 w-5 flex-none text-emerald-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.3 6.3-6.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Shared component library</li>
+          <li class="flex gap-3"><svg class="h-5 w-5 flex-none text-emerald-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.3 6.3-6.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Slack & Linear integrations</li>
+        </ul>
+      </div>
+
+      <!-- Agency -->
+      <div class="rounded-2xl bg-white p-8 ring-1 ring-slate-200">
+        <h3 class="text-lg font-semibold text-slate-900">Agency</h3>
+        <p class="mt-2 text-sm text-slate-500">Power, security, and unlimited client workspaces.</p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-5xl font-extrabold tracking-tight text-slate-900">$<span data-price data-monthly="49" data-annual="39">39</span></span>
+          <span class="text-sm font-medium text-slate-500">/user/mo</span>
+        </div>
+        <p class="mt-1 text-xs text-slate-400" data-billed-monthly hidden>Billed monthly per user</p>
+        <p class="mt-1 text-xs text-emerald-600 font-medium" data-billed-annual>Billed yearly • $468/user/yr</p>
+        <a href="#" class="mt-6 inline-flex w-full justify-center rounded-lg border border-slate-300 bg-white py-2.5 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">Talk to sales</a>
+        <ul class="mt-8 space-y-3 text-sm text-slate-600">
+          <li class="flex gap-3"><svg class="h-5 w-5 flex-none text-sky-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.3 6.3-6.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Unlimited client workspaces</li>
+          <li class="flex gap-3"><svg class="h-5 w-5 flex-none text-sky-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.3 6.3-6.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>White-label exports</li>
+          <li class="flex gap-3"><svg class="h-5 w-5 flex-none text-sky-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.3 6.3-6.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>SSO + audit logs</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function() {
+      const monthlyBtn = document.getElementById('toggleMonthly');
+      const annualBtn  = document.getElementById('toggleAnnual');
+      const prices = document.querySelectorAll('[data-price]');
+      const billedMonthly = document.querySelectorAll('[data-billed-monthly]');
+      const billedAnnual  = document.querySelectorAll('[data-billed-annual]');
+
+      const activeClasses = ['bg-slate-900','text-white','shadow-sm'];
+      const inactiveClasses = ['text-slate-600','hover:text-slate-900'];
+
+      function setMode(mode) {
+        prices.forEach(p => p.textContent = mode === 'annual' ? p.dataset.annual : p.dataset.monthly);
+        billedMonthly.forEach(el => el.hidden = mode !== 'monthly');
+        billedAnnual .forEach(el => el.hidden = mode !== 'annual');
+
+        if (mode === 'annual') {
+          annualBtn.classList.add(...activeClasses);
+          annualBtn.classList.remove(...inactiveClasses);
+          monthlyBtn.classList.remove(...activeClasses);
+          monthlyBtn.classList.add(...inactiveClasses);
+        } else {
+          monthlyBtn.classList.add(...activeClasses);
+          monthlyBtn.classList.remove(...inactiveClasses);
+          annualBtn.classList.remove(...activeClasses);
+          annualBtn.classList.add(...inactiveClasses);
+        }
+      }
+
+      monthlyBtn.addEventListener('click', () => setMode('monthly'));
+      annualBtn .addEventListener('click', () => setMode('annual'));
+      // default: annual selected
+      setMode('annual');
+    })();
+  </script>
+</body>
+</html>
