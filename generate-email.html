@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>LaunchCopy — Generate Cold Email</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { primary: { DEFAULT: '#6366F1', dark: '#4F46E5', light: '#EEF2FF' } },
+        fontFamily: { sans: ['Inter', 'sans-serif'] }
+      }
+    }
+  }
+</script>
+<style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-gray-50">
+
+<!-- SIDEBAR -->
+<aside class="w-60 bg-white border-r border-gray-200 fixed inset-y-0 left-0 flex flex-col">
+  <!-- LOGO -->
+  <div class="px-6 py-5 border-b border-gray-200">
+    <a href="index.html" class="text-xl font-extrabold text-primary">LaunchCopy</a>
+  </div>
+  <!-- NAV -->
+  <nav class="flex-1 px-3 py-4 space-y-1">
+    <a href="generate.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium bg-primary-light text-primary">
+      <span>✦</span><span>New Generation</span>
+    </a>
+    <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100">
+      <span>📋</span><span>History</span>
+    </a>
+    <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100">
+      <span>⚙️</span><span>Settings</span>
+    </a>
+  </nav>
+  <!-- USER -->
+  <div class="p-4 border-t border-gray-200 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">AJ</div>
+    <div class="min-w-0">
+      <div class="text-sm font-semibold text-gray-900 truncate">Alex Johnson</div>
+      <div class="text-xs text-gray-500 truncate">alex@example.com</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="ml-60 grid grid-cols-2 min-h-screen">
+
+  <!-- LEFT PANEL (input) -->
+  <section class="border-r border-gray-200 p-10 bg-white">
+
+    <!-- TABS -->
+    <div class="flex border-b border-gray-200 mb-8">
+      <a href="generate.html" class="px-6 py-3 font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-900">Landing Page</a>
+      <a href="generate-email.html" class="px-6 py-3 font-semibold border-b-2 border-primary text-primary">Cold Email</a>
+    </div>
+
+    <!-- EMAIL FORM -->
+    <form class="space-y-5">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Email purpose <span class="text-red-500">*</span></label>
+        <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+          <option>Investor Outreach</option>
+          <option>Sales Outreach</option>
+          <option>Hiring</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Recipient role <span class="text-red-500">*</span></label>
+        <input type="text" placeholder="e.g. Series A VC Partner" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Your company <span class="text-red-500">*</span></label>
+        <input type="text" placeholder="e.g. LaunchCopy" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Key message <span class="text-red-500">*</span></label>
+        <textarea rows="3" placeholder="e.g. We grew to 500 users in 2 weeks..." class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Tone</label>
+        <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+          <option>Professional</option>
+          <option>Friendly</option>
+          <option>Bold</option>
+        </select>
+      </div>
+      <button type="button" class="bg-primary hover:bg-primary-dark text-white font-semibold w-full py-4 text-lg rounded-lg transition">Generate Email</button>
+    </form>
+
+  </section>
+
+  <!-- RIGHT PANEL (output) -->
+  <section class="p-10 bg-gray-50">
+
+    <!-- ============ EMPTY STATE (commented out) ============
+    <div class="h-full flex flex-col items-center justify-center text-center">
+      <div class="text-6xl text-gray-300">✉️</div>
+      <p class="mt-4 text-gray-500">Your generated email will appear here</p>
+    </div>
+    ============ /EMPTY STATE ============ -->
+
+    <!-- ============ GENERATED STATE EMAIL (visible) ============ -->
+    <div>
+
+      <!-- HEADER ACTIONS -->
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-semibold text-lg text-gray-900">Generated Email</h3>
+        <div class="flex items-center gap-3">
+          <button class="border border-gray-300 hover:bg-gray-50 text-gray-800 font-semibold px-4 py-2 rounded-lg text-sm transition">Copy</button>
+          <button class="text-gray-600 hover:text-gray-900 text-sm font-medium">Regenerate</button>
+        </div>
+      </div>
+
+      <!-- EMAIL CARD -->
+      <div class="bg-white border border-gray-200 rounded-xl p-8">
+
+        <!-- SUBJECT -->
+        <div class="pb-4 mb-4 border-b border-gray-200">
+          <div class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Subject</div>
+          <div class="font-semibold text-gray-900 mt-1">Quick question about [Company]'s growth</div>
+        </div>
+
+        <!-- BODY -->
+        <div class="space-y-4 text-gray-800 leading-relaxed">
+          <p>Hi [Name],</p>
+          <p>I noticed [Company] just shipped [recent launch] — congrats on the traction. I'm building LaunchCopy, an AI tool that helps founders generate high-converting landing page copy and cold emails in under 60 seconds.</p>
+          <p>Teams like [Customer A] and [Customer B] cut their copy iteration time by 80% in their first week, freeing up bandwidth to focus on product and growth instead of staring at a blank page.</p>
+          <p>Would you be open to a 15-minute call next week? I'd love to show you how it could fit into your launch workflow.</p>
+
+          <!-- SIGNATURE -->
+          <p>Best,<br>[Your name]</p>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- ============ /GENERATED STATE EMAIL ============ -->
+
+  </section>
+
+</main>
+
+</body>
+</html>

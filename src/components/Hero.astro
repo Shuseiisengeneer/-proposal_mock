@@ -1,0 +1,129 @@
+---
+---
+
+<section class="relative min-h-[80vh] flex items-center overflow-hidden">
+  <!-- Dark mode only: purple glow behind heading -->
+  <div
+    class="pointer-events-none absolute inset-0 hidden dark:block"
+    aria-hidden="true"
+    style="background: radial-gradient(circle at 30% 50%, rgba(167, 139, 250, 0.18), transparent 60%);"
+  ></div>
+
+  <div class="max-w-5xl mx-auto px-6 py-24 w-full">
+    <div class="flex items-center gap-16 lg:gap-24">
+      <!-- Left: Content -->
+      <div class="flex-1 min-w-0">
+        <!-- Kyoto label -->
+        <p
+          class="font-mono text-[13px] text-ink-muted dark:text-night-muted tracking-[0.15em] uppercase mb-6"
+        >
+          KYOTO ·
+          <span class="font-jp">京都</span>
+        </p>
+
+        <!-- Display heading -->
+        <h1
+          class="animate-fade-up font-sans font-extrabold leading-[1.0] tracking-[-0.04em] mb-6"
+          style="font-size: clamp(48px, 7vw, 72px);"
+        >
+          <span class="text-vibe dark:text-night-glow">Vibe</span><span class="text-ink dark:text-night-text"> coder</span>
+          <br />
+          <span class="text-ink dark:text-night-text">from Kyoto.</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p
+          class="text-[18px] text-ink-muted dark:text-night-muted leading-relaxed max-w-[60ch] mb-8"
+        >
+          I ship AI-native software fast. Bubble.io for backends, Claude Code and Dify for the smart layer, Figma for the surface. Currently studying at Kyoto University and freelancing for international clients.
+        </p>
+
+        <!-- CTA row -->
+        <div class="flex flex-wrap items-center gap-4">
+          <!-- Status badge -->
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-vibe-bg dark:bg-night-card border border-vibe/20 dark:border-night-border"
+          >
+            <span
+              class="animate-pulse-dot inline-block w-2 h-2 rounded-full bg-vibe dark:bg-night-glow flex-shrink-0"
+              aria-hidden="true"
+            ></span>
+            <span class="font-mono text-[13px] text-vibe-deep dark:text-night-glow font-medium">
+              Currently shipping
+            </span>
+          </div>
+
+          <!-- Primary CTA -->
+          <a
+            href="#contact"
+            class="inline-flex items-center px-6 py-3 rounded-full bg-vibe hover:bg-vibe-deep text-white font-semibold text-sm transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+          >
+            Hire me →
+          </a>
+
+          <!-- Ghost CTA -->
+          <a
+            href="#work"
+            class="inline-flex items-center px-4 py-3 text-sm font-medium text-ink dark:text-night-text hover:underline underline-offset-4 decoration-vibe transition-all duration-200"
+          >
+            View work
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: Floating card stack (desktop only) -->
+      <div
+        class="hidden lg:flex flex-col items-center justify-center flex-shrink-0 w-64"
+        aria-hidden="true"
+        style="perspective: 600px;"
+      >
+        <div class="relative w-48 h-56" style="transform-style: preserve-3d;">
+          <!-- Card 3 (back) -->
+          <div
+            class="float-3 absolute bottom-0 left-4 w-44 h-28 rounded-2xl bg-bg-card dark:bg-night-card border border-border dark:border-night-border shadow-lg flex items-center justify-center"
+            style="transform: rotateX(12deg) rotateY(-8deg) translateZ(-32px) translateY(-8px);"
+          >
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-10 h-10 rounded-xl bg-vibe-bg dark:bg-vibe/10 flex items-center justify-center">
+                <span class="font-mono font-bold text-vibe dark:text-night-glow text-lg">F</span>
+              </div>
+              <span class="font-mono text-[10px] text-ink-soft dark:text-night-muted">Figma</span>
+            </div>
+          </div>
+
+          <!-- Card 2 (middle) -->
+          <div
+            class="float-2 absolute bottom-6 left-2 w-44 h-28 rounded-2xl bg-bg-card dark:bg-night-card border border-border dark:border-night-border shadow-lg flex items-center justify-center"
+            style="transform: rotateX(12deg) rotateY(-8deg) translateZ(-16px) translateY(-4px);"
+          >
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-10 h-10 rounded-xl bg-vibe-bg dark:bg-vibe/10 flex items-center justify-center">
+                <span class="font-mono font-bold text-vibe dark:text-night-glow text-lg">C</span>
+              </div>
+              <span class="font-mono text-[10px] text-ink-soft dark:text-night-muted">Claude</span>
+            </div>
+          </div>
+
+          <!-- Card 1 (front) -->
+          <div
+            class="float-1 absolute bottom-12 left-0 w-44 h-28 rounded-2xl bg-bg-card dark:bg-night-card border border-border dark:border-night-border shadow-xl flex items-center justify-center"
+            style="transform: rotateX(12deg) rotateY(-8deg) translateZ(0);"
+          >
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-10 h-10 rounded-xl bg-vibe-bg dark:bg-vibe/10 flex items-center justify-center">
+                <span class="font-mono font-bold text-vibe dark:text-night-glow text-lg">B</span>
+              </div>
+              <span class="font-mono text-[10px] text-ink-soft dark:text-night-muted">Bubble.io</span>
+            </div>
+          </div>
+
+          <!-- Dark mode glow -->
+          <div
+            class="pointer-events-none absolute inset-0 hidden dark:block rounded-3xl"
+            style="background: radial-gradient(circle at 50% 80%, rgba(124, 58, 237, 0.25), transparent 70%); filter: blur(16px);"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
