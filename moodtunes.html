@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>MoodTunes — Tell me your mood, I'll make your playlist</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: '#0F0F0F',
+          spotify: { DEFAULT: '#1DB954', light: '#1ED760', dark: '#169C46' },
+          gold: '#F5D061'
+        },
+        fontFamily: { sans: ['Inter', 'sans-serif'] }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); }
+  .chip-selected { background: #1DB954; color: #0F0F0F; border-color: #1DB954; }
+</style>
+</head>
+<body class="bg-bg text-white min-h-screen overflow-hidden">
+
+<!-- BACKGROUND ACCENT -->
+<div class="fixed inset-0 pointer-events-none">
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-spotify/10 blur-[120px]"></div>
+  <div class="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-gold/5 blur-[120px]"></div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="relative max-w-[640px] mx-auto px-6 py-8 h-screen flex flex-col gap-5">
+
+  <!-- HEADER -->
+  <header class="text-center">
+    <h1 class="text-3xl font-extrabold tracking-tight">
+      <span class="text-gold">🎵</span>
+      <span class="bg-gradient-to-r from-white to-spotify-light bg-clip-text text-transparent">MoodTunes</span>
+    </h1>
+    <p class="mt-1.5 text-sm text-white/60">Tell me your mood, I'll make your playlist</p>
+  </header>
+
+  <!-- INPUT AREA -->
+  <section class="card rounded-2xl p-5">
+    <label class="block text-xs uppercase tracking-wider text-white/50 font-semibold mb-2">How are you feeling?</label>
+    <textarea rows="3" placeholder="e.g. rainy sunday morning, need to focus on work"
+      class="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-sm placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-spotify focus:border-transparent resize-none"></textarea>
+
+    <!-- MOOD CHIPS -->
+    <div class="mt-4">
+      <div class="text-xs uppercase tracking-wider text-white/50 font-semibold mb-2">Mood</div>
+      <div class="flex flex-wrap gap-2">
+        <button class="chip-selected px-4 py-1.5 rounded-full text-sm font-medium border transition">Chill</button>
+        <button class="px-4 py-1.5 rounded-full text-sm font-medium border border-white/15 hover:border-white/40 hover:bg-white/5 transition">Energetic</button>
+        <button class="px-4 py-1.5 rounded-full text-sm font-medium border border-white/15 hover:border-white/40 hover:bg-white/5 transition">Sad</button>
+        <button class="px-4 py-1.5 rounded-full text-sm font-medium border border-white/15 hover:border-white/40 hover:bg-white/5 transition">Romantic</button>
+        <button class="px-4 py-1.5 rounded-full text-sm font-medium border border-white/15 hover:border-white/40 hover:bg-white/5 transition">Focus</button>
+      </div>
+    </div>
+
+    <!-- GENERATE BUTTON -->
+    <button class="mt-5 w-full bg-spotify hover:bg-spotify-light text-black font-bold py-3.5 rounded-full transition shadow-lg shadow-spotify/30">
+      Generate My Playlist
+    </button>
+  </section>
+
+  <!-- OUTPUT AREA -->
+  <section class="card rounded-2xl p-5 flex-1 flex flex-col min-h-0">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <div class="text-xs uppercase tracking-wider text-gold font-semibold">Your AI Playlist</div>
+        <div class="text-base font-bold mt-0.5">Rainy Sunday · Chill</div>
+      </div>
+      <span class="text-xs text-white/50">10 tracks</span>
+    </div>
+
+    <!-- TRACK LIST -->
+    <ol class="flex-1 overflow-hidden space-y-1 text-sm">
+      <li class="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-white/5 transition group">
+        <span class="w-5 text-white/40 text-xs group-hover:hidden">1</span>
+        <span class="w-5 hidden group-hover:inline text-spotify">▶</span>
+        <span class="flex-1 truncate"><span class="font-medium">Skinny Love</span> <span class="text-white/50">— Bon Iver</span></span>
+        <span class="text-xs text-white/40">3:58</span>
+      </li>
+      <li class="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-white/5 transition group">
+        <span class="w-5 text-white/40 text-xs group-hover:hidden">2</span>
+        <span class="w-5 hidden group-hover:inline text-spotify">▶</span>
+        <span class="flex-1 truncate"><span class="font-medium">Holocene</span> <span class="text-white/50">— Bon Iver</span></span>
+        <span class="text-xs text-white/40">5:36</span>
+      </li>
+      <li class="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-white/5 transition group">
+        <span class="w-5 text-white/40 text-xs group-hover:hidden">3</span>
+        <span class="w-5 hidden group-hover:inline text-spotify">▶</span>
+        <span class="flex-1 truncate"><span class="font-medium">The Night We Met</span> <span class="text-white/50">— Lord Huron</span></span>
+        <span class="text-xs text-white/40">3:28</span>
+      </li>
+      <li class="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-white/5 transition group">
+        <span class="w-5 text-white/40 text-xs group-hover:hidden">4</span>
+        <span class="w-5 hidden group-hover:inline text-spotify">▶</span>
+        <span class="flex-1 truncate"><span class="font-medium">Re: Stacks</span> <span class="text-white/50">— Bon Iver</span></span>
+        <span class="text-xs text-white/40">6:41</span>
+      </li>
+      <li class="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-white/5 transition group">
+        <span class="w-5 text-white/40 text-xs group-hover:hidden">5</span>
+        <span class="w-5 hidden group-hover:inline text-spotify">▶</span>
+        <span class="flex-1 truncate"><span class="font-medium">Mystery of Love</span> <span class="text-white/50">— Sufjan Stevens</span></span>
+        <span class="text-xs text-white/40">4:08</span>
+      </li>
+      <li class="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-white/5 transition group">
+        <span class="w-5 text-white/40 text-xs group-hover:hidden">6</span>
+        <span class="w-5 hidden group-hover:inline text-spotify">▶</span>
+        <span class="flex-1 truncate"><span class="font-medium">Liability</span> <span class="text-white/50">— Lorde</span></span>
+        <span class="text-xs text-white/40">2:52</span>
+      </li>
+      <li class="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-white/5 transition group">
+        <span class="w-5 text-white/40 text-xs group-hover:hidden">7</span>
+        <span class="w-5 hidden group-hover:inline text-spotify">▶</span>
+        <span class="flex-1 truncate"><span class="font-medium">Motion Sickness</span> <span class="text-white/50">— Phoebe Bridgers</span></span>
+        <span class="text-xs text-white/40">4:03</span>
+      </li>
+      <li class="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-white/5 transition group">
+        <span class="w-5 text-white/40 text-xs group-hover:hidden">8</span>
+        <span class="w-5 hidden group-hover:inline text-spotify">▶</span>
+        <span class="flex-1 truncate"><span class="font-medium">River</span> <span class="text-white/50">— Joni Mitchell</span></span>
+        <span class="text-xs text-white/40">4:00</span>
+      </li>
+      <li class="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-white/5 transition group">
+        <span class="w-5 text-white/40 text-xs group-hover:hidden">9</span>
+        <span class="w-5 hidden group-hover:inline text-spotify">▶</span>
+        <span class="flex-1 truncate"><span class="font-medium">Lover, You Should've Come Over</span> <span class="text-white/50">— Jeff Buckley</span></span>
+        <span class="text-xs text-white/40">6:43</span>
+      </li>
+      <li class="flex items-center gap-3 px-3 py-1.5 rounded-lg hover:bg-white/5 transition group">
+        <span class="w-5 text-white/40 text-xs group-hover:hidden">10</span>
+        <span class="w-5 hidden group-hover:inline text-spotify">▶</span>
+        <span class="flex-1 truncate"><span class="font-medium">Unchained Melody</span> <span class="text-white/50">— The Righteous Brothers</span></span>
+        <span class="text-xs text-white/40">3:36</span>
+      </li>
+    </ol>
+
+    <!-- SAVE BUTTON -->
+    <button class="mt-4 w-full border border-spotify text-spotify hover:bg-spotify hover:text-black font-semibold py-2.5 rounded-full transition flex items-center justify-center gap-2">
+      <span class="text-base">♫</span>
+      <span>Save to Spotify</span>
+    </button>
+  </section>
+
+</div>
+
+</body>
+</html>
