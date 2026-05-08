@@ -3,115 +3,555 @@
 <head>
 <meta charset="UTF-8" />
 <title>Wanderly — Discover the world right outside your door</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          cream: '#FAF7F2',
-          forest: { DEFAULT: '#2D5F4E', dark: '#1e4035' },
-          coral:  { DEFAULT: '#E07856', dark: '#c5663d'  },
-        },
-        fontFamily: {
-          sans:  ['Inter', 'sans-serif'],
-          serif: ['Playfair Display', 'serif'],
-        }
-      }
-    }
-  }
-</script>
 <style>
-  body { font-family: 'Inter', sans-serif; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
 
-  .spot-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-  .spot-card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(45,95,78,0.12); }
+/* ── Reset ─────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  .animate-globe { animation: spin-slow 3s linear infinite; display: inline-block; }
+/* ── Base ──────────────────────────────── */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #FAF7F2;
+  color: #1A1A1A;
+  line-height: 1.6;
+}
 
-  .mood-chip { cursor: pointer; transition: all 0.15s; }
-  .mood-chip.active { background: #E07856; color: #fff; border-color: #E07856; }
+/* ── Utilities ─────────────────────────── */
+.hidden { display: none !important; }
+
+/* ── Containers ────────────────────────── */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.container--narrow {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ─────────────────────────────────────────
+   SECTION 1 · HERO
+───────────────────────────────────────── */
+#section-hero {
+  text-align: center;
+  padding: 128px 24px;
+}
+
+.hero-badge {
+  display: inline-block;
+  color: #E07856;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.hero-h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 72px;
+  font-weight: 700;
+  color: #2D5F4E;
+  line-height: 1.1;
+}
+
+.hero-subtitle {
+  margin-top: 20px;
+  font-size: 24px;
+  color: #6B6B6B;
+}
+
+.hero-desc {
+  margin-top: 24px;
+  font-size: 18px;
+  color: #6B6B6B;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+
+.hero-cta {
+  margin-top: 48px;
+}
+
+.hero-note {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #6B6B6B;
+}
+
+.notice {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #E07856;
+}
+
+/* ─────────────────────────────────────────
+   BUTTONS
+───────────────────────────────────────── */
+.btn {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s;
+  border: 2px solid transparent;
+  text-align: center;
+}
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn--primary {
+  background: #2D5F4E;
+  color: #fff;
+  padding: 20px 40px;
+  font-size: 18px;
+  box-shadow: 0 8px 24px rgba(45,95,78,0.2);
+}
+.btn--primary:hover:not(:disabled) { background: #1e4035; }
+
+.btn--primary-sm {
+  background: #2D5F4E;
+  color: #fff;
+  padding: 16px 40px;
+  font-size: 16px;
+}
+.btn--primary-sm:hover { background: #1e4035; }
+
+.btn--primary-full {
+  display: block;
+  width: 100%;
+  background: #2D5F4E;
+  color: #fff;
+  padding: 18px;
+  font-size: 18px;
+}
+.btn--primary-full:hover { background: #1e4035; }
+
+.btn--outline {
+  background: transparent;
+  color: #2D5F4E;
+  border-color: #2D5F4E;
+  padding: 16px 40px;
+}
+.btn--outline:hover { background: #2D5F4E; color: #fff; }
+
+.btn--ghost {
+  background: transparent;
+  border: none;
+  color: #6B6B6B;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.btn--ghost:hover { color: #1A1A1A; }
+
+.btn--map {
+  background: transparent;
+  border: 2px solid #E8E4DD;
+  color: #1A1A1A;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.btn--map:hover { border-color: #2D5F4E; }
+
+.btn--why {
+  background: transparent;
+  border: none;
+  color: #2D5F4E;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.btn--why:hover { text-decoration: underline; }
+
+/* ─────────────────────────────────────────
+   SECTION 2 · FORM
+───────────────────────────────────────── */
+#section-form {
+  padding: 80px 24px;
+}
+
+.form-card {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #E8E4DD;
+  border-radius: 24px;
+  box-shadow: 0 8px 40px rgba(45,95,78,0.06);
+  padding: 48px;
+}
+
+.form-h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+
+.form-sub {
+  margin-top: 8px;
+  color: #6B6B6B;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+.form-sub strong { color: #2D5F4E; font-weight: 600; }
+
+.field { margin-bottom: 24px; }
+
+.field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+  margin-bottom: 10px;
+}
+.field-label .req { color: #E07856; }
+
+/* Mood chips */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.mood-chip {
+  border: 1px solid #E8E4DD;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #fff;
+  color: #1A1A1A;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.mood-chip:hover { border-color: #2D5F4E; }
+.mood-chip.active { background: #E07856; color: #fff; border-color: #E07856; }
+
+/* Select */
+.select {
+  width: 100%;
+  border: 1px solid #E8E4DD;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  background: #FAF7F2;
+  color: #1A1A1A;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B6B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  cursor: pointer;
+}
+.select:focus { outline: none; border-color: #2D5F4E; box-shadow: 0 0 0 3px rgba(45,95,78,0.12); }
+
+/* Radio */
+.radio-group { display: flex; gap: 32px; }
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.radio-label input[type="radio"] { accent-color: #2D5F4E; }
+
+.form-note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #6B6B6B;
+  text-align: center;
+}
+.form-note strong { font-weight: 600; }
+
+/* ─────────────────────────────────────────
+   SECTION 3 · LOADING
+───────────────────────────────────────── */
+#section-loading {
+  padding: 160px 24px;
+  text-align: center;
+}
+
+@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.globe {
+  display: inline-block;
+  font-size: 64px;
+  animation: spin-slow 3s linear infinite;
+  margin-bottom: 32px;
+}
+
+.loading-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin-bottom: 8px;
+}
+.loading-sub { font-size: 16px; color: #6B6B6B; }
+
+/* ─────────────────────────────────────────
+   SECTION 4 · RESULTS
+───────────────────────────────────────── */
+#section-results {
+  padding: 80px 24px;
+}
+
+/* Overview */
+.overview {
+  max-width: 800px;
+  margin: 0 auto 80px;
+}
+.overview-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #E07856;
+  margin-bottom: 12px;
+}
+.overview-h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 20px;
+}
+.overview-desc {
+  font-size: 18px;
+  color: #6B6B6B;
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+.badges { display: flex; flex-wrap: wrap; gap: 12px; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid #E8E4DD;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Timeline */
+.timeline {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.timeline-row {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+.timeline-axis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  padding-top: 4px;
+}
+.time-badge {
+  background: #2D5F4E;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.axis-line {
+  width: 1px;
+  flex: 1;
+  background: #E8E4DD;
+  margin-top: 12px;
+}
+
+.transit-row {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  padding: 4px 0;
+}
+.transit-line-wrap {
+  min-width: 80px;
+  display: flex;
+  justify-content: center;
+}
+.transit-v {
+  width: 1px;
+  height: 28px;
+  background: #E8E4DD;
+}
+.transit-label {
+  font-size: 12px;
+  color: #6B6B6B;
+  padding-left: 4px;
+}
+
+/* Spot card */
+.spot-card {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #E8E4DD;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  padding: 24px;
+  margin-bottom: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.spot-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(45,95,78,0.12);
+}
+
+.spot-img {
+  width: 100%;
+  height: 200px;
+  background: #F0ECE5;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B6B6B;
+  font-size: 14px;
+}
+.spot-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin-bottom: 4px;
+}
+.spot-meta {
+  font-size: 12px;
+  font-weight: 600;
+  color: #E07856;
+  margin-bottom: 12px;
+}
+.spot-desc {
+  font-size: 14px;
+  color: #6B6B6B;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.spot-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.why-box {
+  margin-top: 16px;
+  padding: 16px;
+  background: #FAF7F2;
+  border: 1px solid #E8E4DD;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #6B6B6B;
+  line-height: 1.7;
+}
+
+/* Bottom CTA */
+.results-cta {
+  text-align: center;
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+footer {
+  padding: 48px 24px;
+  text-align: center;
+  border-top: 1px solid #E8E4DD;
+  margin-top: 80px;
+}
+.footer-main {
+  font-size: 15px;
+  color: #6B6B6B;
+  font-weight: 500;
+}
+.footer-sub {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6B6B6B;
+}
 </style>
 </head>
-<body class="bg-cream text-[#1A1A1A]">
+<body>
 
 <!-- ══════════════════════════════════════
      SECTION 1: HERO
 ══════════════════════════════════════ -->
-<section id="section-hero" class="text-center py-32 px-6">
-  <!-- BADGE -->
-  <span class="inline-block text-coral text-xs font-semibold uppercase tracking-widest mb-8">✦ Powered by AI</span>
-
-  <!-- H1 -->
-  <h1 class="font-serif text-7xl font-bold text-forest leading-tight">Wanderly</h1>
-
-  <!-- SUBTITLE -->
-  <p class="mt-5 text-2xl text-[#6B6B6B]">Discover the world right outside your door</p>
-
-  <!-- DESCRIPTION -->
-  <p class="mt-6 text-lg text-[#6B6B6B] max-w-[500px] mx-auto leading-relaxed">
+<section id="section-hero">
+  <span class="hero-badge">✦ Powered by AI</span>
+  <h1 class="hero-h1">Wanderly</h1>
+  <p class="hero-subtitle">Discover the world right outside your door</p>
+  <p class="hero-desc">
     Tell us how you feel. We'll craft a perfect day around you, using your real location.
   </p>
-
-  <!-- CTA -->
-  <div class="mt-12">
-    <button id="btn-find-adventure"
-      class="bg-forest hover:bg-forest-dark text-white font-semibold text-lg px-10 py-5 rounded-full transition cursor-pointer shadow-lg shadow-forest/20">
-      Find My Adventure
-    </button>
-    <p class="mt-4 text-sm text-[#6B6B6B]">📍 We'll ask for your location</p>
+  <div class="hero-cta">
+    <button id="btn-find-adventure" class="btn btn--primary">Find My Adventure</button>
+    <p class="hero-note">📍 We'll ask for your location</p>
   </div>
-
-  <!-- LOCATION ERROR -->
-  <p id="location-error" class="hidden mt-5 text-coral text-sm">
-    ⚠️ Location access denied. We'll use a demo location instead.
-  </p>
+  <p id="location-error" class="notice hidden"></p>
 </section>
 
 <!-- ══════════════════════════════════════
      SECTION 2: FORM (initially hidden)
 ══════════════════════════════════════ -->
-<section id="section-form" class="hidden py-20 px-6">
-  <div class="max-w-[600px] mx-auto bg-white rounded-3xl shadow-xl shadow-forest/5 border border-[#E8E4DD] p-12">
-
-    <!-- HEADING -->
-    <h2 class="font-serif text-4xl font-bold text-[#1A1A1A]">What's your vibe today?</h2>
-    <p class="mt-2 text-[#6B6B6B] mb-10">
+<section id="section-form" class="hidden">
+  <div class="form-card">
+    <h2 class="form-h2">What's your vibe today?</h2>
+    <p class="form-sub">
       We'll design your perfect day in
-      <span id="location-name" class="font-semibold text-forest">your area</span>.
+      <strong id="location-name">your area</strong>.
     </p>
 
-    <!-- MOOD CHIPS -->
-    <div class="mb-8">
-      <label class="block text-xs font-semibold uppercase tracking-widest text-[#6B6B6B] mb-3">
-        Mood <span class="text-coral">*</span>
-      </label>
-      <div class="flex flex-wrap gap-2">
-        <span class="mood-chip border border-[#E8E4DD] rounded-full px-4 py-2 text-sm font-medium">🌿 Relaxing</span>
-        <span class="mood-chip border border-[#E8E4DD] rounded-full px-4 py-2 text-sm font-medium">🎨 Cultural</span>
-        <span class="mood-chip border border-[#E8E4DD] rounded-full px-4 py-2 text-sm font-medium">🍷 Foodie</span>
-        <span class="mood-chip border border-[#E8E4DD] rounded-full px-4 py-2 text-sm font-medium">🏃 Active</span>
-        <span class="mood-chip border border-[#E8E4DD] rounded-full px-4 py-2 text-sm font-medium">🌅 Romantic</span>
+    <!-- MOOD -->
+    <div class="field">
+      <label class="field-label">Mood <span class="req">*</span></label>
+      <div class="chips">
+        <span class="mood-chip">🌿 Relaxing</span>
+        <span class="mood-chip">🎨 Cultural</span>
+        <span class="mood-chip">🍷 Foodie</span>
+        <span class="mood-chip">🏃 Active</span>
+        <span class="mood-chip">🌅 Romantic</span>
       </div>
     </div>
 
     <!-- DURATION -->
-    <div class="mb-6">
-      <label class="block text-xs font-semibold uppercase tracking-widest text-[#6B6B6B] mb-2">Duration</label>
-      <select class="w-full border border-[#E8E4DD] bg-cream rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-forest">
+    <div class="field">
+      <label class="field-label">Duration</label>
+      <select class="select">
         <option>Half day (3–4 hours)</option>
         <option selected>Full day (6–8 hours)</option>
       </select>
     </div>
 
     <!-- BUDGET -->
-    <div class="mb-6">
-      <label class="block text-xs font-semibold uppercase tracking-widest text-[#6B6B6B] mb-2">Budget</label>
-      <select class="w-full border border-[#E8E4DD] bg-cream rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-forest">
+    <div class="field">
+      <label class="field-label">Budget</label>
+      <select class="select">
         <option>Budget-friendly</option>
         <option selected>Moderate</option>
         <option>Splurge</option>
@@ -119,292 +559,241 @@
     </div>
 
     <!-- TRAVEL STYLE -->
-    <div class="mb-10">
-      <label class="block text-xs font-semibold uppercase tracking-widest text-[#6B6B6B] mb-3">Travel style</label>
-      <div class="flex gap-8">
-        <label class="flex items-center gap-2 cursor-pointer text-sm">
-          <input type="radio" name="travel" value="walking" checked class="accent-forest"> Walking
+    <div class="field" style="margin-bottom:40px">
+      <label class="field-label">Travel style</label>
+      <div class="radio-group">
+        <label class="radio-label">
+          <input type="radio" name="travel" value="walking" checked> Walking
         </label>
-        <label class="flex items-center gap-2 cursor-pointer text-sm">
-          <input type="radio" name="travel" value="transit" class="accent-forest"> Public transit
+        <label class="radio-label">
+          <input type="radio" name="travel" value="transit"> Public transit
         </label>
-        <label class="flex items-center gap-2 cursor-pointer text-sm">
-          <input type="radio" name="travel" value="driving" class="accent-forest"> Driving
+        <label class="radio-label">
+          <input type="radio" name="travel" value="driving"> Driving
         </label>
       </div>
     </div>
 
-    <!-- SUBMIT -->
-    <button id="btn-generate"
-      class="w-full bg-forest hover:bg-forest-dark text-white font-semibold text-lg py-4 rounded-full transition cursor-pointer">
-      Generate My Plan
-    </button>
-    <p class="mt-3 text-xs text-center text-[#6B6B6B]">
-      📍 Your location: <span id="location-display" class="font-medium">Kyoto, Japan</span>
-    </p>
-
+    <button id="btn-generate" class="btn btn--primary-full">Generate My Plan</button>
+    <p class="form-note">📍 Your location: <strong id="location-display">Kyoto, Japan</strong></p>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════
      SECTION 3: LOADING (initially hidden)
 ══════════════════════════════════════ -->
-<section id="section-loading" class="hidden py-40 text-center px-6">
-  <div class="animate-globe text-6xl mb-8">🌍</div>
-  <h3 class="text-xl font-semibold text-[#1A1A1A] mb-2">Crafting your perfect day...</h3>
-  <p class="text-[#6B6B6B]">Analyzing your location and finding hidden gems</p>
+<section id="section-loading" class="hidden">
+  <div class="globe">🌍</div>
+  <p class="loading-title">Crafting your perfect day...</p>
+  <p class="loading-sub">Analyzing your location and finding hidden gems</p>
 </section>
 
 <!-- ══════════════════════════════════════
      SECTION 4: RESULTS (initially hidden)
 ══════════════════════════════════════ -->
-<section id="section-results" class="hidden py-20 px-6">
+<section id="section-results" class="hidden">
 
-  <!-- 4-1: OVERVIEW CARD -->
-  <div class="max-w-[800px] mx-auto mb-20">
-    <p class="text-xs font-semibold uppercase tracking-widest text-coral mb-3">YOUR DAY IN KYOTO</p>
-    <h2 class="font-serif text-4xl font-bold text-[#1A1A1A] mb-5">A Cultural Afternoon in Kyoto</h2>
-    <p class="text-[#6B6B6B] text-lg max-w-xl leading-relaxed mb-8">
-      Based on your relaxing, cultural mood, we've handpicked five iconic spots that blend timeless Kyoto charm with cozy discoveries you won't find in any guidebook.
+  <!-- 4-1: OVERVIEW -->
+  <div class="overview">
+    <p class="overview-label">YOUR DAY IN KYOTO</p>
+    <h2 class="overview-h2">A Cultural Afternoon in Kyoto</h2>
+    <p class="overview-desc">
+      Based on your relaxing, cultural mood, we've handpicked five iconic spots that blend
+      timeless Kyoto charm with cozy discoveries you won't find in any guidebook.
     </p>
-    <div class="flex flex-wrap gap-3">
-      <span class="inline-flex items-center gap-1.5 bg-white border border-[#E8E4DD] rounded-full px-4 py-2 text-sm font-medium">⏱ 6 hours</span>
-      <span class="inline-flex items-center gap-1.5 bg-white border border-[#E8E4DD] rounded-full px-4 py-2 text-sm font-medium">🚶 Walking</span>
-      <span class="inline-flex items-center gap-1.5 bg-white border border-[#E8E4DD] rounded-full px-4 py-2 text-sm font-medium">💰 Moderate</span>
-      <span class="inline-flex items-center gap-1.5 bg-white border border-[#E8E4DD] rounded-full px-4 py-2 text-sm font-medium">🌤 22°C Sunny</span>
+    <div class="badges">
+      <span class="badge">⏱ 6 hours</span>
+      <span class="badge">🚶 Walking</span>
+      <span class="badge">💰 Moderate</span>
+      <span class="badge">🌤 22°C Sunny</span>
     </div>
   </div>
 
   <!-- 4-2: TIMELINE -->
-  <div class="max-w-[800px] mx-auto">
+  <div class="timeline">
 
-    <!-- ── Spot 1 ── -->
-    <div class="flex gap-8">
-      <div class="flex flex-col items-center" style="min-width:80px">
-        <span class="text-xs font-bold text-white bg-forest px-3 py-1.5 rounded-full whitespace-nowrap mt-1">9:00 AM</span>
-        <div class="w-px flex-1 bg-[#E8E4DD] mt-3"></div>
+    <!-- Spot 1 -->
+    <div class="timeline-row">
+      <div class="timeline-axis">
+        <span class="time-badge">9:00 AM</span>
+        <div class="axis-line"></div>
       </div>
-      <div class="flex-1 spot-card bg-white rounded-2xl border border-[#E8E4DD] shadow-sm p-6 mb-0">
-        <div class="w-full h-48 bg-[#F0ECE5] rounded-xl mb-5 flex items-center justify-center text-[#6B6B6B] text-sm">
-          📷 Café Delluna
+      <div class="spot-card">
+        <div class="spot-img">📷 Café Delluna</div>
+        <p class="spot-name">Café Delluna</p>
+        <p class="spot-meta">☕ Café · ⭐ 4.6 · 5 min away</p>
+        <p class="spot-desc">A sun-drenched corner café tucked in a quiet Kyoto alley. Known for its hand-drip coffee and seasonal matcha croissants — the perfect place to ease into your day with a slow, intentional breakfast.</p>
+        <div class="spot-actions">
+          <button class="btn--map">View on Map</button>
+          <button class="btn--why" onclick="toggleWhy(this)">Why this? ↓</button>
         </div>
-        <h3 class="text-xl font-semibold mb-1">Café Delluna</h3>
-        <p class="text-xs font-medium text-coral mb-3">☕ Café · ⭐ 4.6 · 5 min away</p>
-        <p class="text-sm text-[#6B6B6B] leading-relaxed mb-5">
-          A sun-drenched corner café tucked in a quiet Kyoto alley. Known for its hand-drip coffee and seasonal matcha croissants — the perfect place to ease into your day with a slow, intentional breakfast before heading out.
-        </p>
-        <div class="flex gap-3">
-          <button class="border border-[#E8E4DD] hover:border-forest text-[#1A1A1A] text-sm font-medium px-4 py-2 rounded-full transition">View on Map</button>
-          <button class="text-forest text-sm font-medium hover:underline" onclick="toggleWhy(this)">Why this? ↓</button>
-        </div>
-        <div class="why-box hidden mt-4 p-4 bg-cream rounded-xl text-sm text-[#6B6B6B] border border-[#E8E4DD] leading-relaxed">
-          You chose <strong>Relaxing</strong> mood. Starting the day with a slow café visit sets a deliberate, unhurried tone — exactly what a restorative Kyoto morning calls for.
-        </div>
+        <div class="why-box hidden">You chose <strong>Relaxing</strong> mood. Starting with a slow café visit sets a deliberate, unhurried tone — exactly what a restorative Kyoto morning calls for.</div>
       </div>
     </div>
 
-    <!-- transit -->
-    <div class="flex gap-8 py-1">
-      <div class="flex justify-center" style="min-width:80px"><div class="w-px h-full bg-[#E8E4DD]"></div></div>
-      <p class="text-xs text-[#6B6B6B] py-2 pl-1">↓ &nbsp;8 min walk</p>
+    <div class="transit-row">
+      <div class="transit-line-wrap"><div class="transit-v"></div></div>
+      <p class="transit-label">↓ &nbsp;8 min walk</p>
     </div>
 
-    <!-- ── Spot 2 ── -->
-    <div class="flex gap-8">
-      <div class="flex flex-col items-center" style="min-width:80px">
-        <span class="text-xs font-bold text-white bg-forest px-3 py-1.5 rounded-full whitespace-nowrap mt-1">10:30 AM</span>
-        <div class="w-px flex-1 bg-[#E8E4DD] mt-3"></div>
+    <!-- Spot 2 -->
+    <div class="timeline-row">
+      <div class="timeline-axis">
+        <span class="time-badge">10:30 AM</span>
+        <div class="axis-line"></div>
       </div>
-      <div class="flex-1 spot-card bg-white rounded-2xl border border-[#E8E4DD] shadow-sm p-6">
-        <div class="w-full h-48 bg-[#F0ECE5] rounded-xl mb-5 flex items-center justify-center text-[#6B6B6B] text-sm">
-          📷 Nishiki Market
+      <div class="spot-card">
+        <div class="spot-img">📷 Nishiki Market</div>
+        <p class="spot-name">Nishiki Market</p>
+        <p class="spot-meta">🍜 Food Market · ⭐ 4.7 · 8 min walk</p>
+        <p class="spot-desc">Kyoto's legendary "Kitchen of Kyoto" — a narrow 400-meter arcade packed with 100+ stalls. Sample pickled vegetables, fresh tofu, grilled skewers, and seasonal wagashi sweets as you drift through vendors.</p>
+        <div class="spot-actions">
+          <button class="btn--map">View on Map</button>
+          <button class="btn--why" onclick="toggleWhy(this)">Why this? ↓</button>
         </div>
-        <h3 class="text-xl font-semibold mb-1">Nishiki Market</h3>
-        <p class="text-xs font-medium text-coral mb-3">🍜 Food Market · ⭐ 4.7 · 8 min walk</p>
-        <p class="text-sm text-[#6B6B6B] leading-relaxed mb-5">
-          Kyoto's legendary "Kitchen of Kyoto" — a narrow 400-meter arcade packed with 100+ stalls. Sample pickled vegetables, fresh tofu, grilled skewers, and seasonal wagashi sweets as you drift through vendors bathed in warm morning light.
-        </p>
-        <div class="flex gap-3">
-          <button class="border border-[#E8E4DD] hover:border-forest text-[#1A1A1A] text-sm font-medium px-4 py-2 rounded-full transition">View on Map</button>
-          <button class="text-forest text-sm font-medium hover:underline" onclick="toggleWhy(this)">Why this? ↓</button>
-        </div>
-        <div class="why-box hidden mt-4 p-4 bg-cream rounded-xl text-sm text-[#6B6B6B] border border-[#E8E4DD] leading-relaxed">
-          Your <strong>Foodie</strong> and <strong>Cultural</strong> mood tags made Nishiki a natural fit. Browsing the stalls feels like living inside Kyoto's culinary soul — sensory, authentic, and completely unhurried.
-        </div>
+        <div class="why-box hidden">Your <strong>Foodie</strong> and <strong>Cultural</strong> mood tags made Nishiki a natural fit. Browsing the stalls feels like living inside Kyoto's culinary soul — sensory, authentic, and unhurried.</div>
       </div>
     </div>
 
-    <!-- transit -->
-    <div class="flex gap-8 py-1">
-      <div class="flex justify-center" style="min-width:80px"><div class="w-px h-full bg-[#E8E4DD]"></div></div>
-      <p class="text-xs text-[#6B6B6B] py-2 pl-1">↓ &nbsp;5 min walk</p>
+    <div class="transit-row">
+      <div class="transit-line-wrap"><div class="transit-v"></div></div>
+      <p class="transit-label">↓ &nbsp;5 min walk</p>
     </div>
 
-    <!-- ── Spot 3 ── -->
-    <div class="flex gap-8">
-      <div class="flex flex-col items-center" style="min-width:80px">
-        <span class="text-xs font-bold text-white bg-forest px-3 py-1.5 rounded-full whitespace-nowrap mt-1">12:00 PM</span>
-        <div class="w-px flex-1 bg-[#E8E4DD] mt-3"></div>
+    <!-- Spot 3 -->
+    <div class="timeline-row">
+      <div class="timeline-axis">
+        <span class="time-badge">12:00 PM</span>
+        <div class="axis-line"></div>
       </div>
-      <div class="flex-1 spot-card bg-white rounded-2xl border border-[#E8E4DD] shadow-sm p-6">
-        <div class="w-full h-48 bg-[#F0ECE5] rounded-xl mb-5 flex items-center justify-center text-[#6B6B6B] text-sm">
-          📷 Pontocho Alley
+      <div class="spot-card">
+        <div class="spot-img">📷 Pontocho Alley</div>
+        <p class="spot-name">Pontocho Alley</p>
+        <p class="spot-meta">🏯 Cultural · ⭐ 4.8 · 5 min walk</p>
+        <p class="spot-desc">One of Kyoto's most atmospheric streets — a lantern-lit alley along the Kamogawa River. At midday it hums with quiet elegance, geisha culture, and the scent of kaiseki cooking from half-hidden doorways.</p>
+        <div class="spot-actions">
+          <button class="btn--map">View on Map</button>
+          <button class="btn--why" onclick="toggleWhy(this)">Why this? ↓</button>
         </div>
-        <h3 class="text-xl font-semibold mb-1">Pontocho Alley</h3>
-        <p class="text-xs font-medium text-coral mb-3">🏯 Cultural · ⭐ 4.8 · 5 min walk</p>
-        <p class="text-sm text-[#6B6B6B] leading-relaxed mb-5">
-          One of Kyoto's most atmospheric streets — a lantern-lit alley along the Kamogawa River. At midday it hums with quiet elegance, geisha culture, and the scent of kaiseki cooking drifting from half-hidden doorways. A place that rewards slow wandering.
-        </p>
-        <div class="flex gap-3">
-          <button class="border border-[#E8E4DD] hover:border-forest text-[#1A1A1A] text-sm font-medium px-4 py-2 rounded-full transition">View on Map</button>
-          <button class="text-forest text-sm font-medium hover:underline" onclick="toggleWhy(this)">Why this? ↓</button>
-        </div>
-        <div class="why-box hidden mt-4 p-4 bg-cream rounded-xl text-sm text-[#6B6B6B] border border-[#E8E4DD] leading-relaxed">
-          Pontocho perfectly balances your <strong>Cultural</strong> and <strong>Relaxing</strong> vibes. The unhurried midday atmosphere is a world away from the tourist rush — yet deeply, authentically Kyoto.
-        </div>
+        <div class="why-box hidden">Pontocho balances your <strong>Cultural</strong> and <strong>Relaxing</strong> vibes. The unhurried midday atmosphere is a world away from the tourist rush — yet deeply, authentically Kyoto.</div>
       </div>
     </div>
 
-    <!-- transit -->
-    <div class="flex gap-8 py-1">
-      <div class="flex justify-center" style="min-width:80px"><div class="w-px h-full bg-[#E8E4DD]"></div></div>
-      <p class="text-xs text-[#6B6B6B] py-2 pl-1">↓ &nbsp;12 min walk</p>
+    <div class="transit-row">
+      <div class="transit-line-wrap"><div class="transit-v"></div></div>
+      <p class="transit-label">↓ &nbsp;12 min walk</p>
     </div>
 
-    <!-- ── Spot 4 ── -->
-    <div class="flex gap-8">
-      <div class="flex flex-col items-center" style="min-width:80px">
-        <span class="text-xs font-bold text-white bg-forest px-3 py-1.5 rounded-full whitespace-nowrap mt-1">2:00 PM</span>
-        <div class="w-px flex-1 bg-[#E8E4DD] mt-3"></div>
+    <!-- Spot 4 -->
+    <div class="timeline-row">
+      <div class="timeline-axis">
+        <span class="time-badge">2:00 PM</span>
+        <div class="axis-line"></div>
       </div>
-      <div class="flex-1 spot-card bg-white rounded-2xl border border-[#E8E4DD] shadow-sm p-6">
-        <div class="w-full h-48 bg-[#F0ECE5] rounded-xl mb-5 flex items-center justify-center text-[#6B6B6B] text-sm">
-          📷 Kamogawa Riverside
+      <div class="spot-card">
+        <div class="spot-img">📷 Kamogawa Riverside</div>
+        <p class="spot-name">Kamogawa Riverside</p>
+        <p class="spot-meta">🌳 Nature · ⭐ 4.9 · 12 min walk</p>
+        <p class="spot-desc">Kyoto's beloved riverside promenade, where herons wade and locals cycle alongside the gentle current. In the afternoon light, the water glitters beneath the Sanjo Bridge. Bring a book, or simply sit.</p>
+        <div class="spot-actions">
+          <button class="btn--map">View on Map</button>
+          <button class="btn--why" onclick="toggleWhy(this)">Why this? ↓</button>
         </div>
-        <h3 class="text-xl font-semibold mb-1">Kamogawa Riverside</h3>
-        <p class="text-xs font-medium text-coral mb-3">🌳 Nature · ⭐ 4.9 · 12 min walk</p>
-        <p class="text-sm text-[#6B6B6B] leading-relaxed mb-5">
-          Kyoto's beloved riverside promenade, where herons wade and locals cycle alongside the gentle current. In the afternoon light, the water glitters beneath the Sanjo Bridge. Bring a book, or simply sit and watch the city breathe.
-        </p>
-        <div class="flex gap-3">
-          <button class="border border-[#E8E4DD] hover:border-forest text-[#1A1A1A] text-sm font-medium px-4 py-2 rounded-full transition">View on Map</button>
-          <button class="text-forest text-sm font-medium hover:underline" onclick="toggleWhy(this)">Why this? ↓</button>
-        </div>
-        <div class="why-box hidden mt-4 p-4 bg-cream rounded-xl text-sm text-[#6B6B6B] border border-[#E8E4DD] leading-relaxed">
-          After a full morning of exploring, your <strong>Relaxing</strong> mood calls for decompression. Kamogawa is Kyoto's natural reset button — unhurried, free, and deeply restorative.
-        </div>
+        <div class="why-box hidden">After a full morning of exploring, your <strong>Relaxing</strong> mood calls for decompression. Kamogawa is Kyoto's natural reset button — unhurried, free, and deeply restorative.</div>
       </div>
     </div>
 
-    <!-- transit -->
-    <div class="flex gap-8 py-1">
-      <div class="flex justify-center" style="min-width:80px"><div class="w-px h-full bg-[#E8E4DD]"></div></div>
-      <p class="text-xs text-[#6B6B6B] py-2 pl-1">↓ &nbsp;7 min walk</p>
+    <div class="transit-row">
+      <div class="transit-line-wrap"><div class="transit-v"></div></div>
+      <p class="transit-label">↓ &nbsp;7 min walk</p>
     </div>
 
-    <!-- ── Spot 5 ── -->
-    <div class="flex gap-8">
-      <div class="flex flex-col items-center" style="min-width:80px">
-        <span class="text-xs font-bold text-white bg-forest px-3 py-1.5 rounded-full whitespace-nowrap mt-1">3:30 PM</span>
+    <!-- Spot 5 -->
+    <div class="timeline-row">
+      <div class="timeline-axis">
+        <span class="time-badge">3:30 PM</span>
       </div>
-      <div class="flex-1 spot-card bg-white rounded-2xl border border-[#E8E4DD] shadow-sm p-6">
-        <div class="w-full h-48 bg-[#F0ECE5] rounded-xl mb-5 flex items-center justify-center text-[#6B6B6B] text-sm">
-          📷 Kichi Kichi Omurice
+      <div class="spot-card">
+        <div class="spot-img">📷 Kichi Kichi Omurice</div>
+        <p class="spot-name">Kichi Kichi Omurice</p>
+        <p class="spot-meta">🍳 Restaurant · ⭐ 4.5 · 7 min walk</p>
+        <p class="spot-desc">Kyoto's most theatrical dining experience — Chef Motokichi Yukimura performs his omurice like a stage act, slicing the egg open tableside. A tiny counter restaurant with enormous soul, and a perfect finale.</p>
+        <div class="spot-actions">
+          <button class="btn--map">View on Map</button>
+          <button class="btn--why" onclick="toggleWhy(this)">Why this? ↓</button>
         </div>
-        <h3 class="text-xl font-semibold mb-1">Kichi Kichi Omurice</h3>
-        <p class="text-xs font-medium text-coral mb-3">🍳 Restaurant · ⭐ 4.5 · 7 min walk</p>
-        <p class="text-sm text-[#6B6B6B] leading-relaxed mb-5">
-          Kyoto's most theatrical dining experience — Chef Motokichi Yukimura performs his omurice like a stage act, slicing the egg open tableside. A tiny counter restaurant with enormous soul, and a perfect, memorable finale to your cultural day.
-        </p>
-        <div class="flex gap-3">
-          <button class="border border-[#E8E4DD] hover:border-forest text-[#1A1A1A] text-sm font-medium px-4 py-2 rounded-full transition">View on Map</button>
-          <button class="text-forest text-sm font-medium hover:underline" onclick="toggleWhy(this)">Why this? ↓</button>
-        </div>
-        <div class="why-box hidden mt-4 p-4 bg-cream rounded-xl text-sm text-[#6B6B6B] border border-[#E8E4DD] leading-relaxed">
-          Closing on a memorable meal matches your <strong>Foodie</strong> mood beautifully. Kichi Kichi is a story worth telling — it ends the day with warmth, flavor, and a smile.
-        </div>
+        <div class="why-box hidden">Closing on a memorable meal matches your <strong>Foodie</strong> mood beautifully. Kichi Kichi ends the day with warmth, flavor, and a smile.</div>
       </div>
     </div>
 
   </div>
 
   <!-- 4-3: BOTTOM CTA -->
-  <div class="text-center mt-24 flex flex-col items-center gap-4">
-    <button class="bg-forest hover:bg-forest-dark text-white font-semibold text-base px-10 py-4 rounded-full transition shadow-lg shadow-forest/20">
-      Save This Plan
-    </button>
-    <button id="btn-generate-another"
-      class="border border-forest text-forest hover:bg-forest hover:text-white font-semibold text-base px-10 py-4 rounded-full transition">
-      Generate Another
-    </button>
-    <button class="text-[#6B6B6B] hover:text-[#1A1A1A] text-sm font-medium transition">Share ↗</button>
+  <div class="results-cta">
+    <button class="btn btn--primary-sm">Save This Plan</button>
+    <button id="btn-generate-another" class="btn btn--outline">Generate Another</button>
+    <button class="btn--ghost">Share ↗</button>
   </div>
 
 </section>
 
 <!-- ══════════════════════════════════════
-     SECTION 5: FOOTER
+     FOOTER
 ══════════════════════════════════════ -->
-<footer class="py-12 text-center border-t border-[#E8E4DD] mt-24 px-6">
-  <p class="text-[#6B6B6B] font-medium">Made with ✦ Wanderly · 2026</p>
-  <p class="text-xs text-[#6B6B6B] mt-2">Plans powered by AI · Locations from OpenStreetMap · Photos from Wikipedia</p>
+<footer>
+  <p class="footer-main">Made with ✦ Wanderly · 2026</p>
+  <p class="footer-sub">Plans powered by AI · Locations from OpenStreetMap · Photos from Wikipedia</p>
 </footer>
 
 <script>
-  // ── "Find My Adventure" → get geolocation → show form ────────────
+  // ── "Find My Adventure" → geolocation → show form ────────────────
   document.getElementById('btn-find-adventure').addEventListener('click', function () {
     var btn = this;
     btn.textContent = 'Getting your location...';
     btn.disabled = true;
 
-    function showForm(locationLabel) {
-      document.getElementById('location-name').textContent    = locationLabel;
-      document.getElementById('location-display').textContent = locationLabel;
+    function showForm(label) {
+      document.getElementById('location-name').textContent    = label;
+      document.getElementById('location-display').textContent = label;
       document.getElementById('section-form').classList.remove('hidden');
       document.getElementById('section-form').scrollIntoView({ behavior: 'smooth' });
     }
 
-    function showDemoNotice(message) {
+    function showNotice(msg) {
       var el = document.getElementById('location-error');
-      el.textContent = message;
+      el.textContent = msg;
       el.classList.remove('hidden');
     }
 
-    // Geolocation API requires HTTPS or localhost. In file:// / plain http://
-    // contexts the call hangs or fails silently — so detect and fall back.
     var isSecure =
       location.protocol === 'https:' ||
       location.hostname  === 'localhost' ||
       location.hostname  === '127.0.0.1';
 
     if (!navigator.geolocation || !isSecure) {
-      showDemoNotice('ℹ️ Demo mode — using sample location (Kyoto, Japan).');
+      showNotice('ℹ️ Demo mode — using sample location (Kyoto, Japan).');
       showForm('Kyoto, Japan');
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
-      function () { showForm('Kyoto, Japan'); },     // success (real app: reverse-geocode coords)
-      function () {                                   // denied / error / timeout
-        showDemoNotice('⚠️ Location access denied. Using a demo location instead.');
-        showForm('Kyoto, Japan');
-      },
+      function ()  { showForm('Kyoto, Japan'); },
+      function ()  { showNotice('⚠️ Location access denied. Using a demo location.'); showForm('Kyoto, Japan'); },
       { timeout: 5000, maximumAge: 60000 }
     );
   });
 
-  // ── Mood chips: multiple-select toggle ───────────────────────────
+  // ── Mood chips: toggle ────────────────────────────────────────────
   document.querySelectorAll('.mood-chip').forEach(function (chip) {
     chip.addEventListener('click', function () { this.classList.toggle('active'); });
   });
 
-  // ── "Generate My Plan" → loading → results (3 s delay) ──────────
+  // ── Generate My Plan → loading (3s) → results ────────────────────
   document.getElementById('btn-generate').addEventListener('click', function () {
     document.getElementById('section-form').classList.add('hidden');
     var loading = document.getElementById('section-loading');
     loading.classList.remove('hidden');
     loading.scrollIntoView({ behavior: 'smooth' });
-
     setTimeout(function () {
       loading.classList.add('hidden');
       var results = document.getElementById('section-results');
@@ -413,16 +802,16 @@
     }, 3000);
   });
 
-  // ── "Generate Another" → back to form ───────────────────────────
+  // ── Generate Another → back to form ──────────────────────────────
   document.getElementById('btn-generate-another').addEventListener('click', function () {
     document.getElementById('section-results').classList.add('hidden');
     document.getElementById('section-form').classList.remove('hidden');
     document.getElementById('section-form').scrollIntoView({ behavior: 'smooth' });
   });
 
-  // ── "Why this?" toggle ───────────────────────────────────────────
+  // ── Why this? toggle ──────────────────────────────────────────────
   function toggleWhy(btn) {
-    var box = btn.parentElement.nextElementSibling;   // .why-box follows .flex.gap-3
+    var box = btn.parentElement.nextElementSibling;
     box.classList.toggle('hidden');
     btn.textContent = box.classList.contains('hidden') ? 'Why this? ↓' : 'Why this? ↑';
   }
