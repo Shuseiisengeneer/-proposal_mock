@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>LaunchCopy — Settings</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { primary: { DEFAULT: '#6366F1', dark: '#4F46E5', light: '#EEF2FF' } },
+        fontFamily: { sans: ['Inter', 'sans-serif'] }
+      }
+    }
+  }
+</script>
+<style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+
+<body class="bg-gray-50">
+
+<!-- SIDEBAR -->
+<aside class="w-60 bg-white border-r border-gray-200 fixed inset-y-0 left-0 flex flex-col">
+  <!-- LOGO -->
+  <div class="px-6 py-5 border-b border-gray-200">
+    <a href="index.html" class="text-xl font-extrabold text-primary">LaunchCopy</a>
+  </div>
+  <!-- NAV -->
+  <nav class="flex-1 px-3 py-4 space-y-1">
+    <a href="generate.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100">
+      <span>✦</span><span>New Generation</span>
+    </a>
+    <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100">
+      <span>📋</span><span>History</span>
+    </a>
+    <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium bg-primary-light text-primary">
+      <span>⚙️</span><span>Settings</span>
+    </a>
+  </nav>
+  <!-- USER -->
+  <div class="p-4 border-t border-gray-200 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">AJ</div>
+    <div class="min-w-0">
+      <div class="text-sm font-semibold text-gray-900 truncate">Alex Johnson</div>
+      <div class="text-xs text-gray-500 truncate">alex@example.com</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="ml-60 p-10 max-w-2xl">
+
+  <h2 class="text-3xl font-bold text-gray-900 mb-8">Settings</h2>
+
+  <!-- ACCOUNT CARD -->
+  <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+    <h3 class="font-semibold text-lg text-gray-900 mb-4">Account</h3>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Full name</label>
+        <input type="text" value="Alex Johnson" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+        <input type="email" value="alex@example.com" disabled class="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-100 text-gray-500 cursor-not-allowed">
+      </div>
+    </div>
+    <button class="mt-5 bg-primary hover:bg-primary-dark text-white font-semibold px-5 py-2.5 rounded-lg transition">Save changes</button>
+  </div>
+
+  <!-- PLAN CARD -->
+  <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-semibold text-lg text-gray-900">Current Plan</h3>
+      <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full">Free Plan</span>
+    </div>
+    <p class="text-sm text-gray-600 mb-2">7 / 10 generations used</p>
+    <div class="w-full bg-gray-200 rounded-full h-2 mb-5">
+      <div class="bg-primary h-2 rounded-full" style="width:70%"></div>
+    </div>
+    <button class="bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-4 text-lg rounded-lg transition">Upgrade to Pro — $19/month</button>
+  </div>
+
+  <!-- DANGER ZONE -->
+  <div class="bg-white border-2 border-red-300 rounded-xl p-6">
+    <h3 class="font-semibold text-lg text-red-600 mb-2">Danger Zone</h3>
+    <p class="text-sm text-gray-600 mb-4">Once you delete your account, there is no going back. Please be certain.</p>
+    <button class="border border-red-300 hover:bg-red-50 text-red-600 font-semibold px-5 py-2.5 rounded-lg transition">Delete account</button>
+  </div>
+
+</main>
+
+</body>
+</html>
