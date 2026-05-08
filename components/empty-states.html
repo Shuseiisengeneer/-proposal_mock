@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Empty States</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .floaty { animation: floaty 3s ease-in-out infinite; }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+</style>
+</head>
+<body class="bg-gray-50 p-10">
+
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Empty States</h1>
+    <p class="text-gray-500 mb-10">Five patterns for moments when there&rsquo;s nothing to show.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- 1. Empty list -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+        <div class="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-6">Empty state #1 &mdash; Empty list</div>
+        <div class="flex flex-col items-center text-center py-6">
+          <div class="w-20 h-20 rounded-2xl bg-blue-50 flex items-center justify-center text-4xl mb-5 floaty">
+            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-1">No projects yet</h3>
+          <p class="text-sm text-gray-500 mb-5 max-w-xs">Projects help you keep work organized. Spin up your first one and invite the team.</p>
+          <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm transition">+ Create your first project</button>
+        </div>
+      </div>
+
+      <!-- 2. No search results -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+        <div class="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-6">Empty state #2 &mdash; No search results</div>
+        <div class="flex flex-col items-center text-center py-6">
+          <div class="w-20 h-20 rounded-2xl bg-amber-50 flex items-center justify-center mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-1">No results for &ldquo;quarterly nebula&rdquo;</h3>
+          <p class="text-sm text-gray-500 mb-5 max-w-xs">We couldn&rsquo;t find anything matching that query. Try different keywords or broaden the date range.</p>
+          <a href="#" class="text-sm font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-4">Clear all filters</a>
+        </div>
+      </div>
+
+      <!-- 3. Error / offline -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+        <div class="text-xs font-semibold text-red-600 uppercase tracking-wider mb-6">Empty state #3 &mdash; Connection lost</div>
+        <div class="flex flex-col items-center text-center py-6">
+          <div class="w-20 h-20 rounded-2xl bg-red-50 flex items-center justify-center mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-1">Connection lost</h3>
+          <p class="text-sm text-gray-500 mb-5 max-w-xs">We can&rsquo;t reach our servers right now. Check your connection &mdash; we&rsquo;ll keep trying in the background.</p>
+          <button class="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm transition flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+            Try again
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. Onboarding -->
+      <div class="bg-gradient-to-br from-emerald-50 via-white to-teal-50 rounded-2xl border border-gray-200 p-8 shadow-sm">
+        <div class="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-6">Empty state #4 &mdash; Onboarding</div>
+        <div class="flex flex-col items-center text-center py-2">
+          <div class="flex items-end gap-2 mb-4 text-4xl">
+            <span class="floaty" style="animation-delay:0s">&#127881;</span>
+            <span class="floaty text-5xl" style="animation-delay:.4s">&#128075;</span>
+            <span class="floaty" style="animation-delay:.8s">&#128293;</span>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-1">Welcome! Let&rsquo;s get you started</h3>
+          <p class="text-sm text-gray-500 mb-5 max-w-xs">A few quick steps and you&rsquo;ll be up and running in under two minutes.</p>
+          <div class="grid grid-cols-3 gap-2 w-full">
+            <div class="bg-white rounded-lg border border-gray-100 p-3 text-left hover:border-emerald-300 cursor-pointer transition">
+              <div class="text-xl mb-1">&#128100;</div>
+              <div class="text-xs font-semibold text-gray-800">Set profile</div>
+              <div class="text-[10px] text-gray-400">~30s</div>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-100 p-3 text-left hover:border-emerald-300 cursor-pointer transition">
+              <div class="text-xl mb-1">&#128101;</div>
+              <div class="text-xs font-semibold text-gray-800">Invite team</div>
+              <div class="text-[10px] text-gray-400">~1m</div>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-100 p-3 text-left hover:border-emerald-300 cursor-pointer transition">
+              <div class="text-xl mb-1">&#128640;</div>
+              <div class="text-xs font-semibold text-gray-800">First task</div>
+              <div class="text-[10px] text-gray-400">~30s</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. All caught up -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm md:col-span-2">
+        <div class="text-xs font-semibold text-green-600 uppercase tracking-wider mb-6">Empty state #5 &mdash; All caught up</div>
+        <div class="flex flex-col items-center text-center py-4">
+          <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-5 floaty">
+            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-1">All caught up!</h3>
+          <p class="text-sm text-gray-500 mb-5 max-w-md">Inbox zero achieved. Take a breath, grab a coffee &mdash; we&rsquo;ll let you know the moment something new arrives.</p>
+          <button class="border border-gray-300 hover:border-gray-400 text-gray-800 text-sm font-semibold px-5 py-2.5 rounded-lg transition bg-white">View archived items</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

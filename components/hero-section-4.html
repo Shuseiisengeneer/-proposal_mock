@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Hero Section — Gradient</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-white">
+  <section class="relative min-h-screen overflow-hidden bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500">
+    <!-- decorative blobs -->
+    <div class="absolute top-20 left-10 w-72 h-72 rounded-full bg-yellow-300/30 blur-3xl"></div>
+    <div class="absolute bottom-10 right-20 w-80 h-80 rounded-full bg-cyan-300/30 blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-fuchsia-400/20 blur-3xl"></div>
+
+    <!-- nav -->
+    <nav class="relative z-10 max-w-7xl mx-auto flex items-center justify-between px-6 py-6 text-white">
+      <div class="flex items-center gap-2 font-extrabold text-xl tracking-tight">
+        <span class="inline-block h-7 w-7 rounded-full bg-white"></span>
+        Confetti
+      </div>
+      <a href="#" class="rounded-full bg-white text-purple-700 px-5 py-2 text-sm font-bold hover:bg-yellow-300 transition">Try it free</a>
+    </nav>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-6 pt-16 pb-32 text-center text-white">
+      <span class="inline-block rounded-full bg-white/15 backdrop-blur px-4 py-1.5 text-xs font-bold uppercase tracking-widest ring-1 ring-white/30">
+        🎉 Spring drop is here
+      </span>
+
+      <h1 class="mt-6 text-5xl sm:text-7xl font-extrabold tracking-tight leading-[1.02]">
+        Throw the party your<br/>
+        users will remember
+      </h1>
+
+      <p class="mt-6 max-w-2xl mx-auto text-lg text-white/85 leading-relaxed">
+        Confetti is the all-in-one event platform for creators, communities, and chaotic-good marketing teams. Send invites, sell tickets, and turn up the volume.
+      </p>
+
+      <!-- glass card with CTA -->
+      <div class="mt-12 mx-auto max-w-2xl rounded-3xl bg-white/15 backdrop-blur-xl ring-1 ring-white/30 p-2 shadow-2xl shadow-purple-900/30">
+        <div class="rounded-2xl bg-white/10 p-8 sm:p-10">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-6 text-left">
+            <div>
+              <div class="text-xs font-bold uppercase tracking-widest text-yellow-200">Free forever plan</div>
+              <div class="mt-1 text-2xl font-bold">Host your first event today</div>
+              <div class="mt-1 text-sm text-white/75">Up to 100 guests. No credit card. Real cake not included.</div>
+            </div>
+            <a href="#" class="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-4 text-base font-bold text-purple-700 hover:bg-yellow-300 hover:text-purple-900 transition shadow-lg whitespace-nowrap">
+              Get started
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-white/85">
+        <span class="flex items-center gap-2">⭐️ 4.9 on Product Hunt</span>
+        <span class="flex items-center gap-2">⚡️ Set up in 60 seconds</span>
+        <span class="flex items-center gap-2">🎟 130k+ events hosted</span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
