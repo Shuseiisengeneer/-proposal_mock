@@ -1,825 +1,1190 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Wanderly — Discover the world right outside your door</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
-/* ── Reset ─────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  /* -------- Reset & Base -------- */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #FAF7F2;
+    color: #1A1A1A;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 600; line-height: 1.2; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  input, select { font-family: inherit; }
 
-/* ── Base ──────────────────────────────── */
-body {
-  font-family: 'Inter', sans-serif;
-  background: #FAF7F2;
-  color: #1A1A1A;
-  line-height: 1.6;
-}
+  /* -------- Layout -------- */
+  .container { max-width: 800px; margin: 0 auto; padding: 32px 24px 80px; }
+  .hidden { display: none !important; }
 
-/* ── Section divider ───────────────────── */
-.screen-divider {
-  border: none;
-  border-top: 2px dashed #C5BFBA;
-  margin: 0;
-}
-.screen-label {
-  text-align: center;
-  padding: 12px 0;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #B0A8A0;
-  background: #EDE8E2;
-}
+  /* -------- HERO -------- */
+  .hero {
+    text-align: center;
+    padding: 80px 24px 40px;
+    animation: fadeInUp 0.8s ease-out;
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(45, 95, 78, 0.08);
+    color: #2D5F4E;
+    border: 1px solid rgba(45, 95, 78, 0.15);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 72px;
+    color: #1A1A1A;
+    margin-bottom: 16px;
+    letter-spacing: -2px;
+  }
+  .hero-subtitle {
+    font-size: 20px;
+    color: #2D5F4E;
+    font-style: italic;
+    margin-bottom: 24px;
+    font-family: 'Playfair Display', serif;
+  }
+  .hero-description {
+    color: #6B6B6B;
+    font-size: 16px;
+    max-width: 480px;
+    margin: 0 auto 40px;
+  }
+  .btn-primary {
+    background: #2D5F4E;
+    color: #fff;
+    padding: 16px 36px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(45, 95, 78, 0.2);
+  }
+  .btn-primary:hover { background: #244c3f; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45, 95, 78, 0.28); }
+  .btn-outline {
+    background: transparent;
+    color: #2D5F4E;
+    border: 1.5px solid #2D5F4E;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+  }
+  .btn-outline:hover { background: #2D5F4E; color: #fff; }
+  .location-note {
+    color: #6B6B6B;
+    font-size: 13px;
+    margin-top: 20px;
+  }
+  .location-note .dot { color: #E07856; }
 
-/* ── Containers ────────────────────────── */
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-.container--narrow {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
+  /* -------- FORM -------- */
+  .form-card {
+    background: #fff;
+    border: 1px solid #E8E4DD;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  }
+  .form-title {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  .form-subtitle {
+    color: #6B6B6B;
+    margin-bottom: 32px;
+    font-size: 15px;
+  }
+  .form-group { margin-bottom: 28px; }
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1A1A1A;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .mood-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .mood-chip {
+    padding: 10px 18px;
+    border: 1.5px solid #E8E4DD;
+    border-radius: 999px;
+    background: #fff;
+    color: #1A1A1A;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mood-chip:hover { border-color: #2D5F4E; }
+  .mood-chip.active {
+    background: #2D5F4E;
+    color: #fff;
+    border-color: #2D5F4E;
+  }
+  .form-select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid #E8E4DD;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 15px;
+    color: #1A1A1A;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B6B' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+  }
+  .form-select:focus { border-color: #2D5F4E; outline: none; }
+  .radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .radio-option {
+    flex: 1;
+    min-width: 140px;
+    position: relative;
+  }
+  .radio-option input { position: absolute; opacity: 0; }
+  .radio-option label {
+    display: block;
+    padding: 14px 16px;
+    border: 1.5px solid #E8E4DD;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+  .radio-option input:checked + label {
+    border-color: #2D5F4E;
+    background: rgba(45, 95, 78, 0.05);
+    color: #2D5F4E;
+    font-weight: 500;
+  }
+  .form-footer {
+    text-align: center;
+    color: #6B6B6B;
+    font-size: 13px;
+    margin-top: 16px;
+  }
 
-/* ─────────────────────────────────────────
-   SECTION 1 · HERO
-───────────────────────────────────────── */
-#section-hero {
-  text-align: center;
-  padding: 128px 24px;
-}
+  /* -------- LOADING -------- */
+  .loading {
+    text-align: center;
+    padding: 80px 24px;
+  }
+  .loading-globe {
+    font-size: 64px;
+    display: inline-block;
+    animation: spinSlow 3s linear infinite;
+  }
+  .loading-status {
+    margin-top: 24px;
+    color: #2D5F4E;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 20px;
+  }
+  .progress-bar {
+    width: 100%;
+    max-width: 360px;
+    height: 6px;
+    background: #E8E4DD;
+    border-radius: 999px;
+    margin: 32px auto 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #2D5F4E, #E07856);
+    border-radius: 999px;
+    transition: width 3s ease-out;
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 1.5s linear infinite;
+  }
 
-.hero-badge {
-  display: inline-block;
-  color: #E07856;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 32px;
-}
+  /* -------- RESULTS: OVERVIEW -------- */
+  .overview { margin-bottom: 40px; }
+  .overview-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #E07856;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .overview h2 {
+    font-size: 40px;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+  .overview-description {
+    color: #6B6B6B;
+    font-size: 16px;
+    margin-bottom: 20px;
+    max-width: 640px;
+  }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge {
+    padding: 6px 14px;
+    background: #fff;
+    border: 1px solid #E8E4DD;
+    border-radius: 999px;
+    font-size: 13px;
+    color: #1A1A1A;
+  }
 
-.hero-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 72px;
-  font-weight: 700;
-  color: #2D5F4E;
-  line-height: 1.1;
-}
+  /* -------- MAP SECTION -------- */
+  .map-section {
+    margin-bottom: 48px;
+  }
+  #map {
+    height: 500px;
+    width: 100%;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 1px solid #E8E4DD;
+  }
+  .map-pin {
+    background: #E07856;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(224, 120, 86, 0.4);
+    border: 3px solid #fff;
+    opacity: 0;
+    transform: scale(0);
+  }
+  .map-pin.dropped {
+    animation: pinDrop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  .map-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+  }
+  .stat-badge {
+    background: #fff;
+    border: 1px solid #E8E4DD;
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 14px;
+    color: #1A1A1A;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .leaflet-popup-content-wrapper { border-radius: 12px; }
+  .leaflet-popup-content {
+    font-family: 'Inter', sans-serif;
+    margin: 12px 16px;
+    font-size: 13px;
+  }
+  .leaflet-popup-content strong { font-family: 'Playfair Display', serif; font-size: 15px; display: block; margin-bottom: 4px; }
+  .leaflet-popup-content .pop-meta { color: #6B6B6B; font-size: 12px; }
 
-.hero-subtitle {
-  margin-top: 20px;
-  font-size: 24px;
-  color: #6B6B6B;
-}
+  /* -------- TIMELINE -------- */
+  .timeline { position: relative; padding-left: 0; }
+  .timeline-section-title {
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+  .timeline-axis {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0;
+  }
+  .time-badge {
+    background: #2D5F4E;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .axis-line {
+    flex: 1;
+    height: 1px;
+    background: #E8E4DD;
+  }
 
-.hero-desc {
-  margin-top: 24px;
-  font-size: 18px;
-  color: #6B6B6B;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.7;
-}
+  .spot-card {
+    background: #fff;
+    border: 1px solid #E8E4DD;
+    border-radius: 20px;
+    padding: 24px;
+    margin: 12px 0;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .spot-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    border-color: #2D5F4E33;
+  }
+  .stagger-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .stagger-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .spot-photo {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #E8E4DD 0%, #d4ccbe 100%);
+    border-radius: 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .spot-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .spot-meta {
+    color: #6B6B6B;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  .spot-description {
+    color: #1A1A1A;
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+  .spot-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn-small {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    border: 1px solid #E8E4DD;
+    background: #fff;
+    color: #1A1A1A;
+    transition: all 0.2s ease;
+  }
+  .btn-small:hover { border-color: #2D5F4E; color: #2D5F4E; }
+  .btn-small.coral { color: #E07856; border-color: #E0785633; }
+  .btn-small.coral:hover { background: #E07856; color: #fff; border-color: #E07856; }
 
-.hero-cta {
-  margin-top: 48px;
-}
+  .why-box {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: rgba(45, 95, 78, 0.05);
+    border-left: 3px solid #2D5F4E;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1A1A1A;
+    display: none;
+  }
+  .why-box.open { display: block; }
 
-.hero-note {
-  margin-top: 16px;
-  font-size: 14px;
-  color: #6B6B6B;
-}
+  .transit-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6B6B6B;
+    font-size: 13px;
+    padding: 8px 0 8px 16px;
+    margin: 4px 0;
+  }
+  .transit-row::before {
+    content: '';
+    width: 1px;
+    height: 24px;
+    background: #E8E4DD;
+    display: inline-block;
+  }
 
-/* ─────────────────────────────────────────
-   BUTTONS
-───────────────────────────────────────── */
-.btn {
-  display: inline-block;
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 999px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  text-align: center;
-}
+  /* -------- CTA -------- */
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid #E8E4DD;
+  }
 
-.btn--primary {
-  background: #2D5F4E;
-  color: #fff;
-  padding: 20px 40px;
-  font-size: 18px;
-  box-shadow: 0 8px 24px rgba(45,95,78,0.2);
-}
+  /* -------- ALERT BANNERS -------- */
+  .banner {
+    background: rgba(224, 120, 86, 0.1);
+    border: 1px solid rgba(224, 120, 86, 0.3);
+    border-radius: 14px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    color: #1A1A1A;
+    font-size: 14px;
+  }
+  .banner-icon { font-size: 22px; }
+  .banner-actions { margin-left: auto; display: flex; gap: 8px; }
 
-.btn--primary-sm {
-  background: #2D5F4E;
-  color: #fff;
-  padding: 16px 40px;
-  font-size: 16px;
-}
+  /* -------- ERROR STATE -------- */
+  .error-card {
+    background: #fff;
+    border: 1px solid #E8E4DD;
+    border-radius: 24px;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  }
+  .error-icon {
+    font-size: 56px;
+    margin-bottom: 20px;
+  }
+  .error-title {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .error-msg {
+    color: #6B6B6B;
+    margin-bottom: 28px;
+  }
 
-.btn--primary-full {
-  display: block;
-  width: 100%;
-  background: #2D5F4E;
-  color: #fff;
-  padding: 18px;
-  font-size: 18px;
-  border-radius: 999px;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  border: none;
-}
+  /* -------- MODAL -------- */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+    backdrop-filter: blur(4px);
+  }
+  .modal.is-open { display: flex; animation: fadeIn 0.2s ease-out; }
+  .modal-card {
+    background: #FAF7F2;
+    border-radius: 24px;
+    max-width: 540px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    padding: 32px;
+    animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #6B6B6B;
+    transition: all 0.2s ease;
+  }
+  .modal-close:hover { background: rgba(0,0,0,0.1); color: #1A1A1A; }
+  .modal-photo {
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(135deg, #E8E4DD 0%, #d4ccbe 100%);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+  }
+  .modal-name { font-size: 28px; margin-bottom: 8px; }
+  .modal-cat-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(224, 120, 86, 0.1);
+    color: #E07856;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .modal-description { color: #1A1A1A; margin-bottom: 16px; font-size: 15px; }
+  .modal-hours {
+    color: #6B6B6B;
+    font-size: 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mini-map-placeholder {
+    height: 140px;
+    background: linear-gradient(135deg, #c7e0d4 0%, #a8d4be 100%);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 32px;
+  }
+  .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
-.btn--outline {
-  background: transparent;
-  color: #2D5F4E;
-  border-color: #2D5F4E;
-  padding: 16px 40px;
-}
+  /* -------- SHARE MODAL -------- */
+  .share-url-row {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0;
+  }
+  .share-url-input {
+    flex: 1;
+    padding: 12px 14px;
+    border: 1.5px solid #E8E4DD;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 13px;
+    color: #6B6B6B;
+  }
+  .copy-btn {
+    padding: 12px 18px;
+    border-radius: 10px;
+    background: #2D5F4E;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .copy-btn.copied { background: #E07856; }
+  .social-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .social-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 12px;
+    border: 1.5px solid #E8E4DD;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #1A1A1A;
+    font-size: 13px;
+    transition: all 0.2s ease;
+  }
+  .social-btn:hover { border-color: #2D5F4E; color: #2D5F4E; }
 
-.btn--ghost {
-  background: transparent;
-  border: none;
-  color: #6B6B6B;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 8px 0;
-  cursor: pointer;
-}
+  /* -------- ANIMATIONS -------- */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pinDrop {
+    0% { opacity: 0; transform: scale(0) translateY(-20px); }
+    60% { opacity: 1; transform: scale(1.15) translateY(0); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.92) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
 
-.btn--map {
-  background: transparent;
-  border: 2px solid #E8E4DD;
-  color: #1A1A1A;
-  font-size: 14px;
-  padding: 8px 16px;
-  border-radius: 999px;
-  cursor: pointer;
-}
-
-.btn--why {
-  background: transparent;
-  border: none;
-  color: #2D5F4E;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-/* ─────────────────────────────────────────
-   SECTION 2 · FORM
-───────────────────────────────────────── */
-#section-form {
-  padding: 80px 24px;
-  background: #FAF7F2;
-}
-
-.form-card {
-  max-width: 600px;
-  margin: 0 auto;
-  background: #fff;
-  border: 1px solid #E8E4DD;
-  border-radius: 24px;
-  box-shadow: 0 8px 40px rgba(45,95,78,0.06);
-  padding: 48px;
-}
-
-.form-h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 36px;
-  font-weight: 700;
-  color: #1A1A1A;
-}
-
-.form-sub {
-  margin-top: 8px;
-  color: #6B6B6B;
-  font-size: 16px;
-  margin-bottom: 40px;
-}
-.form-sub strong { color: #2D5F4E; font-weight: 600; }
-
-.field { margin-bottom: 24px; }
-
-.field-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #6B6B6B;
-  margin-bottom: 10px;
-}
-.field-label .req { color: #E07856; }
-
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-
-.mood-chip {
-  border: 1px solid #E8E4DD;
-  border-radius: 999px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  background: #fff;
-  color: #1A1A1A;
-  cursor: pointer;
-  user-select: none;
-}
-.mood-chip.active { background: #E07856; color: #fff; border-color: #E07856; }
-
-.select {
-  width: 100%;
-  border: 1px solid #E8E4DD;
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-size: 14px;
-  font-family: 'Inter', sans-serif;
-  background: #FAF7F2;
-  color: #1A1A1A;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B6B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-}
-
-.radio-group { display: flex; gap: 32px; }
-.radio-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  cursor: pointer;
-}
-.radio-label input[type="radio"] { accent-color: #2D5F4E; }
-
-.form-note {
-  margin-top: 12px;
-  font-size: 12px;
-  color: #6B6B6B;
-  text-align: center;
-}
-.form-note strong { font-weight: 600; }
-
-/* ─────────────────────────────────────────
-   SECTION 3 · LOADING
-───────────────────────────────────────── */
-#section-loading {
-  padding: 120px 24px;
-  text-align: center;
-  background: #FAF7F2;
-}
-
-.globe {
-  display: inline-block;
-  font-size: 64px;
-  margin-bottom: 32px;
-}
-
-.loading-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1A1A1A;
-  margin-bottom: 8px;
-}
-.loading-sub { font-size: 16px; color: #6B6B6B; }
-
-/* ─────────────────────────────────────────
-   SECTION 4 · RESULTS
-───────────────────────────────────────── */
-#section-results {
-  padding: 80px 24px;
-  background: #FAF7F2;
-}
-
-.overview {
-  max-width: 800px;
-  margin: 0 auto 80px;
-}
-.overview-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #E07856;
-  margin-bottom: 12px;
-}
-.overview-h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 40px;
-  font-weight: 700;
-  color: #1A1A1A;
-  margin-bottom: 20px;
-}
-.overview-desc {
-  font-size: 18px;
-  color: #6B6B6B;
-  max-width: 520px;
-  line-height: 1.7;
-  margin-bottom: 32px;
-}
-.badges { display: flex; flex-wrap: wrap; gap: 12px; }
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #fff;
-  border: 1px solid #E8E4DD;
-  border-radius: 999px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* Map placeholder */
-.map-section {
-  max-width: 900px;
-  margin: 0 auto 64px;
-}
-.map-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #E07856;
-  margin-bottom: 12px;
-}
-.map-placeholder {
-  height: 420px;
-  border-radius: 24px;
-  box-shadow: 0 4px 32px rgba(0,0,0,0.08);
-  border: 1px solid #E8E4DD;
-  background: #E8E4DD;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  position: relative;
-  overflow: hidden;
-}
-.map-placeholder::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(0deg, transparent, transparent 39px, #D8D2CB 39px, #D8D2CB 40px),
-    repeating-linear-gradient(90deg, transparent, transparent 39px, #D8D2CB 39px, #D8D2CB 40px);
-}
-.map-pins-row {
-  display: flex;
-  gap: 40px;
-  position: relative;
-  z-index: 1;
-}
-.map-pin-static {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #E07856;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 15px;
-  font-family: 'Inter', sans-serif;
-  box-shadow: 0 3px 12px rgba(224,120,86,0.5);
-}
-.map-caption {
-  font-size: 13px;
-  color: #6B6B6B;
-  font-weight: 500;
-  position: relative;
-  z-index: 1;
-}
-.map-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-/* Timeline */
-.timeline {
-  max-width: 800px;
-  margin: 0 auto;
-}
-.timeline-row {
-  display: flex;
-  gap: 32px;
-  align-items: flex-start;
-}
-.timeline-axis {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 80px;
-  padding-top: 4px;
-}
-.time-badge {
-  background: #2D5F4E;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 6px 12px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-.axis-line {
-  width: 1px;
-  flex: 1;
-  background: #E8E4DD;
-  margin-top: 12px;
-  min-height: 40px;
-}
-
-.transit-row {
-  display: flex;
-  gap: 32px;
-  align-items: center;
-  padding: 4px 0;
-}
-.transit-line-wrap {
-  min-width: 80px;
-  display: flex;
-  justify-content: center;
-}
-.transit-v {
-  width: 1px;
-  height: 28px;
-  background: #E8E4DD;
-}
-.transit-label {
-  font-size: 12px;
-  color: #6B6B6B;
-  padding-left: 4px;
-}
-
-.spot-card {
-  flex: 1;
-  background: #fff;
-  border: 1px solid #E8E4DD;
-  border-radius: 20px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-  padding: 24px;
-  margin-bottom: 0;
-}
-
-.spot-img {
-  width: 100%;
-  height: 200px;
-  background: #F0ECE5;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #6B6B6B;
-  font-size: 14px;
-}
-.spot-name {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1A1A1A;
-  margin-bottom: 4px;
-}
-.spot-meta {
-  font-size: 12px;
-  font-weight: 600;
-  color: #E07856;
-  margin-bottom: 12px;
-}
-.spot-desc {
-  font-size: 14px;
-  color: #6B6B6B;
-  line-height: 1.7;
-  margin-bottom: 20px;
-}
-.spot-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.why-box {
-  margin-top: 16px;
-  padding: 16px;
-  background: #FAF7F2;
-  border: 1px solid #E8E4DD;
-  border-radius: 12px;
-  font-size: 14px;
-  color: #6B6B6B;
-  line-height: 1.7;
-}
-
-.results-cta {
-  text-align: center;
-  margin-top: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-/* ─────────────────────────────────────────
-   FOOTER
-───────────────────────────────────────── */
-footer {
-  padding: 48px 24px;
-  text-align: center;
-  border-top: 1px solid #E8E4DD;
-  margin-top: 80px;
-}
-.footer-main {
-  font-size: 15px;
-  color: #6B6B6B;
-  font-weight: 500;
-}
-.footer-sub {
-  margin-top: 8px;
-  font-size: 12px;
-  color: #6B6B6B;
-}
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 52px; }
+    .hero { padding: 48px 16px 24px; }
+    .form-card { padding: 28px 20px; }
+    .overview h2 { font-size: 30px; }
+    #map { height: 380px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     SCREEN 1: HERO
-══════════════════════════════════════ -->
-<section id="section-hero">
-  <span class="hero-badge">✦ Powered by AI</span>
-  <h1 class="hero-h1">Wanderly</h1>
-  <p class="hero-subtitle">Discover the world right outside your door</p>
-  <p class="hero-desc">
-    Tell us how you feel. We'll craft a perfect day around you, using your real location.
-  </p>
-  <div class="hero-cta">
-    <button class="btn btn--primary">Find My Adventure</button>
-    <p class="hero-note">📍 We'll ask for your location</p>
-  </div>
-</section>
+<div class="container">
 
-<hr class="screen-divider">
-<div class="screen-label">Screen 2 — Form</div>
-<hr class="screen-divider">
-
-<!-- ══════════════════════════════════════
-     SCREEN 2: FORM
-══════════════════════════════════════ -->
-<section id="section-form">
-  <div class="form-card">
-    <h2 class="form-h2">What's your vibe today?</h2>
-    <p class="form-sub">
-      We'll design your perfect day in
-      <strong>Kyoto, Japan</strong>.
+  <!-- ============ STATE: HERO (active) ============ -->
+  <section id="section-hero" class="hero">
+    <span class="hero-badge">AI Travel Companion</span>
+    <h1>Wanderly</h1>
+    <p class="hero-subtitle">Discover the world right outside your door</p>
+    <p class="hero-description">
+      Tell us your mood, your time, your budget — and we'll craft a one-of-a-kind day worth remembering.
     </p>
+    <button id="btn-find" class="btn-primary">Find My Adventure</button>
+    <p class="location-note"><span class="dot">●</span> We'll use your location to personalize recommendations</p>
+    <div id="hero-notice" style="margin-top: 20px;"></div>
+  </section>
 
-    <div class="field">
-      <label class="field-label">Mood <span class="req">*</span></label>
-      <div class="chips">
-        <span class="mood-chip active">🌿 Relaxing</span>
-        <span class="mood-chip active">🎨 Cultural</span>
-        <span class="mood-chip">🍷 Foodie</span>
-        <span class="mood-chip">🏃 Active</span>
-        <span class="mood-chip">🌅 Romantic</span>
+  <!-- ============ STATE: FORM (hidden) ============ -->
+  <section id="section-form" class="hidden">
+    <div class="form-card">
+      <h2 class="form-title">What's the vibe?</h2>
+      <p class="form-subtitle">Help us understand what kind of day you're craving.</p>
+
+      <form id="planner-form">
+        <div class="form-group">
+          <label class="form-label">Mood</label>
+          <div class="mood-chips">
+            <button type="button" class="mood-chip active" data-mood="cultural">🏯 Cultural</button>
+            <button type="button" class="mood-chip" data-mood="foodie">🍜 Foodie</button>
+            <button type="button" class="mood-chip" data-mood="nature">🌳 Nature</button>
+            <button type="button" class="mood-chip" data-mood="cozy">☕ Cozy</button>
+            <button type="button" class="mood-chip" data-mood="adventurous">⛰ Adventurous</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="duration">Duration</label>
+          <select id="duration" class="form-select">
+            <option>2 hours</option>
+            <option>Half day (4 hours)</option>
+            <option selected>Full day (6 hours)</option>
+            <option>Weekend</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="budget">Budget</label>
+          <select id="budget" class="form-select">
+            <option>$ — Free / cheap eats</option>
+            <option selected>$$ — Comfortable</option>
+            <option>$$$ — Treat yourself</option>
+            <option>$$$$ — Sky's the limit</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Travel style</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="style-walk" name="style" checked />
+              <label for="style-walk">🚶 Walking</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="style-bike" name="style" />
+              <label for="style-bike">🚴 Cycling</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="style-transit" name="style" />
+              <label for="style-transit">🚇 Transit</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%;">Generate My Plan</button>
+        <p class="form-footer"><span style="color:#E07856;">●</span> Planning around <strong id="form-location">Kyoto, Japan</strong></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ STATE: LOADING (hidden) ============ -->
+  <section id="section-loading" class="loading hidden">
+    <div class="loading-globe">🌏</div>
+    <p class="loading-status" id="loading-status">Crafting your perfect day…</p>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </section>
+
+  <!-- ============ STATE: RESULTS (hidden) ============ -->
+  <section id="section-results" class="hidden">
+
+    <!-- Overview -->
+    <div class="overview">
+      <p class="overview-label">Your Personalized Plan</p>
+      <h2>A Cultural Afternoon in Kyoto</h2>
+      <p class="overview-description">
+        Soak in centuries of tradition through hidden tea houses, lantern-lit alleys, and riverside views — paired with bites that make Kyoto sing.
+      </p>
+      <div class="badge-row">
+        <span class="badge">🏯 Cultural</span>
+        <span class="badge">🚶 Walking</span>
+        <span class="badge">$$</span>
+        <span class="badge">⏱ 6 hours</span>
       </div>
     </div>
 
-    <div class="field">
-      <label class="field-label">Duration</label>
-      <select class="select">
-        <option>Half day (3–4 hours)</option>
-        <option selected>Full day (6–8 hours)</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label class="field-label">Budget</label>
-      <select class="select">
-        <option>Budget-friendly</option>
-        <option selected>Moderate</option>
-        <option>Splurge</option>
-      </select>
-    </div>
-
-    <div class="field" style="margin-bottom:40px">
-      <label class="field-label">Travel style</label>
-      <div class="radio-group">
-        <label class="radio-label">
-          <input type="radio" name="travel" value="walking" checked> Walking
-        </label>
-        <label class="radio-label">
-          <input type="radio" name="travel" value="transit"> Public transit
-        </label>
-        <label class="radio-label">
-          <input type="radio" name="travel" value="driving"> Driving
-        </label>
+    <!-- Map Section -->
+    <div class="map-section">
+      <div id="map"></div>
+      <div class="map-stats">
+        <span class="stat-badge">📍 5 stops</span>
+        <span class="stat-badge">🚶 8.2 km total</span>
+        <span class="stat-badge">⏱ 6 hours</span>
+        <span class="stat-badge">⛰ 45m elevation</span>
       </div>
     </div>
 
-    <button class="btn--primary-full">Generate My Plan</button>
-    <p class="form-note">📍 Your location: <strong>Kyoto, Japan</strong></p>
-  </div>
-</section>
+    <!-- Timeline -->
+    <div class="timeline">
+      <h3 class="timeline-section-title">Your Day, Hour by Hour</h3>
 
-<hr class="screen-divider">
-<div class="screen-label">Screen 3 — Loading</div>
-<hr class="screen-divider">
+      <div class="timeline-axis"><span class="time-badge">9:00 AM</span><span class="axis-line"></span></div>
+      <div class="spot-card stagger-card" data-spot="1">
+        <div class="spot-photo">☕</div>
+        <h4 class="spot-name">Café Delluna</h4>
+        <p class="spot-meta">Café · ⭐ 4.8 · 0.4 km away</p>
+        <p class="spot-description">A serene morning stop with single-origin pour-overs and almond croissants worth pilgrimaging for.</p>
+        <div class="spot-actions">
+          <button class="btn-small" onclick="event.stopPropagation();">View on Map</button>
+          <button class="btn-small coral" onclick="event.stopPropagation(); toggleWhy(this);">Why this?</button>
+        </div>
+        <div class="why-box">Matches your "cozy + cultural" mood and starts the day with caffeine before the crowds arrive at the markets.</div>
+      </div>
 
-<!-- ══════════════════════════════════════
-     SCREEN 3: LOADING
-══════════════════════════════════════ -->
-<section id="section-loading">
-  <div class="globe">🌍</div>
-  <p class="loading-title">Crafting your perfect day...</p>
-  <p class="loading-sub">Analyzing your location and finding hidden gems</p>
-</section>
+      <div class="transit-row">🚶 12-min walk · 0.9 km</div>
 
-<hr class="screen-divider">
-<div class="screen-label">Screen 4 — Results</div>
-<hr class="screen-divider">
+      <div class="timeline-axis"><span class="time-badge">10:30 AM</span><span class="axis-line"></span></div>
+      <div class="spot-card stagger-card" data-spot="2">
+        <div class="spot-photo">🍜</div>
+        <h4 class="spot-name">Nishiki Market</h4>
+        <p class="spot-meta">Market · ⭐ 4.7 · 0.9 km away</p>
+        <p class="spot-description">Five blocks of Kyoto's culinary heritage — pickles, tofu, yuba, and tamagoyaki on sticks.</p>
+        <div class="spot-actions">
+          <button class="btn-small" onclick="event.stopPropagation();">View on Map</button>
+          <button class="btn-small coral" onclick="event.stopPropagation(); toggleWhy(this);">Why this?</button>
+        </div>
+        <div class="why-box">A 400-year-old food street that lets you taste 20 things without committing to a full meal.</div>
+      </div>
 
-<!-- ══════════════════════════════════════
-     SCREEN 4: RESULTS
-══════════════════════════════════════ -->
-<section id="section-results">
+      <div class="transit-row">🚶 8-min walk · 0.6 km</div>
 
-  <!-- OVERVIEW -->
-  <div class="overview">
-    <p class="overview-label">YOUR DAY IN KYOTO</p>
-    <h2 class="overview-h2">A Cultural Afternoon in Kyoto</h2>
-    <p class="overview-desc">
-      Based on your relaxing, cultural mood, we've handpicked five iconic spots that blend
-      timeless Kyoto charm with cozy discoveries you won't find in any guidebook.
+      <div class="timeline-axis"><span class="time-badge">12:00 PM</span><span class="axis-line"></span></div>
+      <div class="spot-card stagger-card" data-spot="3">
+        <div class="spot-photo">🏯</div>
+        <h4 class="spot-name">Pontocho Alley</h4>
+        <p class="spot-meta">Historic Street · ⭐ 4.9 · 1.2 km away</p>
+        <p class="spot-description">A lantern-lit ribbon of geisha houses and machiya. Best experienced slowly, camera-out.</p>
+        <div class="spot-actions">
+          <button class="btn-small" onclick="event.stopPropagation();">View on Map</button>
+          <button class="btn-small coral" onclick="event.stopPropagation(); toggleWhy(this);">Why this?</button>
+        </div>
+        <div class="why-box">Quintessential Kyoto — and it's just steps from your next stop.</div>
+      </div>
+
+      <div class="transit-row">🚶 15-min walk · 1.1 km</div>
+
+      <div class="timeline-axis"><span class="time-badge">2:00 PM</span><span class="axis-line"></span></div>
+      <div class="spot-card stagger-card" data-spot="4">
+        <div class="spot-photo">🌳</div>
+        <h4 class="spot-name">Kamogawa Riverside</h4>
+        <p class="spot-meta">Park · ⭐ 4.8 · 1.6 km away</p>
+        <p class="spot-description">Locals nap, herons fish, and the river hums. Bring a snack and let the afternoon stretch.</p>
+        <div class="spot-actions">
+          <button class="btn-small" onclick="event.stopPropagation();">View on Map</button>
+          <button class="btn-small coral" onclick="event.stopPropagation(); toggleWhy(this);">Why this?</button>
+        </div>
+        <div class="why-box">A breath of nature mid-day to reset before your final foodie stop.</div>
+      </div>
+
+      <div class="transit-row">🚶 11-min walk · 0.8 km</div>
+
+      <div class="timeline-axis"><span class="time-badge">3:30 PM</span><span class="axis-line"></span></div>
+      <div class="spot-card stagger-card" data-spot="5">
+        <div class="spot-photo">🍳</div>
+        <h4 class="spot-name">Kichi Kichi Omurice</h4>
+        <p class="spot-meta">Restaurant · ⭐ 4.9 · 2.3 km away</p>
+        <p class="spot-description">A theatrical late lunch — silky omurice sliced open tableside by Chef Motokichi himself.</p>
+        <div class="spot-actions">
+          <button class="btn-small" onclick="event.stopPropagation();">View on Map</button>
+          <button class="btn-small coral" onclick="event.stopPropagation(); toggleWhy(this);">Why this?</button>
+        </div>
+        <div class="why-box">Iconic, joyful, and a perfect sweet finish to a culture-rich day.</div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-row">
+      <button id="btn-save" class="btn-primary">Save This Plan</button>
+      <button id="btn-regen" class="btn-outline">Generate Another</button>
+      <button id="btn-share" class="btn-outline">Share ↗</button>
+    </div>
+  </section>
+
+  <!--
+  ============================================================
+  ============ STATE: LOCATION ERROR (alternate) =============
+  ============================================================
+  Show this banner above the form if geolocation fails.
+  <section id="section-location-error">
+    <div class="banner">
+      <span class="banner-icon">⚠️</span>
+      <div>
+        <strong>Couldn't get your location</strong><br/>
+        <span style="color:#6B6B6B; font-size:13px;">We'll need it to recommend nearby spots.</span>
+      </div>
+      <div class="banner-actions">
+        <button class="btn-small">Retry</button>
+        <button class="btn-small coral">Use demo location</button>
+      </div>
+    </div>
+  </section>
+  -->
+
+  <!--
+  ============================================================
+  ============ STATE: GENERAL ERROR (alternate) ==============
+  ============================================================
+  <section id="section-error">
+    <div class="error-card">
+      <div class="error-icon">❌</div>
+      <h2 class="error-title">Something went wrong</h2>
+      <p class="error-msg">We couldn't generate your plan. Please check your connection and try again.</p>
+      <button class="btn-primary">Try again</button>
+    </div>
+  </section>
+  -->
+
+  <!--
+  ============================================================
+  ============ STATE: LOADING ALT (rotating text) ============
+  ============================================================
+  Alternate loading screen with rotating status text:
+  "Finding cafés..." -> "Checking weather..." -> "Crafting timeline..."
+  <section id="section-loading-alt" class="loading">
+    <div class="loading-globe">🌏</div>
+    <p class="loading-status" id="loading-rotating">Finding cafés...</p>
+    <div class="progress-bar"><div class="progress-fill" style="width:60%;"></div></div>
+  </section>
+  Pseudo JS:
+    const msgs = ['Finding cafés...', 'Checking weather...', 'Crafting timeline...'];
+    let i = 0;
+    setInterval(() => {
+      document.getElementById('loading-rotating').textContent = msgs[i++ % msgs.length];
+    }, 1200);
+  -->
+
+</div>
+
+<!-- ============ MODAL: Spot Detail ============ -->
+<div class="modal" id="modal-spot">
+  <div class="modal-card">
+    <button class="modal-close" data-close>✕</button>
+    <div class="modal-photo" id="modal-spot-photo">☕</div>
+    <span class="modal-cat-badge" id="modal-spot-cat">Café</span>
+    <h2 class="modal-name" id="modal-spot-name">Café Delluna</h2>
+    <p class="modal-description" id="modal-spot-desc">
+      A serene morning stop with single-origin pour-overs and almond croissants worth pilgrimaging for. Tucked off a side street, this neighborhood favorite quietly elevates every detail.
     </p>
-    <div class="badges">
-      <span class="badge">⏱ 6 hours</span>
-      <span class="badge">🚶 Walking</span>
-      <span class="badge">💰 Moderate</span>
-      <span class="badge">🌤 22°C Sunny</span>
+    <p class="modal-hours">🕘 <span>9:00 AM – 6:00 PM</span></p>
+    <div class="mini-map-placeholder">📍</div>
+    <div class="modal-actions">
+      <button class="btn-primary">Add to route</button>
+      <button class="btn-outline">Exclude</button>
     </div>
   </div>
+</div>
 
-  <!-- MAP (static placeholder) -->
-  <div class="map-section">
-    <p class="map-label">YOUR ROUTE</p>
-    <div class="map-placeholder">
-      <div class="map-pins-row">
-        <div class="map-pin-static">1</div>
-        <div class="map-pin-static">2</div>
-        <div class="map-pin-static">3</div>
-        <div class="map-pin-static">4</div>
-        <div class="map-pin-static">5</div>
-      </div>
-      <p class="map-caption">Interactive map · Kyoto route</p>
+<!-- ============ MODAL: Save Confirmation ============ -->
+<div class="modal" id="modal-save">
+  <div class="modal-card" style="text-align: center; padding: 48px 32px;">
+    <button class="modal-close" data-close>✕</button>
+    <div style="font-size: 64px; margin-bottom: 16px;">✓</div>
+    <h2 class="modal-name" style="text-align:center;">Saved!</h2>
+    <p style="color:#6B6B6B; margin: 8px 0 24px;">Your plan is saved to favorites.</p>
+    <button class="btn-primary">View saved plans</button>
+  </div>
+</div>
+
+<!-- ============ MODAL: Share ============ -->
+<div class="modal" id="modal-share">
+  <div class="modal-card">
+    <button class="modal-close" data-close>✕</button>
+    <h2 class="modal-name">Share your plan</h2>
+    <p style="color:#6B6B6B; font-size:14px; margin-top:6px;">Send this day to a friend — or save it for later.</p>
+    <div class="share-url-row">
+      <input class="share-url-input" id="share-url" type="text" readonly value="https://wanderly.app/p/abc123" />
+      <button class="copy-btn" id="copy-btn">Copy link</button>
     </div>
-    <div class="map-stats">
-      <span class="badge">📍 5 stops</span>
-      <span class="badge">🚶 8.2 km total</span>
-      <span class="badge">⏱ 6 hours</span>
-      <span class="badge">⛰ 45m elevation</span>
+    <div class="social-row">
+      <a class="social-btn" href="#" target="_blank">🐦 Twitter</a>
+      <a class="social-btn" href="#" target="_blank">📘 Facebook</a>
+      <a class="social-btn" href="#" target="_blank">✉️ Email</a>
     </div>
   </div>
+</div>
 
-  <!-- TIMELINE -->
-  <div class="timeline">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // ============== State ==============
+  const state = {
+    location: 'Kyoto, Japan',
+    coords: [35.0116, 135.7681],
+    map: null,
+    mapInited: false
+  };
 
-    <div class="timeline-row">
-      <div class="timeline-axis">
-        <span class="time-badge">9:00 AM</span>
-        <div class="axis-line"></div>
-      </div>
-      <div class="spot-card">
-        <div class="spot-img">📷 Café Delluna</div>
-        <p class="spot-name">Café Delluna</p>
-        <p class="spot-meta">☕ Café · ⭐ 4.6 · 5 min away</p>
-        <p class="spot-desc">A sun-drenched corner café tucked in a quiet Kyoto alley. Known for its hand-drip coffee and seasonal matcha croissants — the perfect place to ease into your day with a slow, intentional breakfast.</p>
-        <div class="spot-actions">
-          <button class="btn--map">View on Map</button>
-          <button class="btn--why">Why this? ↓</button>
-        </div>
-        <div class="why-box">You chose <strong>Relaxing</strong> mood. Starting with a slow café visit sets a deliberate, unhurried tone — exactly what a restorative Kyoto morning calls for.</div>
-      </div>
-    </div>
+  const spots = [
+    { coords: [35.0116, 135.7681], name: 'Café Delluna',         time: '9:00 AM',  cat: 'Café',            emoji: '☕' },
+    { coords: [35.0050, 135.7650], name: 'Nishiki Market',       time: '10:30 AM', cat: 'Market',          emoji: '🍜' },
+    { coords: [35.0084, 135.7707], name: 'Pontocho Alley',       time: '12:00 PM', cat: 'Historic Street', emoji: '🏯' },
+    { coords: [35.0150, 135.7750], name: 'Kamogawa Riverside',   time: '2:00 PM',  cat: 'Park',            emoji: '🌳' },
+    { coords: [35.0200, 135.7700], name: 'Kichi Kichi Omurice',  time: '3:30 PM',  cat: 'Restaurant',      emoji: '🍳' }
+  ];
 
-    <div class="transit-row">
-      <div class="transit-line-wrap"><div class="transit-v"></div></div>
-      <p class="transit-label">↓ &nbsp;8 min walk</p>
-    </div>
+  // ============== DOM helpers ==============
+  const $ = (id) => document.getElementById(id);
+  const show = (el) => el.classList.remove('hidden');
+  const hide = (el) => el.classList.add('hidden');
 
-    <div class="timeline-row">
-      <div class="timeline-axis">
-        <span class="time-badge">10:30 AM</span>
-        <div class="axis-line"></div>
-      </div>
-      <div class="spot-card">
-        <div class="spot-img">📷 Nishiki Market</div>
-        <p class="spot-name">Nishiki Market</p>
-        <p class="spot-meta">🍜 Food Market · ⭐ 4.7 · 8 min walk</p>
-        <p class="spot-desc">Kyoto's legendary "Kitchen of Kyoto" — a narrow 400-meter arcade packed with 100+ stalls. Sample pickled vegetables, fresh tofu, grilled skewers, and seasonal wagashi sweets as you drift through vendors.</p>
-        <div class="spot-actions">
-          <button class="btn--map">View on Map</button>
-          <button class="btn--why">Why this? ↓</button>
-        </div>
-        <div class="why-box">Your <strong>Foodie</strong> and <strong>Cultural</strong> mood tags made Nishiki a natural fit. Browsing the stalls feels like living inside Kyoto's culinary soul — sensory, authentic, and unhurried.</div>
-      </div>
-    </div>
+  // ============== Hero -> Form ==============
+  $('btn-find').addEventListener('click', () => {
+    const isSecure = window.isSecureContext || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    const goToForm = (note) => {
+      if (note) {
+        $('hero-notice').innerHTML = `<div class="banner" style="max-width:480px;margin:0 auto;"><span class="banner-icon">⚠️</span><div style="text-align:left;font-size:13px;">${note}</div></div>`;
+      }
+      setTimeout(() => {
+        hide($('section-hero'));
+        show($('section-form'));
+        $('form-location').textContent = state.location;
+      }, 300);
+    };
 
-    <div class="transit-row">
-      <div class="transit-line-wrap"><div class="transit-v"></div></div>
-      <p class="transit-label">↓ &nbsp;5 min walk</p>
-    </div>
+    if (isSecure && navigator.geolocation) {
+      let settled = false;
+      const timer = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        goToForm("Couldn't get your location — using <strong>Kyoto, Japan</strong> as a demo.");
+      }, 5000);
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          if (settled) return; settled = true;
+          clearTimeout(timer);
+          state.coords = [pos.coords.latitude, pos.coords.longitude];
+          state.location = 'Your location';
+          goToForm(null);
+        },
+        () => {
+          if (settled) return; settled = true;
+          clearTimeout(timer);
+          goToForm("Location denied — using <strong>Kyoto, Japan</strong> as a demo.");
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      goToForm("Insecure context — using <strong>Kyoto, Japan</strong> as a demo.");
+    }
+  });
 
-    <div class="timeline-row">
-      <div class="timeline-axis">
-        <span class="time-badge">12:00 PM</span>
-        <div class="axis-line"></div>
-      </div>
-      <div class="spot-card">
-        <div class="spot-img">📷 Pontocho Alley</div>
-        <p class="spot-name">Pontocho Alley</p>
-        <p class="spot-meta">🏯 Cultural · ⭐ 4.8 · 5 min walk</p>
-        <p class="spot-desc">One of Kyoto's most atmospheric streets — a lantern-lit alley along the Kamogawa River. At midday it hums with quiet elegance, geisha culture, and the scent of kaiseki cooking from half-hidden doorways.</p>
-        <div class="spot-actions">
-          <button class="btn--map">View on Map</button>
-          <button class="btn--why">Why this? ↓</button>
-        </div>
-        <div class="why-box">Pontocho balances your <strong>Cultural</strong> and <strong>Relaxing</strong> vibes. The unhurried midday atmosphere is a world away from the tourist rush — yet deeply, authentically Kyoto.</div>
-      </div>
-    </div>
+  // ============== Mood chips ==============
+  document.querySelectorAll('.mood-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
 
-    <div class="transit-row">
-      <div class="transit-line-wrap"><div class="transit-v"></div></div>
-      <p class="transit-label">↓ &nbsp;12 min walk</p>
-    </div>
+  // ============== Form -> Loading -> Results ==============
+  $('planner-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    hide($('section-form'));
+    show($('section-loading'));
 
-    <div class="timeline-row">
-      <div class="timeline-axis">
-        <span class="time-badge">2:00 PM</span>
-        <div class="axis-line"></div>
-      </div>
-      <div class="spot-card">
-        <div class="spot-img">📷 Kamogawa Riverside</div>
-        <p class="spot-name">Kamogawa Riverside</p>
-        <p class="spot-meta">🌳 Nature · ⭐ 4.9 · 12 min walk</p>
-        <p class="spot-desc">Kyoto's beloved riverside promenade, where herons wade and locals cycle alongside the gentle current. In the afternoon light, the water glitters beneath the Sanjo Bridge. Bring a book, or simply sit.</p>
-        <div class="spot-actions">
-          <button class="btn--map">View on Map</button>
-          <button class="btn--why">Why this? ↓</button>
-        </div>
-        <div class="why-box">After a full morning of exploring, your <strong>Relaxing</strong> mood calls for decompression. Kamogawa is Kyoto's natural reset button — unhurried, free, and deeply restorative.</div>
-      </div>
-    </div>
+    const fill = $('progress-fill');
+    fill.style.width = '0%';
+    void fill.offsetWidth;
+    requestAnimationFrame(() => { fill.style.width = '100%'; });
 
-    <div class="transit-row">
-      <div class="transit-line-wrap"><div class="transit-v"></div></div>
-      <p class="transit-label">↓ &nbsp;7 min walk</p>
-    </div>
+    const statuses = ['Finding cafés…', 'Checking the weather…', 'Crafting your timeline…'];
+    let si = 0;
+    const statusEl = $('loading-status');
+    statusEl.textContent = statuses[0];
+    const rotator = setInterval(() => {
+      si = (si + 1) % statuses.length;
+      statusEl.textContent = statuses[si];
+    }, 1000);
 
-    <div class="timeline-row">
-      <div class="timeline-axis">
-        <span class="time-badge">3:30 PM</span>
-      </div>
-      <div class="spot-card">
-        <div class="spot-img">📷 Kichi Kichi Omurice</div>
-        <p class="spot-name">Kichi Kichi Omurice</p>
-        <p class="spot-meta">🍳 Restaurant · ⭐ 4.5 · 7 min walk</p>
-        <p class="spot-desc">Kyoto's most theatrical dining experience — Chef Motokichi Yukimura performs his omurice like a stage act, slicing the egg open tableside. A tiny counter restaurant with enormous soul, and a perfect finale.</p>
-        <div class="spot-actions">
-          <button class="btn--map">View on Map</button>
-          <button class="btn--why">Why this? ↓</button>
-        </div>
-        <div class="why-box">Closing on a memorable meal matches your <strong>Foodie</strong> mood beautifully. Kichi Kichi ends the day with warmth, flavor, and a smile.</div>
-      </div>
-    </div>
+    setTimeout(() => {
+      clearInterval(rotator);
+      hide($('section-loading'));
+      show($('section-results'));
+      initMap();
+      observeStaggerCards();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 3000);
+  });
 
-  </div>
+  // ============== Leaflet map (lazy) ==============
+  function initMap() {
+    if (state.mapInited) return;
+    state.mapInited = true;
 
-  <div class="results-cta">
-    <button class="btn btn--primary-sm">Save This Plan</button>
-    <button class="btn btn--outline">Generate Another</button>
-    <button class="btn--ghost">Share ↗</button>
-  </div>
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([35.0116, 135.7700], 14);
+    state.map = map;
 
-</section>
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      maxZoom: 19
+    }).addTo(map);
 
-<footer>
-  <p class="footer-main">Made with ✦ Wanderly · 2026</p>
-  <p class="footer-sub">Plans powered by AI · Locations from OpenStreetMap · Photos from Wikipedia</p>
-</footer>
+    const latlngs = spots.map(s => s.coords);
+    L.polyline(latlngs, {
+      color: '#E07856',
+      weight: 3,
+      opacity: 0.85,
+      dashArray: '8 10'
+    }).addTo(map);
 
+    spots.forEach((s, i) => {
+      const icon = L.divIcon({
+        className: '',
+        html: `<div class="map-pin" data-pin="${i}">${i + 1}</div>`,
+        iconSize: [36, 36],
+        iconAnchor: [18, 18]
+      });
+      const marker = L.marker(s.coords, { icon }).addTo(map);
+      marker.bindPopup(
+        `<strong>${s.name}</strong><div class="pop-meta">${s.time} · ${s.cat} ${s.emoji}</div>`
+      );
+      marker.on('mouseover', () => marker.openPopup());
+    });
+
+    map.fitBounds(L.latLngBounds(latlngs).pad(0.25));
+
+    setTimeout(() => {
+      map.invalidateSize();
+      document.querySelectorAll('.map-pin').forEach((pin, i) => {
+        setTimeout(() => pin.classList.add('dropped'), i * 200);
+      });
+    }, 100);
+  }
+
+  // ============== Stagger fade-in via IntersectionObserver ==============
+  function observeStaggerCards() {
+    const cards = document.querySelectorAll('.stagger-card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(cards).indexOf(entry.target);
+          setTimeout(() => entry.target.classList.add('visible'), idx * 100);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    cards.forEach(c => observer.observe(c));
+  }
+
+  // ============== Why this? toggle ==============
+  function toggleWhy(btn) {
+    const why = btn.closest('.spot-card').querySelector('.why-box');
+    why.classList.toggle('open');
+  }
+  window.toggleWhy = toggleWhy;
+
+  // ============== Spot card -> modal ==============
+  document.querySelectorAll('.spot-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const idx = parseInt(card.dataset.spot, 10) - 1;
+      const s = spots[idx];
+      $('modal-spot-photo').textContent = s.emoji;
+      $('modal-spot-name').textContent = s.name;
+      $('modal-spot-cat').textContent = s.cat;
+      $('modal-spot-desc').textContent = card.querySelector('.spot-description').textContent;
+      openModal($('modal-spot'));
+    });
+  });
+
+  // ============== Modal helpers ==============
+  function openModal(el) { el.classList.add('is-open'); }
+  function closeModal(el) { el.classList.remove('is-open'); }
+  function closeAllModals() { document.querySelectorAll('.modal').forEach(closeModal); }
+
+  document.querySelectorAll('.modal').forEach((modal) => {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal(modal);
+    });
+    modal.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', () => closeModal(modal));
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAllModals();
+  });
+
+  // ============== Save / Share / Regen ==============
+  $('btn-save').addEventListener('click', () => openModal($('modal-save')));
+  $('btn-share').addEventListener('click', () => openModal($('modal-share')));
+  $('btn-regen').addEventListener('click', () => {
+    hide($('section-results'));
+    show($('section-form'));
+    $('section-form').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // ============== Copy link ==============
+  $('copy-btn').addEventListener('click', () => {
+    const input = $('share-url');
+    input.select();
+    try {
+      navigator.clipboard.writeText(input.value);
+    } catch (err) {
+      document.execCommand('copy');
+    }
+    const btn = $('copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+</script>
 </body>
 </html>
