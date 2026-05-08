@@ -364,18 +364,33 @@
       document.getElementById('section-form').scrollIntoView({ behavior: 'smooth' });
     }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        function () { showForm('Kyoto, Japan'); },          // success (real app: reverse-geocode coords)
-        function () {                                        // denied / error
-          document.getElementById('location-error').classList.remove('hidden');
-          showForm('Kyoto, Japan');
-        }
-      );
-    } else {
-      document.getElementById('location-error').classList.remove('hidden');
-      showForm('Kyoto, Japan');
+    function showDemoNotice(message) {
+      var el = document.getElementById('location-error');
+      el.textContent = message;
+      el.classList.remove('hidden');
     }
+
+    // Geolocation API requires HTTPS or localhost. In file:// / plain http://
+    // contexts the call hangs or fails silently — so detect and fall back.
+    var isSecure =
+      location.protocol === 'https:' ||
+      location.hostname  === 'localhost' ||
+      location.hostname  === '127.0.0.1';
+
+    if (!navigator.geolocation || !isSecure) {
+      showDemoNotice('ℹ️ Demo mode — using sample location (Kyoto, Japan).');
+      showForm('Kyoto, Japan');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      function () { showForm('Kyoto, Japan'); },     // success (real app: reverse-geocode coords)
+      function () {                                   // denied / error / timeout
+        showDemoNotice('⚠️ Location access denied. Using a demo location instead.');
+        showForm('Kyoto, Japan');
+      },
+      { timeout: 5000, maximumAge: 60000 }
+    );
   });
 
   // ── Mood chips: multiple-select toggle ───────────────────────────
