@@ -1,29 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Student Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dating App MVP — Proposal Mock</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #0f1f3d;
-    --navy-2: #162a52;
-    --navy-3: #1d3567;
-    --blue: #4a90e2;
-    --light-blue: #6cb4f5;
-    --white: #ffffff;
-    --gray: #b8c2d6;
-    --gray-2: #8593ad;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.25);
-    --shadow-glow: 0 8px 32px rgba(74, 144, 226, 0.35);
+    --bg-1: #1a0b1f;
+    --bg-2: #2a0f2e;
+    --pink:   #ff4f7e;
+    --pink-2: #ff7aa2;
+    --coral:  #ff8a65;
+    --violet: #8e5bff;
+    --cream:  #fff7f1;
+    --ink:    #1a0a18;
+    --ink-2:  #4a3a48;
+    --gray:   #9b8e9a;
+    --gray-2: #d8ccd6;
+    --line:   rgba(255,255,255,0.08);
+    --shadow: 0 18px 50px rgba(0,0,0,0.45);
+    --pop:    0 10px 28px rgba(255,79,126,0.45);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    background:
+      radial-gradient(1100px 600px at 20% 0%, rgba(255,79,126,0.18), transparent 60%),
+      radial-gradient(1000px 700px at 100% 100%, rgba(142,91,255,0.18), transparent 60%),
+      #0d0510;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #fff;
+    min-height: 100%;
+  }
+
+  body { padding: 48px 24px 96px; }
 
   .icon {
     display: block;
@@ -36,353 +50,558 @@
     flex-shrink: 0;
   }
 
-  html, body {
-    background: #060c1c;
-    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    color: var(--white);
-    height: 100%;
+  /* ───── Page header ───── */
+  .page-head { max-width: 1280px; margin: 0 auto 36px; text-align: center; }
+  .page-head .eyebrow {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--pink-2);
+    background: rgba(255,79,126,0.12);
+    border: 1px solid rgba(255,79,126,0.28);
+    padding: 6px 14px; border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-size: 36px; font-weight: 800; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff, #ffd1dc 60%, #c8a8ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .page-head p {
+    margin-top: 10px;
+    font-size: 14px; color: var(--gray-2); font-weight: 500;
   }
 
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+  /* ───── Devices ───── */
+  .devices {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-items: center;
+    gap: 36px;
+  }
+  @media (max-width: 1080px) {
+    .devices { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  }
+  @media (max-width: 760px) {
+    .devices { grid-template-columns: 1fr; }
+  }
+
+  .stage {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+
+  .stage-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gray-2);
+  }
+  .stage-label .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--pink); box-shadow: 0 0 10px var(--pink);
   }
 
   .device {
     width: 375px;
-    height: 812px;
-    background: var(--navy);
-    background-image:
-      radial-gradient(circle at 20% 0%, rgba(74, 144, 226, 0.18), transparent 40%),
-      radial-gradient(circle at 100% 30%, rgba(108, 180, 245, 0.12), transparent 50%);
+    height: 760px;
+    background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
     position: relative;
     overflow: hidden;
-    border-radius: 32px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border-radius: 38px;
+    box-shadow: var(--shadow), inset 0 0 0 1px rgba(255,255,255,0.06);
   }
-
-  /* ----- Header ----- */
-  .header {
+  .device::before {
+    content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 72px;
-    padding: 14px 20px 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 10;
-    background: linear-gradient(180deg, rgba(15, 31, 61, 0.95) 60%, rgba(15, 31, 61, 0));
-    backdrop-filter: blur(8px);
+    top: 8px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 26px;
+    background: #000;
+    border-radius: 0 0 18px 18px;
+    z-index: 30;
   }
 
-  .greet { display: flex; align-items: center; gap: 10px; }
-
-  .avatar {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6cb4f5, #4a90e2);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 18px; color: white;
-    border: 2px solid rgba(255,255,255,0.15);
-    box-shadow: 0 4px 12px rgba(74,144,226,0.4);
+  /* common header */
+  .top {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 64px;
+    padding: 28px 20px 8px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 20;
   }
-
-  .greet-text .hello { font-size: 12px; color: var(--gray); font-weight: 600; }
-  .greet-text .name  { font-size: 16px; font-weight: 800; color: white; line-height: 1.1; }
-
-  .header-right { display: flex; align-items: center; gap: 10px; }
-
-  .icon-btn {
-    width: 40px; height: 40px;
-    border-radius: 14px;
-    background: rgba(255,255,255,0.08);
+  .top .brand {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.3px;
+    background: linear-gradient(135deg, var(--pink), var(--coral));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .top .top-actions { display: flex; gap: 8px; }
+  .ic-btn {
+    width: 36px; height: 36px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--line);
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px; color: white;
-    position: relative; cursor: pointer;
+    color: #fff; font-size: 18px;
+    cursor: pointer;
     transition: transform .2s ease, background .2s ease;
   }
-  .icon-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.14); }
+  .ic-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.12); }
 
-  .badge-dot {
-    position: absolute; top: 6px; right: 6px;
-    width: 8px; height: 8px;
-    background: var(--warning);
-    border-radius: 50%;
-    border: 2px solid var(--navy);
-  }
-
-  .streak {
-    display: flex; align-items: center; gap: 5px;
-    background: linear-gradient(135deg, #f59e0b, #ef4444);
-    padding: 8px 12px;
-    border-radius: 14px;
-    font-size: 14px; font-weight: 800; color: white;
-    box-shadow: 0 4px 12px rgba(245,158,11,0.35);
-    cursor: pointer;
-    transition: transform .2s ease;
-  }
-  .streak .icon { width: 18px; height: 18px; }
-  .streak:hover { transform: translateY(-2px); }
-
-  /* ----- Scroll body ----- */
-  .scroll {
+  .body {
     position: absolute;
-    top: 72px; bottom: 76px;
-    left: 0; right: 0;
-    overflow-y: auto; overflow-x: hidden;
-    padding: 8px 20px 24px;
-    scrollbar-width: none;
-  }
-  .scroll::-webkit-scrollbar { display: none; }
-
-  /* ----- Progress card ----- */
-  .progress-card {
-    margin-top: 8px;
-    background: linear-gradient(135deg, #4a90e2 0%, #6cb4f5 100%);
-    border-radius: 20px;
-    padding: 18px;
-    display: flex; align-items: center; gap: 16px;
-    box-shadow: var(--shadow-glow);
-    position: relative; overflow: hidden;
-    cursor: pointer;
-    transition: transform .25s ease;
-  }
-  .progress-card:hover { transform: translateY(-3px); }
-  .progress-card::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 120px; height: 120px;
-    background: rgba(255,255,255,0.12);
-    border-radius: 50%;
+    top: 64px; bottom: 84px; left: 0; right: 0;
+    overflow: hidden;
+    padding: 8px 18px 16px;
   }
 
-  .ring {
-    width: 88px; height: 88px;
-    flex-shrink: 0; position: relative; z-index: 1;
+  /* ───── Discover (swipe card) ───── */
+  .deck {
+    position: relative;
+    width: 100%;
+    height: 470px;
+    margin-top: 6px;
   }
-  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .ring .track { fill: none; stroke: rgba(255,255,255,0.25); stroke-width: 8; }
-  .ring .bar {
-    fill: none; stroke: white; stroke-width: 8; stroke-linecap: round;
-    stroke-dasharray: 251.2;
-    stroke-dashoffset: 82.9;
-    filter: drop-shadow(0 0 6px rgba(255,255,255,0.6));
-  }
-  .ring-text {
+  .card {
     position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column; font-weight: 900;
+    border-radius: 26px;
+    overflow: hidden;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.45);
   }
-  .ring-text .pct { font-size: 20px; line-height: 1; }
-  .ring-text .lbl { font-size: 9px; opacity: 0.85; letter-spacing: 0.5px; margin-top: 2px; }
-
-  .progress-info { z-index: 1; }
-  .progress-info .title { font-size: 13px; font-weight: 700; opacity: 0.9; margin-bottom: 4px; }
-  .progress-info .stat  { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
-  .progress-info .msg {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: rgba(255,255,255,0.22);
-    padding: 4px 10px; border-radius: 10px;
-    font-size: 12px; font-weight: 700;
+  .card.behind-1 {
+    transform: scale(0.94) translateY(14px) rotate(-3deg);
+    opacity: 0.55;
+    filter: blur(0.5px);
   }
-  .msg .icon { width: 14px; height: 14px; }
-
-  /* ----- Section ----- */
-  .section { margin-top: 22px; }
-  .section-head {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 12px;
+  .card.behind-2 {
+    transform: scale(0.88) translateY(28px) rotate(2deg);
+    opacity: 0.3;
   }
-  .section-title { font-size: 16px; font-weight: 800; color: white; }
-  .section-link { font-size: 12px; color: var(--light-blue); font-weight: 700; cursor: pointer; }
-  .section-link:hover { text-decoration: underline; }
+  .card .photo {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.85) 100%),
+      linear-gradient(135deg, #ff8aa2 0%, #ff5577 35%, #8e3bff 100%);
+  }
+  .card .photo.alt-1 {
+    background:
+      linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.85) 100%),
+      linear-gradient(135deg, #ffb88a 0%, #ff7a55 50%, #ff3b8e 100%);
+  }
+  .card .photo.alt-2 {
+    background:
+      linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.85) 100%),
+      linear-gradient(135deg, #b388ff 0%, #6a4bff 50%, #ff3b8e 100%);
+  }
 
-  /* ----- Daily quests ----- */
-  .quest-list { display: flex; flex-direction: column; gap: 10px; }
-  .quest {
-    background: var(--navy-2);
-    border: 1px solid rgba(255,255,255,0.06);
+  /* photo decoration silhouette */
+  .silhouette {
+    position: absolute;
+    bottom: -10px; left: 50%;
+    transform: translateX(-50%);
+    width: 220px; height: 320px;
+    border-radius: 50% 50% 28% 28% / 50% 50% 12% 12%;
+    background: radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.22), rgba(255,255,255,0.04) 60%, transparent 70%);
+    mix-blend-mode: overlay;
+  }
+
+  .photo-dots {
+    position: absolute; top: 12px; left: 12px; right: 12px;
+    display: flex; gap: 4px;
+  }
+  .photo-dots span {
+    flex: 1; height: 3px; border-radius: 2px;
+    background: rgba(255,255,255,0.35);
+  }
+  .photo-dots span.on { background: #fff; }
+
+  .pill-row {
+    position: absolute; top: 28px; right: 14px;
+    display: flex; gap: 6px;
+  }
+  .pill-online {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    font-size: 11px; font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .pill-online::before {
+    content: ''; width: 7px; height: 7px;
+    background: #2bd47f; border-radius: 50%;
+    box-shadow: 0 0 8px #2bd47f;
+  }
+
+  .card-info {
+    position: absolute; left: 18px; right: 18px; bottom: 18px;
+    color: #fff;
+  }
+  .name-row {
+    display: flex; align-items: baseline; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .name-row .name { font-size: 24px; font-weight: 800; letter-spacing: -0.3px; }
+  .name-row .age  { font-size: 22px; font-weight: 600; opacity: 0.92; }
+  .name-row .verified {
+    width: 18px; height: 18px;
+    background: linear-gradient(135deg, #4ab0ff, #2b6dff);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 10px;
+    box-shadow: 0 2px 8px rgba(43,109,255,0.5);
+  }
+  .verified .icon { width: 11px; height: 11px; stroke-width: 3; }
+
+  .meta {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .meta .icon { width: 13px; height: 13px; }
+
+  .prompt-bubble {
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.18);
     border-radius: 16px;
-    padding: 12px 14px;
-    display: flex; align-items: center; gap: 12px;
-    cursor: pointer;
-    transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    padding: 10px 12px;
   }
-  .quest:hover  { transform: translateY(-2px); background: var(--navy-3); }
-  .quest:active { background: var(--navy-3); border-color: var(--blue); }
+  .prompt-bubble .q {
+    font-size: 11px; font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+  .prompt-bubble .a { font-size: 13px; font-weight: 600; line-height: 1.35; }
 
-  .quest-icon {
-    width: 42px; height: 42px;
-    border-radius: 12px;
+  .actions {
+    margin-top: 18px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px; color: white;
-    flex-shrink: 0;
+    gap: 18px;
   }
-  .quest-icon.q1 { background: linear-gradient(135deg, #4a90e2, #6cb4f5); }
-  .quest-icon.q2 { background: linear-gradient(135deg, #10b981, #34d399); }
-  .quest-icon.q3 { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+  .act {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: transform .25s cubic-bezier(.2,.8,.3,1.4), box-shadow .25s ease;
+    background: #fff;
+    color: var(--ink);
+    font-size: 22px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.35);
+  }
+  .act:hover { transform: translateY(-3px) scale(1.06); }
+  .act.pass    { color: #ff5d6c; }
+  .act.like    {
+    width: 68px; height: 68px;
+    background: linear-gradient(135deg, var(--pink), var(--coral));
+    color: #fff;
+    box-shadow: var(--pop);
+  }
+  .act.like .icon { width: 30px; height: 30px; stroke-width: 2.4; }
+  .act.star    { color: var(--violet); }
+  .act .icon { width: 24px; height: 24px; }
 
-  .quest-body { flex: 1; min-width: 0; }
-  .quest-title { font-size: 14px; font-weight: 700; color: white; margin-bottom: 4px; }
-  .quest-bar {
-    height: 4px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 4px; overflow: hidden;
+  /* ───── Matches list ───── */
+  .matches-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 4px 2px 14px;
   }
-  .quest-bar > span {
-    display: block; height: 100%;
-    background: linear-gradient(90deg, var(--blue), var(--light-blue));
-    border-radius: 4px;
-  }
-
-  .quest-pts {
-    background: rgba(16,185,129,0.15);
-    color: var(--success);
-    font-size: 12px; font-weight: 800;
-    padding: 6px 10px; border-radius: 10px;
-    flex-shrink: 0;
+  .matches-head h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; }
+  .filter-chip {
+    font-size: 11px; font-weight: 700;
+    color: var(--pink-2);
+    background: rgba(255,79,126,0.12);
+    padding: 5px 10px; border-radius: 999px;
+    border: 1px solid rgba(255,79,126,0.28);
   }
 
-  /* ----- Continue learning ----- */
-  .h-scroll {
-    display: flex; gap: 12px;
-    overflow-x: auto; overflow-y: hidden;
-    margin: 0 -20px;
-    padding: 4px 20px 8px;
-    scroll-snap-type: x mandatory;
+  .new-matches {
+    display: flex; gap: 10px;
+    overflow-x: auto;
+    margin: 0 -18px 16px;
+    padding: 0 18px 4px;
     scrollbar-width: none;
   }
-  .h-scroll::-webkit-scrollbar { display: none; }
-
-  .lesson {
-    flex: 0 0 168px;
-    background: var(--navy-2);
-    border-radius: 18px; overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.06);
-    cursor: pointer;
-    transition: transform .25s ease, box-shadow .25s ease;
-    scroll-snap-align: start;
+  .new-matches::-webkit-scrollbar { display: none; }
+  .new-match {
+    flex: 0 0 64px;
+    text-align: center;
   }
-  .lesson:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
-
-  .thumb {
-    height: 96px;
-    display: flex; align-items: center; justify-content: center;
-    color: white; position: relative;
+  .new-match .av {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+    border: 2.5px solid transparent;
+    background:
+      linear-gradient(var(--bg-1), var(--bg-1)) padding-box,
+      linear-gradient(135deg, var(--pink), var(--coral)) border-box;
+    position: relative;
+    overflow: hidden;
   }
-  .thumb .icon {
-    width: 48px; height: 48px;
-    stroke-width: 1.5;
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+  .new-match .av::after {
+    content: '';
+    position: absolute; inset: 3px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c1, #ff8aa2), var(--c2, #8e3bff));
   }
-  .thumb.l1 { background: linear-gradient(135deg, #4a90e2, #6cb4f5); }
-  .thumb.l2 { background: linear-gradient(135deg, #10b981, #34d399); }
-  .thumb.l3 { background: linear-gradient(135deg, #a78bfa, #f472b6); }
-  .thumb.l4 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
-
-  .thumb .tag {
-    position: absolute; top: 8px; left: 8px;
-    background: rgba(0,0,0,0.35); color: white;
-    font-size: 10px; font-weight: 700;
-    padding: 3px 8px; border-radius: 8px;
-    backdrop-filter: blur(4px);
+  .new-match.is-new .av::before {
+    content: '';
+    position: absolute; bottom: 1px; right: 1px;
+    width: 14px; height: 14px;
+    background: var(--pink); border-radius: 50%;
+    border: 2px solid var(--bg-1);
+    z-index: 2;
   }
-
-  .lesson-body { padding: 10px 12px 12px; }
-  .lesson-title {
-    font-size: 13px; font-weight: 800; color: white;
-    line-height: 1.25; margin-bottom: 8px;
+  .new-match .nm {
+    font-size: 11px; font-weight: 700; color: var(--gray-2);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .lesson-progress {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 11px; color: var(--gray); font-weight: 700;
-  }
-  .lesson-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
-  .lesson-bar > span { display: block; height: 100%; background: var(--light-blue); border-radius: 4px; }
 
-  /* ----- Achievements ----- */
-  .achievements { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .badge {
-    background: var(--navy-2);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    padding: 14px 8px;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  .conv-list { display: flex; flex-direction: column; gap: 4px; }
+  .conv {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 4px;
+    border-radius: 14px;
     cursor: pointer;
-    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-    position: relative; overflow: hidden;
+    transition: background .2s ease;
   }
-  .badge::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 50% 30%, rgba(108,180,245,0.25), transparent 60%);
-    opacity: 0;
-    transition: opacity .3s ease;
-  }
-  .badge:hover {
-    transform: translateY(-3px);
-    border-color: rgba(108,180,245,0.5);
-    box-shadow: 0 8px 20px rgba(74,144,226,0.25);
-  }
-  .badge:hover::before { opacity: 1; }
-
-  .badge-icon {
+  .conv:hover { background: rgba(255,255,255,0.04); }
+  .conv .av {
     width: 52px; height: 52px;
     border-radius: 50%;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    position: relative;
+  }
+  .conv .av .ring-online {
+    position: absolute; bottom: 0; right: 0;
+    width: 13px; height: 13px;
+    background: #2bd47f; border-radius: 50%;
+    border: 2.5px solid var(--bg-1);
+  }
+  .conv-body { flex: 1; min-width: 0; }
+  .conv-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .conv-top .nm { font-size: 14px; font-weight: 800; }
+  .conv-top .ts { font-size: 11px; color: var(--gray); font-weight: 600; flex-shrink: 0; }
+  .conv-bot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 2px; }
+  .conv-bot .preview {
+    font-size: 12.5px; color: var(--gray-2); font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .conv.unread .conv-bot .preview { color: #fff; font-weight: 700; }
+  .unread-badge {
+    flex-shrink: 0;
+    min-width: 20px; height: 20px;
+    padding: 0 6px;
+    background: linear-gradient(135deg, var(--pink), var(--coral));
+    color: #fff;
+    font-size: 11px; font-weight: 800;
+    border-radius: 999px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 26px; color: white;
-    position: relative; z-index: 1;
-  }
-  .badge-icon .icon { width: 28px; height: 28px; }
-  .badge-icon.b1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
-  .badge-icon.b2 { background: linear-gradient(135deg, #6cb4f5, #4a90e2); box-shadow: 0 4px 12px rgba(74,144,226,0.4); }
-  .badge-icon.b3 { background: linear-gradient(135deg, #f472b6, #a78bfa); box-shadow: 0 4px 12px rgba(167,139,250,0.4); }
-
-  .badge-name {
-    font-size: 11px; font-weight: 800; color: white;
-    text-align: center; z-index: 1; line-height: 1.2;
+    box-shadow: 0 4px 10px rgba(255,79,126,0.45);
   }
 
-  /* ----- Bottom Nav ----- */
+  /* ───── Chat ───── */
+  .chat-top {
+    height: 64px;
+    padding: 28px 16px 8px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .chat-top .back {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; cursor: pointer;
+  }
+  .chat-top .av {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff8aa2, #8e3bff);
+    flex-shrink: 0;
+  }
+  .chat-top .who { flex: 1; min-width: 0; }
+  .chat-top .who .nm { font-size: 15px; font-weight: 800; }
+  .chat-top .who .st { font-size: 11px; color: #2bd47f; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+  .chat-top .who .st::before { content: ''; width: 6px; height: 6px; background: #2bd47f; border-radius: 50%; }
+
+  .match-banner {
+    margin: 8px 2px 14px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255,79,126,0.22), rgba(142,91,255,0.22));
+    border: 1px solid rgba(255,79,126,0.35);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .match-banner .icon { width: 18px; height: 18px; color: var(--pink-2); }
+  .match-banner .txt { font-size: 12px; font-weight: 700; }
+  .match-banner .txt b { color: var(--pink-2); }
+
+  .messages {
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 4px 2px 12px;
+  }
+  .msg-day {
+    align-self: center;
+    font-size: 10px; font-weight: 700;
+    color: var(--gray);
+    background: rgba(255,255,255,0.05);
+    padding: 4px 10px; border-radius: 999px;
+    margin: 6px 0;
+    letter-spacing: 0.5px;
+  }
+  .bubble {
+    max-width: 75%;
+    padding: 9px 13px;
+    border-radius: 18px;
+    font-size: 13px; font-weight: 500;
+    line-height: 1.4;
+  }
+  .bubble.them {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--line);
+    border-bottom-left-radius: 6px;
+  }
+  .bubble.me {
+    align-self: flex-end;
+    background: linear-gradient(135deg, var(--pink), var(--coral));
+    color: #fff;
+    border-bottom-right-radius: 6px;
+    box-shadow: 0 4px 14px rgba(255,79,126,0.35);
+  }
+  .bubble .ts {
+    display: block;
+    font-size: 9px; font-weight: 600;
+    margin-top: 3px; opacity: 0.75;
+  }
+
+  .composer {
+    position: absolute;
+    bottom: 84px; left: 0; right: 0;
+    padding: 8px 14px 10px;
+    background: linear-gradient(180deg, transparent, var(--bg-2) 30%);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .composer .ic-btn { background: rgba(255,255,255,0.06); }
+  .input-pill {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    height: 40px;
+    padding: 0 14px;
+    display: flex; align-items: center;
+    font-size: 13px; color: var(--gray-2); font-weight: 500;
+  }
+  .send-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink), var(--coral));
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(255,79,126,0.45);
+    cursor: pointer;
+  }
+
+  /* ───── Bottom nav ───── */
   .nav {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    height: 76px;
-    background: rgba(15,31,61,0.92);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255,255,255,0.06);
+    height: 84px;
+    padding: 8px 14px 22px;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.55) 60%);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line);
     display: flex; justify-content: space-around; align-items: center;
-    padding: 6px 12px 14px;
-    z-index: 10;
+    z-index: 15;
   }
   .nav-item {
     flex: 1;
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    color: var(--gray-2);
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: var(--gray);
     font-size: 10px; font-weight: 700;
     cursor: pointer;
-    transition: color .2s ease, transform .2s ease;
-    padding: 6px 4px; border-radius: 12px;
+    padding: 6px;
+    transition: color .2s ease;
   }
-  .nav-item:hover { color: var(--light-blue); transform: translateY(-2px); }
-  .nav-item .icon { width: 24px; height: 24px; }
-  .nav-item.active { color: var(--light-blue); }
-  .nav-item.active .icon { filter: drop-shadow(0 0 6px rgba(108,180,245,0.6)); }
+  .nav-item .icon { width: 22px; height: 22px; }
+  .nav-item:hover { color: var(--gray-2); }
+  .nav-item.active { color: var(--pink); }
+  .nav-item.active .icon { filter: drop-shadow(0 0 8px rgba(255,79,126,0.7)); }
+  .nav-item .nm-badge {
+    position: absolute;
+    margin-top: -22px; margin-left: 14px;
+    min-width: 16px; height: 16px;
+    background: var(--pink);
+    color: #fff;
+    font-size: 9px; font-weight: 800;
+    border-radius: 999px;
+    border: 2px solid var(--bg-2);
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 4px;
+  }
 
-  .spacer-sm { height: 4px; }
+  /* ───── It's a Match overlay (decorative on Discover) ───── */
+  .match-pop {
+    position: absolute;
+    top: 16px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    background: linear-gradient(135deg, var(--pink), var(--violet));
+    color: #fff;
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 12px; font-weight: 800;
+    letter-spacing: 0.3px;
+    box-shadow: 0 10px 24px rgba(255,79,126,0.45);
+    display: inline-flex; align-items: center; gap: 8px;
+    animation: floaty 3s ease-in-out infinite;
+  }
+  .match-pop .icon { width: 14px; height: 14px; stroke-width: 2.5; }
+  @keyframes floaty {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50%     { transform: translateX(-50%) translateY(-4px); }
+  }
 
-  /* ----- Watermark ----- */
+  /* ───── Footer / spec list ───── */
+  .spec {
+    max-width: 1080px;
+    margin: 64px auto 0;
+    padding: 28px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+  }
+  .spec h3 { font-size: 14px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--pink-2); margin-bottom: 16px; }
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .spec-item {
+    background: rgba(0,0,0,0.18);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+  }
+  .spec-item .lbl { font-size: 11px; color: var(--gray); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .spec-item .val { font-size: 14px; font-weight: 700; }
+
+  /* ───── Watermark ───── */
   .watermark {
     position: fixed;
-    right: 12px;
-    bottom: 12px;
+    right: 12px; bottom: 12px;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.3);
-    background: rgba(0, 0, 0, 0.4);
+    color: rgba(255,255,255,0.35);
+    background: rgba(0,0,0,0.4);
     padding: 6px 12px;
     border-radius: 4px;
     z-index: 9999;
@@ -396,301 +615,369 @@
 
 <!-- ═══════════════ INLINE SVG SPRITE ═══════════════ -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
-
-  <!-- bell -->
+  <symbol id="ico-heart" viewBox="0 0 24 24">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </symbol>
+  <symbol id="ico-x" viewBox="0 0 24 24">
+    <line x1="18" y1="6" x2="6" y2="18"/>
+    <line x1="6" y1="6" x2="18" y2="18"/>
+  </symbol>
+  <symbol id="ico-star" viewBox="0 0 24 24">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+  </symbol>
+  <symbol id="ico-pin" viewBox="0 0 24 24">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+    <circle cx="12" cy="10" r="3"/>
+  </symbol>
+  <symbol id="ico-check" viewBox="0 0 24 24">
+    <polyline points="20 6 9 17 4 12"/>
+  </symbol>
+  <symbol id="ico-back" viewBox="0 0 24 24">
+    <polyline points="15 18 9 12 15 6"/>
+  </symbol>
+  <symbol id="ico-more" viewBox="0 0 24 24">
+    <circle cx="12" cy="5"  r="1.5" fill="currentColor" stroke="none"/>
+    <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+    <circle cx="12" cy="19" r="1.5" fill="currentColor" stroke="none"/>
+  </symbol>
+  <symbol id="ico-filter" viewBox="0 0 24 24">
+    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+  </symbol>
   <symbol id="ico-bell" viewBox="0 0 24 24">
     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
     <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
   </symbol>
-
-  <!-- flame -->
-  <symbol id="ico-flame" viewBox="0 0 24 24">
-    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+  <symbol id="ico-cards" viewBox="0 0 24 24">
+    <rect x="3" y="6" width="14" height="14" rx="3"/>
+    <path d="M7 6V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"/>
   </symbol>
-
-  <!-- zap / flash -->
-  <symbol id="ico-zap" viewBox="0 0 24 24">
-    <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+  <symbol id="ico-chat" viewBox="0 0 24 24">
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
   </symbol>
-
-  <!-- book-open -->
-  <symbol id="ico-book" viewBox="0 0 24 24">
-    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-  </symbol>
-
-  <!-- check-circle (completed quest) -->
-  <symbol id="ico-check" viewBox="0 0 24 24">
-    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-    <polyline points="22 4 12 14.01 9 11.01"/>
-  </symbol>
-
-  <!-- clock -->
-  <symbol id="ico-clock" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="10"/>
-    <polyline points="12 6 12 12 16 14"/>
-  </symbol>
-
-  <!-- calculator -->
-  <symbol id="ico-calc" viewBox="0 0 24 24">
-    <rect x="3" y="2" width="18" height="20" rx="2" fill="none"/>
-    <rect x="6" y="5" width="12" height="3.5" rx="0.5" fill="currentColor" stroke="none"/>
-    <circle cx="8"  cy="13" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="12" cy="13" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="16" cy="13" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="8"  cy="18" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="12" cy="18" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="16" cy="18" r="1.5" fill="currentColor" stroke="none"/>
-  </symbol>
-
-  <!-- globe / planet -->
-  <symbol id="ico-planet" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="10"/>
-    <line x1="2" y1="12" x2="22" y2="12"/>
-    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-  </symbol>
-
-  <!-- code-slash -->
-  <symbol id="ico-code" viewBox="0 0 24 24">
-    <polyline points="16 18 22 12 16 6"/>
-    <polyline points="8 6 2 12 8 18"/>
-    <line x1="15" y1="3" x2="9" y2="21"/>
-  </symbol>
-
-  <!-- trophy -->
-  <symbol id="ico-trophy" viewBox="0 0 24 24">
-    <polyline points="8 21 12 21 16 21"/>
-    <line x1="12" y1="17" x2="12" y2="21"/>
-    <path d="M7 4h10v6a5 5 0 0 1-10 0V4z"/>
-    <path d="M5 4H3c0 5 2 7 4 8"/>
-    <path d="M19 4h2c0 5-2 7-4 8"/>
-  </symbol>
-
-  <!-- home -->
-  <symbol id="ico-home" viewBox="0 0 24 24">
-    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-    <polyline points="9 22 9 12 15 12 15 22"/>
-  </symbol>
-
-  <!-- layers / lessons -->
-  <symbol id="ico-layers" viewBox="0 0 24 24">
-    <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-    <polyline points="2 17 12 22 22 17"/>
-    <polyline points="2 12 12 17 22 12"/>
-  </symbol>
-
-  <!-- sparkles / AI -->
-  <symbol id="ico-sparkles" viewBox="0 0 24 24">
-    <path d="m12 3-1.9 5.8a2 2 0 0 1-1.29 1.29L3 12l5.8 1.9a2 2 0 0 1 1.29 1.29L12 21l1.9-5.8a2 2 0 0 1 1.29-1.29L21 12l-5.8-1.9a2 2 0 0 1-1.29-1.29Z"/>
-    <path d="M5 3v4M3 5h4M19 17v4M17 19h4"/>
-  </symbol>
-
-  <!-- person -->
-  <symbol id="ico-person" viewBox="0 0 24 24">
+  <symbol id="ico-user" viewBox="0 0 24 24">
     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
     <circle cx="12" cy="7" r="4"/>
   </symbol>
-
+  <symbol id="ico-send" viewBox="0 0 24 24">
+    <line x1="22" y1="2" x2="11" y2="13"/>
+    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+  </symbol>
+  <symbol id="ico-photo" viewBox="0 0 24 24">
+    <rect x="3" y="3" width="18" height="18" rx="2"/>
+    <circle cx="8.5" cy="8.5" r="1.5"/>
+    <polyline points="21 15 16 10 5 21"/>
+  </symbol>
+  <symbol id="ico-sparkle" viewBox="0 0 24 24">
+    <path d="m12 3-1.9 5.8a2 2 0 0 1-1.29 1.29L3 12l5.8 1.9a2 2 0 0 1 1.29 1.29L12 21l1.9-5.8a2 2 0 0 1 1.29-1.29L21 12l-5.8-1.9a2 2 0 0 1-1.29-1.29Z"/>
+  </symbol>
 </svg>
-<!-- ════════════════════════════════════════════════════ -->
 
-<div class="device">
+<!-- ═══════════════ PAGE HEAD ═══════════════ -->
+<div class="page-head">
+  <span class="eyebrow">Bubble.io · Dating App MVP</span>
+  <h1>Sparkly — proposal mockup</h1>
+  <p>Discover · Matches · Chat — モバイルファースト設計（max-width 430px）</p>
+</div>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="greet">
-      <div class="avatar">A</div>
-      <div class="greet-text">
-        <div class="hello">Welcome back</div>
-        <div class="name">Hi, Alex!</div>
-      </div>
-    </div>
-    <div class="header-right">
-      <div class="icon-btn" aria-label="Notifications">
-        <svg class="icon"><use href="#ico-bell"/></svg>
-        <span class="badge-dot"></span>
-      </div>
-      <div class="streak" aria-label="Streak 7 days">
-        <svg class="icon"><use href="#ico-flame"/></svg><span>7</span>
-      </div>
-    </div>
-  </header>
+<!-- ═══════════════ THREE DEVICES ═══════════════ -->
+<div class="devices">
 
-  <!-- SCROLLABLE BODY -->
-  <main class="scroll">
-
-    <!-- PROGRESS CARD -->
-    <section class="progress-card">
-      <div class="ring">
-        <svg viewBox="0 0 100 100">
-          <circle class="track" cx="50" cy="50" r="40"></circle>
-          <circle class="bar"   cx="50" cy="50" r="40"></circle>
-        </svg>
-        <div class="ring-text">
-          <span class="pct">67%</span>
-          <span class="lbl">DONE</span>
+  <!-- ░░░░░░░ DEVICE 1: DISCOVER ░░░░░░░ -->
+  <div class="stage">
+    <div class="stage-label"><span class="dot"></span>Discover · /discover</div>
+    <div class="device">
+      <header class="top">
+        <div class="brand">Sparkly</div>
+        <div class="top-actions">
+          <div class="ic-btn"><svg class="icon"><use href="#ico-filter"/></svg></div>
+          <div class="ic-btn"><svg class="icon"><use href="#ico-bell"/></svg></div>
         </div>
+      </header>
+
+      <div class="match-pop">
+        <svg class="icon"><use href="#ico-sparkle"/></svg>
+        2 new likes today
       </div>
-      <div class="progress-info">
-        <div class="title">Today's Goal</div>
-        <div class="stat">2 of 3 lessons</div>
-        <div class="msg">
-          <svg class="icon"><use href="#ico-zap"/></svg>
-          Keep going!
-        </div>
-      </div>
-    </section>
 
-    <!-- DAILY QUESTS -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">Daily Quests</h2>
-        <span class="section-link">View all</span>
-      </div>
-      <div class="quest-list">
+      <div class="body">
+        <div class="deck">
+          <div class="card behind-2"><div class="photo alt-2"></div></div>
+          <div class="card behind-1"><div class="photo alt-1"></div></div>
+          <div class="card">
+            <div class="photo">
+              <div class="silhouette"></div>
+            </div>
 
-        <div class="quest">
-          <div class="quest-icon q1"><svg class="icon"><use href="#ico-book"/></svg></div>
-          <div class="quest-body">
-            <div class="quest-title">Learn 10 new words</div>
-            <div class="quest-bar"><span style="width:60%"></span></div>
-          </div>
-          <div class="quest-pts">+50 pt</div>
-        </div>
+            <div class="photo-dots">
+              <span class="on"></span><span></span><span></span><span></span>
+            </div>
 
-        <div class="quest">
-          <div class="quest-icon q2"><svg class="icon"><use href="#ico-check"/></svg></div>
-          <div class="quest-body">
-            <div class="quest-title">Answer 3 quiz questions</div>
-            <div class="quest-bar"><span style="width:100%"></span></div>
-          </div>
-          <div class="quest-pts">+30 pt</div>
-        </div>
+            <div class="pill-row">
+              <div class="pill-online">Online</div>
+            </div>
 
-        <div class="quest">
-          <div class="quest-icon q3"><svg class="icon"><use href="#ico-clock"/></svg></div>
-          <div class="quest-body">
-            <div class="quest-title">Study for 15 minutes</div>
-            <div class="quest-bar"><span style="width:35%"></span></div>
-          </div>
-          <div class="quest-pts">+20 pt</div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- CONTINUE LEARNING -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">Continue Learning</h2>
-        <span class="section-link">See all</span>
-      </div>
-      <div class="h-scroll">
-
-        <div class="lesson">
-          <div class="thumb l1">
-            <span class="tag">MATH</span>
-            <svg class="icon"><use href="#ico-calc"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">Fractions Basics</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:70%"></span></div>
-              <span>70%</span>
+            <div class="card-info">
+              <div class="name-row">
+                <span class="name">Aiko</span>
+                <span class="age">26</span>
+                <span class="verified"><svg class="icon"><use href="#ico-check"/></svg></span>
+              </div>
+              <div class="meta">
+                <svg class="icon"><use href="#ico-pin"/></svg>
+                Shibuya · 2 km away
+              </div>
+              <div class="prompt-bubble">
+                <div class="q">週末は何してる？</div>
+                <div class="a">朝ランしてカフェで本読むのが幸せ☕️ 一緒に走れる人募集中！</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="lesson">
-          <div class="thumb l2">
-            <span class="tag">SCIENCE</span>
-            <svg class="icon"><use href="#ico-planet"/></svg>
+        <div class="actions">
+          <div class="act pass" title="Pass"><svg class="icon"><use href="#ico-x"/></svg></div>
+          <div class="act like" title="Like"><svg class="icon"><use href="#ico-heart"/></svg></div>
+          <div class="act star" title="Super Like"><svg class="icon"><use href="#ico-star"/></svg></div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <div class="nav-item active">
+          <svg class="icon"><use href="#ico-cards"/></svg><span>Discover</span>
+        </div>
+        <div class="nav-item">
+          <svg class="icon"><use href="#ico-heart"/></svg><span>Matches</span>
+        </div>
+        <div class="nav-item">
+          <svg class="icon"><use href="#ico-chat"/></svg><span>Chat</span>
+        </div>
+        <div class="nav-item">
+          <svg class="icon"><use href="#ico-user"/></svg><span>Profile</span>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ░░░░░░░ DEVICE 2: MATCHES ░░░░░░░ -->
+  <div class="stage">
+    <div class="stage-label"><span class="dot"></span>Matches · /matches</div>
+    <div class="device">
+      <header class="top">
+        <div class="brand">Matches</div>
+        <div class="top-actions">
+          <div class="ic-btn"><svg class="icon"><use href="#ico-filter"/></svg></div>
+        </div>
+      </header>
+
+      <div class="body">
+        <div class="matches-head">
+          <h2>新しいマッチ</h2>
+          <span class="filter-chip">3 new</span>
+        </div>
+
+        <div class="new-matches">
+          <div class="new-match is-new">
+            <div class="av" style="--c1:#ff8aa2;--c2:#ff5577"></div>
+            <div class="nm">Aiko</div>
           </div>
-          <div class="lesson-body">
-            <div class="lesson-title">The Solar System</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:45%"></span></div>
-              <span>45%</span>
+          <div class="new-match is-new">
+            <div class="av" style="--c1:#b388ff;--c2:#6a4bff"></div>
+            <div class="nm">Mei</div>
+          </div>
+          <div class="new-match is-new">
+            <div class="av" style="--c1:#ffb88a;--c2:#ff7a55"></div>
+            <div class="nm">Sora</div>
+          </div>
+          <div class="new-match">
+            <div class="av" style="--c1:#88e8ff;--c2:#4a90e2"></div>
+            <div class="nm">Yuna</div>
+          </div>
+          <div class="new-match">
+            <div class="av" style="--c1:#ffd17a;--c2:#ff9a3c"></div>
+            <div class="nm">Hana</div>
+          </div>
+        </div>
+
+        <div class="matches-head" style="margin-top: 4px;">
+          <h2>メッセージ</h2>
+        </div>
+
+        <div class="conv-list">
+          <div class="conv unread">
+            <div class="av" style="--c1:#ff8aa2;--c2:#8e3bff">
+              <div class="ring-online"></div>
+            </div>
+            <div class="conv-body">
+              <div class="conv-top">
+                <span class="nm">Aiko</span>
+                <span class="ts">2 min</span>
+              </div>
+              <div class="conv-bot">
+                <span class="preview">日曜の朝、走りに行きませんか？🏃‍♀️</span>
+                <span class="unread-badge">2</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="conv unread">
+            <div class="av" style="--c1:#b388ff;--c2:#6a4bff"></div>
+            <div class="conv-body">
+              <div class="conv-top">
+                <span class="nm">Mei</span>
+                <span class="ts">17 min</span>
+              </div>
+              <div class="conv-bot">
+                <span class="preview">そのカフェ私もよく行きます！</span>
+                <span class="unread-badge">1</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="conv">
+            <div class="av" style="--c1:#88e8ff;--c2:#4a90e2"></div>
+            <div class="conv-body">
+              <div class="conv-top">
+                <span class="nm">Yuna</span>
+                <span class="ts">3h</span>
+              </div>
+              <div class="conv-bot">
+                <span class="preview">いいですね〜🍣 来週末空いてます</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="conv">
+            <div class="av" style="--c1:#ffd17a;--c2:#ff9a3c"></div>
+            <div class="conv-body">
+              <div class="conv-top">
+                <span class="nm">Hana</span>
+                <span class="ts">昨日</span>
+              </div>
+              <div class="conv-bot">
+                <span class="preview">ありがとう、嬉しい☺️</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="conv">
+            <div class="av" style="--c1:#a3ffd1;--c2:#10b981"></div>
+            <div class="conv-body">
+              <div class="conv-top">
+                <span class="nm">Rina</span>
+                <span class="ts">2日前</span>
+              </div>
+              <div class="conv-bot">
+                <span class="preview">了解です！また連絡します</span>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="lesson">
-          <div class="thumb l3">
-            <span class="tag">ENGLISH</span>
-            <svg class="icon"><use href="#ico-book"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">Past Tense Verbs</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:20%"></span></div>
-              <span>20%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="lesson">
-          <div class="thumb l4">
-            <span class="tag">CODING</span>
-            <svg class="icon"><use href="#ico-code"/></svg>
-          </div>
-          <div class="lesson-body">
-            <div class="lesson-title">Loops &amp; Logic</div>
-            <div class="lesson-progress">
-              <div class="lesson-bar"><span style="width:10%"></span></div>
-              <span>10%</span>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </section>
 
-    <!-- ACHIEVEMENTS -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">Recent Achievements</h2>
-        <span class="section-link">All badges</span>
+      <nav class="nav">
+        <div class="nav-item">
+          <svg class="icon"><use href="#ico-cards"/></svg><span>Discover</span>
+        </div>
+        <div class="nav-item active">
+          <svg class="icon"><use href="#ico-heart"/></svg><span>Matches</span>
+          <span class="nm-badge">3</span>
+        </div>
+        <div class="nav-item">
+          <svg class="icon"><use href="#ico-chat"/></svg><span>Chat</span>
+        </div>
+        <div class="nav-item">
+          <svg class="icon"><use href="#ico-user"/></svg><span>Profile</span>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ░░░░░░░ DEVICE 3: CHAT ░░░░░░░ -->
+  <div class="stage">
+    <div class="stage-label"><span class="dot"></span>Chat · /chat?match_id=…</div>
+    <div class="device">
+      <header class="chat-top">
+        <div class="back"><svg class="icon"><use href="#ico-back"/></svg></div>
+        <div class="av"></div>
+        <div class="who">
+          <div class="nm">Aiko, 26</div>
+          <div class="st">Active now</div>
+        </div>
+        <div class="ic-btn"><svg class="icon"><use href="#ico-more"/></svg></div>
+      </header>
+
+      <div class="body" style="top:64px; bottom:148px;">
+        <div class="match-banner">
+          <svg class="icon"><use href="#ico-sparkle"/></svg>
+          <div class="txt">あなたと <b>Aiko</b> がマッチしました 🎉</div>
+        </div>
+
+        <div class="messages">
+          <div class="msg-day">TODAY</div>
+
+          <div class="bubble them">
+            はじめまして！プロフィールの朝ラン気になりました🏃‍♀️
+            <span class="ts">10:24</span>
+          </div>
+
+          <div class="bubble me">
+            やった、嬉しい！どのあたり走ってますか？
+            <span class="ts">10:26</span>
+          </div>
+
+          <div class="bubble them">
+            駒沢公園が多いです。代々木も好きで〜🌳
+            <span class="ts">10:28</span>
+          </div>
+
+          <div class="bubble me">
+            駒沢いいですね！日曜の朝とか空いてたりしますか？
+            <span class="ts">10:30</span>
+          </div>
+
+          <div class="bubble them">
+            空いてます☺️ 一緒に走ってからカフェ行きましょ☕️
+            <span class="ts">10:31</span>
+          </div>
+        </div>
       </div>
-      <div class="achievements">
-        <div class="badge">
-          <div class="badge-icon b1"><svg class="icon"><use href="#ico-trophy"/></svg></div>
-          <div class="badge-name">Word<br/>Master</div>
-        </div>
-        <div class="badge">
-          <div class="badge-icon b2"><svg class="icon"><use href="#ico-zap"/></svg></div>
-          <div class="badge-name">Quick<br/>Thinker</div>
-        </div>
-        <div class="badge">
-          <div class="badge-icon b3"><svg class="icon"><use href="#ico-flame"/></svg></div>
-          <div class="badge-name">Streak<br/>Hero</div>
-        </div>
+
+      <div class="composer">
+        <div class="ic-btn"><svg class="icon"><use href="#ico-photo"/></svg></div>
+        <div class="input-pill">メッセージを入力…</div>
+        <div class="send-btn"><svg class="icon"><use href="#ico-send"/></svg></div>
       </div>
-    </section>
 
-    <div class="spacer-sm"></div>
-  </main>
+      <nav class="nav">
+        <div class="nav-item">
+          <svg class="icon"><use href="#ico-cards"/></svg><span>Discover</span>
+        </div>
+        <div class="nav-item">
+          <svg class="icon"><use href="#ico-heart"/></svg><span>Matches</span>
+        </div>
+        <div class="nav-item active">
+          <svg class="icon"><use href="#ico-chat"/></svg><span>Chat</span>
+        </div>
+        <div class="nav-item">
+          <svg class="icon"><use href="#ico-user"/></svg><span>Profile</span>
+        </div>
+      </nav>
+    </div>
+  </div>
 
-  <!-- BOTTOM NAV -->
-  <nav class="nav">
-    <div class="nav-item active">
-      <svg class="icon"><use href="#ico-home"/></svg>
-      <span>Home</span>
-    </div>
-    <div class="nav-item">
-      <svg class="icon"><use href="#ico-layers"/></svg>
-      <span>Lessons</span>
-    </div>
-    <div class="nav-item">
-      <svg class="icon"><use href="#ico-sparkles"/></svg>
-      <span>AI Tutor</span>
-    </div>
-    <div class="nav-item">
-      <svg class="icon"><use href="#ico-person"/></svg>
-      <span>Profile</span>
-    </div>
-  </nav>
+</div>
 
+<!-- ═══════════════ SPEC SUMMARY ═══════════════ -->
+<div class="spec">
+  <h3>Build Spec — at a glance</h3>
+  <div class="spec-grid">
+    <div class="spec-item"><div class="lbl">Stack</div><div class="val">Bubble.io (no-code)</div></div>
+    <div class="spec-item"><div class="lbl">Data Types</div><div class="val">User · Like · Match · Message · Report</div></div>
+    <div class="spec-item"><div class="lbl">Pages</div><div class="val">9 pages (auth → discover → chat)</div></div>
+    <div class="spec-item"><div class="lbl">Privacy Rules</div><div class="val">First-class · 5 types</div></div>
+    <div class="spec-item"><div class="lbl">Width</div><div class="val">max 430px · モバイルファースト</div></div>
+    <div class="spec-item"><div class="lbl">推定工数</div><div class="val">約 23h（上級者）</div></div>
+  </div>
 </div>
 
 <div class="watermark">by Shusei - Sample Only</div>
